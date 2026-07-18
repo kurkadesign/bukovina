@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150" role="img" aria-labelledby="title desc">
+  <title id="title">Svadba J a M</title>
+  <desc id="desc">Elegantné svadobné logo s jemným srdcom</desc>
+  <g fill="none" stroke="#d98286" stroke-width="3" stroke-linecap="round">
+    <path d="M438 61c-18-26-58-10-50 20 5 19 31 35 50 50 20-15 45-31 50-50 8-30-32-46-50-20Z"/>
+    <path d="M30 109c48-8 62-36 69-66" opacity=".55"/>
+    <path d="M62 77c-23-4-31-20-30-34 17 0 31 9 36 25M72 63c4-20 17-31 31-34 4 16-2 31-20 42" opacity=".55"/>
+  </g>
+  <text x="118" y="88" fill="#775f54" font-family="cursive" font-size="62" font-style="italic">Svadba J &amp; M</text>
+  <text x="122" y="120" fill="#9a8b83" font-family="Arial, sans-serif" font-size="15" letter-spacing="5">PLÁN SEDENIA</text>
+</svg>
