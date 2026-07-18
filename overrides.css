@@ -25,6 +25,70 @@ main {
   cursor: grabbing;
 }
 
+.object-actions {
+  position: absolute;
+  right: -8px;
+  top: -46px;
+  z-index: 12;
+  display: flex;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 253, 250, 0.92);
+  box-shadow: 0 4px 14px rgba(65, 48, 39, 0.18);
+}
+
+.object-actions button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 7px;
+  font-size: 18px;
+}
+
+.object-actions .remove {
+  color: #b94e55;
+  background: #fff1f1;
+}
+
+#seatEditor {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+#seatEditor small {
+  color: var(--muted);
+}
+
+dialog.dialog-fallback[open] {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  z-index: 100;
+  display: block;
+  transform: translate(-50%, -50%);
+  max-height: calc(100vh - 30px);
+  overflow: auto;
+  background: #fff;
+}
+
+#legacyBrowser {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  place-items: center;
+  padding: 30px;
+  text-align: center;
+  background: #fffaf7;
+}
+
+#legacyBrowser > div {
+  max-width: 520px;
+}
+
 .floor-logo {
   position: fixed;
   left: 22px;
@@ -133,7 +197,8 @@ main {
 
 @media print {
   .floor-logo,
-  .floor-controls {
+  .floor-controls,
+  .object-actions {
     display: none !important;
   }
 }
