@@ -1,6 +1,8 @@
 export const TYPES=[['round-table','Okrúhly stôl','◯',140,140,8],['rect-table','Obdĺžnikový stôl','▭',180,100,8],['head-table','Hlavný svadobný stôl','♔',260,90,8],['chair','Stolička','♧',55,55,0],['dj','DJ pult','♫',150,80,0],['bar','Bar','▰',170,70,0],['dance-floor','Tanečný parket','▦',250,200,0],['decoration','Dekorácia','✿',70,70,0],['plant','Rastlina','♣',70,70,0],['stage','Pódium','▤',220,110,0],['photo','Fotokútik','▣',180,120,0]];
 export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','Sója','Iné'];
-const uid=()=>crypto.randomUUID();
+const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'
+  ?globalThis.crypto.randomUUID()
+  :'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
 export function initialState(){const t1=uid(),t2=uid(),t3=uid(),g1=uid(),g2=uid(),g3=uid(),g4=uid();return{schemaVersion:1,projectId:uid(),wedding:{name:'Svadba J & M',date:'2026-09-12',venue:'Svadobná sála',contactName:'Jana',phone:'',email:'',note:''},settings:{zoom:0.72,panX:60,panY:35},items:[
   {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:0,seats:10,note:'',locked:false},
   {id:t1,type:'round-table',name:'Stôl 1',x:380,y:350,width:180,height:180,rotation:0,number:1,seats:8,note:'Rodina nevesty',locked:false},
