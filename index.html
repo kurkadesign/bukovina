@@ -1,11 +1,70 @@
 <!doctype html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bukovina</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f3ef">
+  <title>Svadobný plánovač</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <p>a je to tam</p>
+  <div id="mobileGate"><div><span>♡</span><h1>Svadobný plánovač</h1><p>Editor je možné používať na tablete alebo počítači.</p></div></div>
+  <div class="app-shell">
+    <header>
+      <div class="brand"><span class="script">Svadba J &amp; M ♡</span><b>Plán sedenia</b></div>
+      <div class="toolbar">
+        <button id="undoBtn" title="Späť">↶ <span>Späť</span></button><button id="redoBtn" title="Znova">↷ <span>Znova</span></button>
+        <button id="zoomOut">−</button><strong id="zoomLabel">100%</strong><button id="zoomIn">+</button>
+        <button id="fitBtn">Prispôsobiť</button><span id="saveState" class="saved">Uložené</span>
+        <button id="importBtn">Import</button><button id="exportBtn">Export JSON</button><button id="pdfBtn">Export PDF</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="workspace">
+        <div id="viewport" aria-label="Editor pôdorysu">
+          <div id="world"><div class="room-label">SVADOBNÁ SÁLA</div><div id="items"></div></div>
+          <div class="zoom-tip">Koliesko: zoom · medzerník + ťah: posun</div>
+        </div>
+        <div class="library-wrap">
+          <div class="library-title"><b>Presuňte prvky do pôdorysu</b><span>Potiahnite kartu alebo na ňu kliknite</span></div>
+          <div id="library" class="library"></div>
+        </div>
+      </section>
+
+      <aside id="sidebar">
+        <div class="side-tabs"><button class="active" data-tab="overview">Prehľad</button><button data-tab="table">Detail stola</button><button data-tab="event">Podujatie</button></div>
+        <div id="overviewTab" class="tab-panel active">
+          <section class="card"><h2>Prehľad</h2><div id="stats" class="stats"></div></section>
+          <section class="card guests-card">
+            <div class="section-head"><h2>Zoznam hostí</h2><button id="addGuest" class="primary">＋ Pridať hosťa</button></div>
+            <div class="filters"><input id="guestSearch" placeholder="Vyhľadať hosťa…"><select id="guestFilter"><option value="all">Všetci hostia</option><option value="unseated">Bez miesta</option><option value="allergy">S alergiou</option><option value="child">Deti</option></select></div>
+            <div id="guestList" class="guest-list"></div>
+          </section>
+        </div>
+        <div id="tableTab" class="tab-panel"><section class="card" id="tableDetail"><div class="empty"><b>Vyberte stôl</b><p>Kliknite na stôl v pôdoryse.</p></div></section></div>
+        <div id="eventTab" class="tab-panel">
+          <section class="card"><h2>Informácie o podujatí</h2><div class="form-grid"><label>Názov<input data-event="name"></label><label>Dátum<input type="date" data-event="date"></label><label>Miesto<input data-event="venue"></label><label>Kontaktná osoba<input data-event="contactName"></label><label>Telefón<input data-event="phone"></label><label>E-mail<input type="email" data-event="email"></label><label class="span2">Všeobecná poznámka<textarea data-event="note" rows="5"></textarea></label></div></section>
+          <section class="card submit-card"><button id="submitPlan" class="primary large">✈ Odoslať plán</button><small>Na GitHub Pages sa finálna verzia bezpečne stiahne ako samostatný JSON súbor.</small></section>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <dialog id="guestDialog"><form id="guestForm" method="dialog"><div class="dialog-head"><h2 id="guestDialogTitle">Pridať hosťa</h2><button value="cancel" class="icon-btn">×</button></div><div class="form-grid">
+    <label>Meno<input name="firstName" required maxlength="60"></label><label>Priezvisko<input name="lastName" required maxlength="60"></label>
+    <label>Typ osoby<select name="personType"><option value="adult">Dospelý</option><option value="child">Dieťa</option></select></label><label>Vek dieťaťa<input name="childAge" type="number" min="0" max="17"></label>
+    <label>Stôl<select name="tableId"></select></label><label>Číslo miesta<input name="seatNumber" type="number" min="1"></label>
+    <label>Typ menu<select name="menu"><option>Klasické</option><option>Detské</option><option>Vegetariánske</option><option>Vegánske</option><option>Bezlepkové</option><option>Vlastné</option></select></label><label>Sprievodná osoba<input name="companion"></label>
+    <label>Skupina / rodina<input name="group"></label><label>Účasť<select name="rsvp"><option value="yes">Áno</option><option value="no">Nie</option><option value="pending">Čaká sa</option></select></label>
+    <fieldset class="span2"><legend>Alergie a intolerancie</legend><div id="allergyChoices" class="checks"></div></fieldset>
+    <label class="span2">Poznámka<textarea name="note" rows="3"></textarea></label>
+  </div><div class="dialog-actions"><button value="cancel">Zrušiť</button><button id="saveGuest" value="default" class="primary">Uložiť hosťa</button></div></form></dialog>
+
+  <dialog id="itemDialog"><form id="itemForm" method="dialog"><div class="dialog-head"><h2>Nastavenie prvku</h2><button value="cancel" class="icon-btn">×</button></div><div class="form-grid"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="table-only">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="span2">Poznámka<textarea name="note"></textarea></label></div><div class="dialog-actions"><button id="deleteItem" class="danger" type="button">Odstrániť</button><button id="duplicateItem" type="button">Duplikovať</button><button id="lockItem" type="button">Uzamknúť</button><button value="default" class="primary">Uložiť</button></div></form></dialog>
+  <dialog id="summaryDialog"><div class="dialog-head"><h2>Rekapitulácia plánu</h2><button class="icon-btn" onclick="this.closest('dialog').close()">×</button></div><div id="summaryContent"></div><div class="dialog-actions"><button onclick="this.closest('dialog').close()">Zavrieť</button><button id="confirmSubmit" class="primary">Uložiť finálnu verziu</button></div></dialog>
+  <input id="fileInput" type="file" accept="application/json" hidden>
+  <div id="toast" role="status"></div>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
