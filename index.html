@@ -6,25 +6,23 @@
   <meta name="theme-color" content="#f7f3ef">
   <title>Svadobný plánovač</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="overrides.css">
 </head>
 <body>
   <div id="mobileGate"><div><span>♡</span><h1>Svadobný plánovač</h1><p>Editor je možné používať na tablete alebo počítači.</p></div></div>
   <div class="app-shell">
-    <header>
-      <div class="brand"><span class="script">Svadba J &amp; M ♡</span><b>Plán sedenia</b></div>
-      <div class="toolbar">
-        <button id="undoBtn" title="Späť">↶ <span>Späť</span></button><button id="redoBtn" title="Znova">↷ <span>Znova</span></button>
-        <button id="zoomOut">−</button><strong id="zoomLabel">100%</strong><button id="zoomIn">+</button>
-        <button id="fitBtn">Prispôsobiť</button><span id="saveState" class="saved">Uložené</span>
-        <button id="importBtn">Import</button><button id="exportBtn">Export JSON</button><button id="pdfBtn">Export PDF</button>
-      </div>
-    </header>
+    <a class="floor-logo" href="./" aria-label="Svadobný plánovač"><img src="assets/logo.svg" alt="Svadba J a M"></a>
+    <div class="floor-controls" aria-label="Ovládanie pôdorysu">
+      <button id="undoBtn" title="Späť">↶</button><button id="redoBtn" title="Znova">↷</button>
+      <button id="zoomOut" title="Oddialiť">−</button><strong id="zoomLabel">100%</strong><button id="zoomIn" title="Priblížiť">+</button>
+      <button id="fitBtn">Prispôsobiť</button><span id="saveState" class="saved">Uložené</span>
+    </div>
 
     <main>
       <section class="workspace">
         <div id="viewport" aria-label="Editor pôdorysu">
           <div id="world"><div class="room-label">SVADOBNÁ SÁLA</div><div id="items"></div></div>
-          <div class="zoom-tip">Koliesko: zoom · medzerník + ťah: posun</div>
+          <div class="zoom-tip">Koliesko: zoom · ťahanie prázdnej plochy: posun</div>
         </div>
         <div class="library-wrap">
           <div class="library-title"><b>Presuňte prvky do pôdorysu</b><span>Potiahnite kartu alebo na ňu kliknite</span></div>
@@ -45,7 +43,12 @@
         <div id="tableTab" class="tab-panel"><section class="card" id="tableDetail"><div class="empty"><b>Vyberte stôl</b><p>Kliknite na stôl v pôdoryse.</p></div></section></div>
         <div id="eventTab" class="tab-panel">
           <section class="card"><h2>Informácie o podujatí</h2><div class="form-grid"><label>Názov<input data-event="name"></label><label>Dátum<input type="date" data-event="date"></label><label>Miesto<input data-event="venue"></label><label>Kontaktná osoba<input data-event="contactName"></label><label>Telefón<input data-event="phone"></label><label>E-mail<input type="email" data-event="email"></label><label class="span2">Všeobecná poznámka<textarea data-event="note" rows="5"></textarea></label></div></section>
-          <section class="card submit-card"><button id="submitPlan" class="primary large">✈ Odoslať plán</button><small>Na GitHub Pages sa finálna verzia bezpečne stiahne ako samostatný JSON súbor.</small></section>
+          <section class="card submit-card">
+            <div class="project-actions"><button id="importBtn">Import JSON</button><button id="exportBtn">Export JSON</button></div>
+            <button id="pdfBtn" class="large">▧ Vytvoriť PDF</button>
+            <button id="submitPlan" class="primary large">✈ Odoslať celý plán</button>
+            <small>Na GitHub Pages sa finálna verzia bezpečne stiahne ako samostatný JSON súbor.</small>
+          </section>
         </div>
       </aside>
     </main>
