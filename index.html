@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="overrides.css">
 </head>
 <body>
+  <div id="legacyBrowser"><div><h1>Prehliadač nie je podporovaný</h1><p>Na používanie editora otvorte stránku v aktuálnom Microsoft Edge, Firefoxe alebo Opere.</p></div></div>
   <div id="mobileGate"><div><span>♡</span><h1>Svadobný plánovač</h1><p>Editor je možné používať na tablete alebo počítači.</p></div></div>
   <div class="app-shell">
     <a class="floor-logo" href="./" aria-label="Svadobný plánovač"><img src="assets/logo.svg" alt="Svadba J a M"></a>
@@ -54,7 +55,7 @@
     </main>
   </div>
 
-  <dialog id="guestDialog"><form id="guestForm" method="dialog"><div class="dialog-head"><h2 id="guestDialogTitle">Pridať hosťa</h2><button value="cancel" class="icon-btn">×</button></div><div class="form-grid">
+  <dialog id="guestDialog"><form id="guestForm"><div class="dialog-head"><h2 id="guestDialogTitle">Pridať hosťa</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="form-grid">
     <label>Meno<input name="firstName" required maxlength="60"></label><label>Priezvisko<input name="lastName" required maxlength="60"></label>
     <label>Typ osoby<select name="personType"><option value="adult">Dospelý</option><option value="child">Dieťa</option></select></label><label>Vek dieťaťa<input name="childAge" type="number" min="0" max="17"></label>
     <label>Stôl<select name="tableId"></select></label><label>Číslo miesta<input name="seatNumber" type="number" min="1"></label>
@@ -62,12 +63,13 @@
     <label>Skupina / rodina<input name="group"></label><label>Účasť<select name="rsvp"><option value="yes">Áno</option><option value="no">Nie</option><option value="pending">Čaká sa</option></select></label>
     <fieldset class="span2"><legend>Alergie a intolerancie</legend><div id="allergyChoices" class="checks"></div></fieldset>
     <label class="span2">Poznámka<textarea name="note" rows="3"></textarea></label>
-  </div><div class="dialog-actions"><button value="cancel">Zrušiť</button><button id="saveGuest" value="default" class="primary">Uložiť hosťa</button></div></form></dialog>
+  </div><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="saveGuest" type="submit" class="primary">Uložiť hosťa</button></div></form></dialog>
 
-  <dialog id="itemDialog"><form id="itemForm" method="dialog"><div class="dialog-head"><h2>Nastavenie prvku</h2><button value="cancel" class="icon-btn">×</button></div><div class="form-grid"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="table-only">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="span2">Poznámka<textarea name="note"></textarea></label></div><div class="dialog-actions"><button id="deleteItem" class="danger" type="button">Odstrániť</button><button id="duplicateItem" type="button">Duplikovať</button><button id="lockItem" type="button">Uzamknúť</button><button value="default" class="primary">Uložiť</button></div></form></dialog>
-  <dialog id="summaryDialog"><div class="dialog-head"><h2>Rekapitulácia plánu</h2><button class="icon-btn" onclick="this.closest('dialog').close()">×</button></div><div id="summaryContent"></div><div class="dialog-actions"><button onclick="this.closest('dialog').close()">Zavrieť</button><button id="confirmSubmit" class="primary">Uložiť finálnu verziu</button></div></dialog>
+  <dialog id="itemDialog"><form id="itemForm"><div class="dialog-head"><h2>Nastavenie prvku</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="form-grid"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="table-only">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="span2">Poznámka<textarea name="note"></textarea></label></div><div class="dialog-actions"><button id="deleteItem" class="danger" type="button">Odstrániť</button><button id="duplicateItem" type="button">Duplikovať</button><button id="lockItem" type="button">Uzamknúť</button><button type="submit" class="primary">Uložiť</button></div></form></dialog>
+  <dialog id="summaryDialog"><div class="dialog-head"><h2>Rekapitulácia plánu</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div id="summaryContent"></div><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zavrieť</button><button id="confirmSubmit" class="primary">Uložiť finálnu verziu</button></div></dialog>
   <input id="fileInput" type="file" accept="application/json" hidden>
   <div id="toast" role="status"></div>
   <script type="module" src="js/app.js"></script>
+  <script nomodule>document.getElementById('legacyBrowser').style.display='grid';document.querySelector('.app-shell').style.display='none';</script>
 </body>
 </html>
