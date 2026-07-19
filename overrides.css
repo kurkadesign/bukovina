@@ -52,6 +52,11 @@ main {
   background: #fff1f1;
 }
 
+.seat:hover,
+.detail-seat:hover {
+  transform: translate(-50%, -50%);
+}
+
 #seatEditor {
   display: grid;
   gap: 8px;
