@@ -91,6 +91,15 @@ main {
   transform: translate(-50%, -50%);
 }
 
+.seat,
+.detail-seat {
+  padding: 0;
+  line-height: 1;
+  text-align: center;
+  align-items: center;
+  justify-items: center;
+}
+
 #seatEditor {
   display: grid;
   gap: 8px;
