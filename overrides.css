@@ -52,6 +52,12 @@ main {
   background: #fff1f1;
 }
 
+.lib-item.dragging {
+  cursor: grabbing;
+  opacity: 0.62;
+  transform: scale(0.98);
+}
+
 .seat:hover,
 .detail-seat:hover {
   transform: translate(-50%, -50%);
