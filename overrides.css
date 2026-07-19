@@ -58,6 +58,13 @@ main {
   transform: scale(0.98);
 }
 
+.library {
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(130, 111, 100, 0.38) transparent;
+}
+
 .seat:hover,
 .detail-seat:hover {
   transform: translate(-50%, -50%);
