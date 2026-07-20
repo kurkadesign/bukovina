@@ -1,4 +1,76 @@
 /* Full-canvas editor with floating glass panels */
+:root {
+  --object-border-color: #a99b90;
+  --object-text-color: #564d47;
+  --object-default-color: #f3e9dd;
+  --round-table-color: #f4eadf;
+  --rect-table-color: #f3e9dd;
+  --head-table-color: #f7e6e3;
+  --chair-color: #f3e9dd;
+  --dj-color: #f3e9dd;
+  --bar-color: #f3e9dd;
+  --dance-floor-color-a: #ead8c4;
+  --dance-floor-color-b: #f4e8db;
+  --decoration-color: #c89199;
+  --plant-color: #789b7e;
+  --stage-color: #f3e9dd;
+  --photo-color: #f3e9dd;
+}
+
+.object-shape {
+  color: var(--object-text-color);
+  background: var(--object-default-color);
+  border-color: var(--object-border-color);
+}
+
+.round-table .object-shape {
+  background: var(--round-table-color);
+}
+
+.rect-table .object-shape {
+  background: var(--rect-table-color);
+}
+
+.head-table .object-shape {
+  background: var(--head-table-color);
+}
+
+.chair .object-shape {
+  background: var(--chair-color);
+}
+
+.dj .object-shape {
+  background: var(--dj-color);
+}
+
+.bar .object-shape {
+  background: var(--bar-color);
+}
+
+.dance-floor .object-shape {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--dance-floor-color-a) 0 18px,
+    var(--dance-floor-color-b) 18px 36px
+  );
+}
+
+.decoration .object-shape {
+  color: var(--decoration-color);
+}
+
+.plant .object-shape {
+  color: var(--plant-color);
+}
+
+.stage .object-shape {
+  background: var(--stage-color);
+}
+
+.photo .object-shape {
+  background: var(--photo-color);
+}
+
 main {
   height: 100%;
   position: relative;
