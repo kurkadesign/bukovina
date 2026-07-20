@@ -54,8 +54,7 @@
 
   <dialog id="guestDialog"><form id="guestForm"><div class="dialog-head"><h2 id="guestDialogTitle">Pridať hosťa</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="form-grid">
     <label>Meno<input name="firstName" required maxlength="60"></label><label>Priezvisko<input name="lastName" required maxlength="60"></label>
-    <label>Typ osoby<select name="personType"><option value="adult">Dospelý</option><option value="child">Dieťa</option></select></label><label>Vek dieťaťa<input name="childAge" type="number" min="0" max="17"></label>
-    <label>Stôl<select name="tableId"></select></label><label>Číslo miesta<input name="seatNumber" type="number" min="1"></label>
+    <div class="guest-placement-row span2"><label>Typ osoby<select name="personType"><option value="adult">Dospelý</option><option value="child">Dieťa</option></select></label><label>Stôl<select name="tableId"></select></label><label>Číslo miesta<input name="seatNumber" type="number" min="1"></label></div>
     <fieldset class="span2"><legend>Alergie a intolerancie</legend><div id="allergyChoices" class="checks"></div></fieldset>
     <label class="span2">Poznámka<textarea name="note" rows="3"></textarea></label>
   </div><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="saveGuest" type="submit" class="primary">Uložiť hosťa</button></div></form></dialog>
