@@ -10,8 +10,8 @@ export const TYPES=[
   ['speaker','Reproduktor','fa_speaker',55,55,0,{icon:true,text:false,shape:'rounded'}],
   ['bar','Bar','fa_martini_glass_citrus',170,70,0,{icon:true,text:true,shape:'rounded'}],
   ['dance-floor','Tanečný parket','fa_shoe_prints',250,200,0,{icon:true,text:true,shape:'sharp'}],
-  ['decoration','Dekorácia','fa_balloon',70,70,0,{icon:true,text:true,shape:'none'}],
-  ['plant','Rastlina','fa_flower_tulip',70,70,0,{icon:true,text:true,shape:'none'}],
+  ['decoration','Dekorácia','fa_balloon',50,50,0,{icon:true,text:true,shape:'none'}],
+  ['plant','Rastlina','fa_flower_tulip',50,50,0,{icon:true,text:true,shape:'none'}],
   ['stage','Pódium','fa_masks_theater',220,110,0,{icon:true,text:true,shape:'rounded'}],
   ['photo','Fotokútik','fa_camera_retro',180,120,0,{icon:true,text:true,shape:'rounded'}]
 ];
