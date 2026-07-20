@@ -7,14 +7,13 @@ export const TYPES=[
   ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:false,text:false,shape:'rounded'}],
   ['chair','Stolička','fa_chair',55,55,0,{icon:true,text:true,shape:'chair'}],
   ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:true,shape:'rounded'}],
+  ['speaker','Reproduktor','fa_speaker',55,55,0,{icon:true,text:false,shape:'rounded'}],
   ['bar','Bar','fa_martini_glass_citrus',170,70,0,{icon:true,text:true,shape:'rounded'}],
   ['dance-floor','Tanečný parket','fa_border_all',250,200,0,{icon:true,text:true,shape:'sharp'}],
   ['decoration','Dekorácia','fa_wand_magic_sparkles',70,70,0,{icon:true,text:true,shape:'none'}],
   ['plant','Rastlina','fa_seedling',70,70,0,{icon:true,text:true,shape:'none'}],
   ['stage','Pódium','fa_masks_theater',220,110,0,{icon:true,text:true,shape:'rounded'}],
-  ['photo','Fotokútik','fa_camera_retro',180,120,0,{icon:true,text:true,shape:'rounded'}],
-  ['universal-sharp','Univerzálny – ostré rohy','fa_square',120,80,0,{icon:true,text:true,shape:'sharp'}],
-  ['universal-rounded','Univerzálny – oblé rohy','fa_rectangle',120,80,0,{icon:true,text:true,shape:'rounded'}]
+  ['photo','Fotokútik','fa_camera_retro',180,120,0,{icon:true,text:true,shape:'rounded'}]
 ];
 export const PERSON_ICONS={adult:'fa_user',child:'fa_child_reaching'};
 export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','Sója','Iné'];
