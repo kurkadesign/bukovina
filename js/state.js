@@ -1,4 +1,6 @@
-export const TYPES=[['round-table','Okrúhly stôl','◯',140,140,8],['rect-table','Obdĺžnikový stôl','▭',180,100,8],['head-table','Hlavný svadobný stôl','♔',260,90,8],['chair','Stolička','♧',55,55,0],['dj','DJ pult','♫',150,80,0],['bar','Bar','▰',170,70,0],['dance-floor','Tanečný parket','▦',250,200,0],['decoration','Dekorácia','✿',70,70,0],['plant','Rastlina','♣',70,70,0],['stage','Pódium','▤',220,110,0],['photo','Fotokútik','▣',180,120,0]];
+// Ikona: použite napr. "fa_house" alebo názov SVG súboru z assets, napr. "stol.svg".
+export const TYPES=[['round-table','Okrúhly stôl','fa_circle',140,140,8],['rect-table','Obdĺžnikový stôl','fa_table_cells_large',180,100,8],['head-table','Hlavný svadobný stôl','fa_crown',260,90,8],['chair','Stolička','fa_chair',55,55,0],['dj','DJ pult','fa_compact_disc',150,80,0],['bar','Bar','fa_martini_glass_citrus',170,70,0],['dance-floor','Tanečný parket','fa_border_all',250,200,0],['decoration','Dekorácia','fa_wand_magic_sparkles',70,70,0],['plant','Rastlina','fa_seedling',70,70,0],['stage','Pódium','fa_masks_theater',220,110,0],['photo','Fotokútik','fa_camera_retro',180,120,0]];
+export const PERSON_ICONS={adult:'fa_user',child:'fa_child_reaching'};
 export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','Sója','Iné'];
 const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'
   ?globalThis.crypto.randomUUID()
