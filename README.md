@@ -23,6 +23,10 @@ Objekty spodnej lišty sú definované v poli `TYPES` v `js/state.js`. Posledný
 viditeľnosť ikony a textu a nezávislý tvar rohov. Dostupné hodnoty `shape` sú `sharp`,
 `rounded`, `circle`, `chair` a `none`.
 
+Farbu Font Awesome ikony možno nastaviť v rovnakom objekte cez `iconColor`, napríklad
+`iconColor: '#789b7e'` alebo `iconColor: 'var(--plant-color)'`. Jednotná veľkosť ikon na
+ploche sa nastavuje premennou `--object-icon-size` na začiatku `overrides.css`.
+
 Napríklad reproduktor s ostrými rohmi možno pridať bez použitia typu DJ:
 
 ```js
