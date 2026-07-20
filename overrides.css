@@ -82,6 +82,17 @@ main {
   height: 54%;
 }
 
+.object-shape.icon-only .item-visual-icon {
+  max-width: 76%;
+  max-height: 76%;
+  font-size: 2.35em;
+}
+
+.object-shape.icon-only .svg-icon.item-visual-icon {
+  width: 76%;
+  height: 76%;
+}
+
 .object-label {
   line-height: 1.15;
 }
