@@ -14,7 +14,7 @@ export const TYPES=[
   ['stage','Pódium','fa_masks_theater',220,110,0,{icon:true,text:true}],
   ['photo','Fotokútik','fa_camera_retro',180,120,0,{icon:true,text:true}]
 ];
-export const PERSON_ICONS={adult:'fa_user',child:'fa_child_reaching'};
+export const PERSON_ICONS={adult:'fa_user',child:'fa_child_dress'};
 export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','Sója','Iné'];
 const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'
   ?globalThis.crypto.randomUUID()
