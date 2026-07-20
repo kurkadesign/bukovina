@@ -7,7 +7,7 @@ export const TYPES=[
   ['chair','Stolička','fa_chair',55,55,0,{icon:true,text:true}],
   ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:true}],
   ['bar','Bar','fa_martini_glass_citrus',170,70,0,{icon:true,text:true}],
-  ['dance-floor','Tanečný parket','fa-sneaker-running',250,200,0,{icon:true,text:true}],
+  ['dance-floor','Tanečný parket','fa_shoe_prints',250,200,0,{icon:true,text:true}],
   ['decoration','Dekorácia','fa_wand_magic_sparkles',70,70,0,{icon:true,text:true}],
   ['plant','Rastlina','fa_seedling',70,70,0,{icon:true,text:true}],
   ['stage','Pódium','fa_masks_theater',220,110,0,{icon:true,text:true}],
