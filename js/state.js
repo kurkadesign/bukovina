@@ -3,7 +3,7 @@ export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','
 const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'
   ?globalThis.crypto.randomUUID()
   :'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
-export function initialState(){const t1=uid(),t2=uid(),t3=uid(),g1=uid(),g2=uid(),g3=uid(),g4=uid();return{schemaVersion:1,projectId:uid(),wedding:{name:'Svadba J & M',date:'2026-09-12',venue:'Svadobná sála',contactName:'Jana',phone:'',email:'',note:''},settings:{zoom:0.72,panX:60,panY:35},items:[
+export function initialState(){const t1=uid(),t2=uid(),t3=uid(),g1=uid(),g2=uid(),g3=uid(),g4=uid();return{schemaVersion:1,projectId:uid(),wedding:{date:'2026-09-12',contactName:'Jana',phone:'',email:'',note:''},settings:{zoom:0.72,panX:60,panY:35},items:[
   {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:0,seats:10,note:'',locked:false},
   {id:t1,type:'round-table',name:'Stôl 1',x:380,y:350,width:180,height:180,rotation:0,number:1,seats:8,note:'Rodina nevesty',locked:false},
   {id:t2,type:'round-table',name:'Stôl 2',x:800,y:320,width:180,height:180,rotation:0,number:2,seats:8,note:'',locked:false},
@@ -14,6 +14,6 @@ export function initialState(){const t1=uid(),t2=uid(),t3=uid(),g1=uid(),g2=uid(
   {id:g3,firstName:'Anna',lastName:'Kováčová',personType:'adult',childAge:'',tableId:t2,seatNumber:3,menu:'Bezlepkové',allergies:['Lepok'],note:'',companion:'',group:'Kováčovci',rsvp:'yes',color:'#d9b776'},
   {id:g4,firstName:'Nina',lastName:'Kováčová',personType:'child',childAge:7,tableId:t2,seatNumber:4,menu:'Detské',allergies:[],note:'',companion:'Anna Kováčová',group:'Kováčovci',rsvp:'yes',color:'#b09ad8'},
   {id:uid(),firstName:'Tomáš',lastName:'Horváth',personType:'adult',childAge:'',tableId:'',seatNumber:null,menu:'Vegetariánske',allergies:[],note:'',companion:'',group:'Priatelia',rsvp:'pending',color:'#85ad9a'}],meta:{createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),submittedAt:null}}}
-export function load(){try{const raw=localStorage.getItem('wedding-planner-v1');if(!raw)return initialState();const s=JSON.parse(raw);if(!s.items||!s.guests||!s.wedding)throw Error();return s}catch{return initialState()}}
+export function load(){try{const raw=localStorage.getItem('wedding-planner-v1');if(!raw)return initialState();const s=JSON.parse(raw);if(!s.items||!s.guests||!s.wedding)throw Error();delete s.wedding.name;delete s.wedding.venue;return s}catch{return initialState()}}
 export function validProject(s){return !!(s&&s.schemaVersion===1&&Array.isArray(s.items)&&Array.isArray(s.guests)&&s.wedding&&s.settings)}
 export function download(data,name,type='application/json'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
