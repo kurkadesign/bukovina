@@ -3,6 +3,7 @@
   --object-border-color: #a99b90;
   --object-text-color: #564d47;
   --object-default-color: #f3e9dd;
+  --object-icon-size: 24px;
   --object-radius-sharp: 0;
   --object-radius-rounded: 8px;
   --object-radius-chair: 13px 13px 7px 7px;
@@ -26,6 +27,7 @@
   color: var(--object-text-color);
   background: var(--object-default-color);
   border-color: var(--object-border-color);
+  overflow: hidden;
 }
 
 .shape-sharp .object-shape {
@@ -177,25 +179,26 @@ main {
 }
 
 .object-shape .item-visual-icon {
-  max-width: 54%;
-  max-height: 54%;
-  font-size: 1.7em;
+  max-width: calc(100% - 12px);
+  max-height: calc(100% - 12px);
+  font-size: var(--object-icon-size);
+  line-height: 1;
 }
 
 .object-shape .svg-icon.item-visual-icon {
-  width: 54%;
-  height: 54%;
+  width: var(--object-icon-size);
+  height: var(--object-icon-size);
 }
 
 .object-shape.icon-only .item-visual-icon {
-  max-width: 76%;
-  max-height: 76%;
-  font-size: 2.35em;
+  max-width: calc(100% - 12px);
+  max-height: calc(100% - 12px);
+  font-size: var(--object-icon-size);
 }
 
 .object-shape.icon-only .svg-icon.item-visual-icon {
-  width: 76%;
-  height: 76%;
+  width: var(--object-icon-size);
+  height: var(--object-icon-size);
 }
 
 .object-label {
