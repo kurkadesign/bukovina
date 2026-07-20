@@ -21,7 +21,7 @@
           <div class="zoom-tip">Koliesko: zoom · ťahanie prázdnej plochy: posun</div>
         </div>
         <div class="library-wrap">
-          <div class="library-title"><b>Presuňte prvky do pôdorysu</b><button id="resetPlan" type="button">Vyresetovať plán sály</button></div>
+          <div class="library-title"><b>Presuňte prvky do pôdorysu</b><a id="resetPlan" href="#">Vyresetovať plán sály</a></div>
           <div id="library" class="library"></div>
         </div>
       </section>
@@ -60,6 +60,7 @@
 
   <dialog id="itemDialog"><form id="itemForm"><div class="dialog-head"><h2>Nastavenie prvku</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="form-grid"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="table-only">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="span2">Poznámka<textarea name="note"></textarea></label></div><div class="dialog-actions"><button id="deleteItem" class="danger" type="button">Odstrániť</button><button id="duplicateItem" type="button">Duplikovať</button><button id="lockItem" type="button">Uzamknúť</button><button type="submit" class="primary">Uložiť</button></div></form></dialog>
   <dialog id="summaryDialog"><div class="dialog-head"><h2>Rekapitulácia plánu</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div id="summaryContent"></div><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zavrieť</button><button id="confirmSubmit" class="primary">Uložiť finálnu verziu</button></div></dialog>
+  <dialog id="resetDialog"><div class="dialog-head"><h2>Vyresetovať plán sály?</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><p>Všetky aktuálne zmeny sa nahradia predvoleným rozložením. Túto akciu nie je možné vrátiť späť.</p><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="confirmReset" type="button" class="danger">Áno, vyresetovať</button></div></dialog>
   <input id="fileInput" type="file" accept="application/json" hidden>
   <div id="toast" role="status"></div>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
