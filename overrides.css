@@ -397,7 +397,16 @@ dialog.dialog-fallback[open] {
 }
 
 .lib-item {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 112px;
+  max-width: 162px;
   border: 0;
+}
+
+.lib-item > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .project-actions {
