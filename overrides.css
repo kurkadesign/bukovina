@@ -52,6 +52,80 @@ main {
   background: #fff1f1;
 }
 
+.visual-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.svg-icon {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+}
+
+.object-shape {
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  padding: 6px;
+}
+
+.object-shape .item-visual-icon {
+  max-width: 54%;
+  max-height: 54%;
+  font-size: 1.7em;
+}
+
+.object-shape .svg-icon.item-visual-icon {
+  width: 54%;
+  height: 54%;
+}
+
+.object-label {
+  line-height: 1.15;
+}
+
+.plant .object-label,
+.decoration .object-label {
+  font-size: 12px;
+}
+
+.lib-icon .visual-icon {
+  width: 28px;
+  height: 28px;
+  font-size: 23px;
+}
+
+.avatar .visual-icon {
+  font-size: 14px;
+}
+
+.seat.child::before {
+  content: none;
+}
+
+.seat-person-icon {
+  position: absolute;
+  left: -5px;
+  top: -7px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #d58b91;
+  color: #fff;
+  font-size: 7px;
+}
+
+.seat.child .seat-person-icon {
+  background: #8da5d6;
+}
+
+.object-actions .visual-icon,
+.guest-actions .visual-icon {
+  font-size: 13px;
+}
+
 .lib-item.dragging {
   cursor: grabbing;
   opacity: 0.62;
