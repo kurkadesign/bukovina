@@ -170,16 +170,18 @@ dialog.dialog-fallback[open] {
   left: 16px;
   right: 390px;
   bottom: 14px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.5);
   border: 0;
+  box-shadow: none;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
 
 #sidebar {
   top: 12px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.5);
   border: 0;
+  box-shadow: none;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
@@ -187,6 +189,10 @@ dialog.dialog-fallback[open] {
 .side-tabs,
 .tab-panel {
   background: transparent;
+}
+
+.lib-item {
+  border: 0;
 }
 
 .project-actions {
