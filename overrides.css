@@ -3,6 +3,9 @@
   --object-border-color: #a99b90;
   --object-text-color: #564d47;
   --object-default-color: #f3e9dd;
+  --object-radius-sharp: 0;
+  --object-radius-rounded: 8px;
+  --object-radius-chair: 13px 13px 7px 7px;
   --round-table-color: #f4eadf;
   --rect-table-color: #f3e9dd;
   --head-table-color: #f7e6e3;
@@ -15,12 +18,34 @@
   --plant-color: #789b7e;
   --stage-color: #f3e9dd;
   --photo-color: #f3e9dd;
+  --universal-sharp-color: #f3e9dd;
+  --universal-rounded-color: #f3e9dd;
 }
 
 .object-shape {
   color: var(--object-text-color);
   background: var(--object-default-color);
   border-color: var(--object-border-color);
+}
+
+.shape-sharp .object-shape {
+  border-radius: var(--object-radius-sharp);
+}
+
+.shape-rounded .object-shape {
+  border-radius: var(--object-radius-rounded);
+}
+
+.shape-circle .object-shape {
+  border-radius: 50%;
+}
+
+.shape-chair .object-shape {
+  border-radius: var(--object-radius-chair);
+}
+
+.shape-none .object-shape {
+  border-radius: 0;
 }
 
 .round-table .object-shape {
@@ -69,6 +94,14 @@
 
 .photo .object-shape {
   background: var(--photo-color);
+}
+
+.universal-sharp .object-shape {
+  background: var(--universal-sharp-color);
+}
+
+.universal-rounded .object-shape {
+  background: var(--universal-rounded-color);
 }
 
 main {
