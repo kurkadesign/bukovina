@@ -451,6 +451,277 @@ dialog.nahradny-dialog[open] {
   margin-top: 7px;
 }
 
+#mobilneUpozornenie img {
+  display: block;
+  width: min(230px, 72vw);
+  height: auto;
+  margin: 0 auto 18px;
+}
+
+#mobilneUpozornenie h1 {
+  margin-top: 0;
+}
+
+#podorys.pdf-obrysy {
+  background-color: #fff;
+  background-image: none;
+  border-color: #8d8985;
+}
+
+.pdf-obrysy .tvar-prvku,
+.pdf-obrysy .miesto {
+  background: #fff !important;
+  border-color: #8d8985 !important;
+  box-shadow: none !important;
+  color: #3e3935 !important;
+}
+
+.pdf-obrysy .tvar-prvku {
+  border: 1.5px solid #8d8985 !important;
+}
+
+.pdf-obrysy .vizualna-ikona,
+.pdf-obrysy .nazov-prvku {
+  color: #3e3935 !important;
+}
+
+.pdf-obrysy .miesto.obsadene {
+  background: #f5f5f5 !important;
+}
+
+.pdf-obrysy .miesto.ma-alergiu::after,
+.pdf-obrysy .ikona-osoby-na-mieste {
+  filter: grayscale(1);
+}
+
+.pdf-strana {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  z-index: 9999;
+  width: 1400px;
+  height: 990px;
+  padding: 42px 52px 38px;
+  overflow: hidden;
+  pointer-events: none;
+  background: #fff;
+  color: #3e3935;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.pdf-hlavicka {
+  height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #ddd5ce;
+}
+
+.pdf-hlavicka img {
+  width: 245px;
+  height: 74px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.pdf-hlavicka strong {
+  color: #7a6b62;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.pdf-podnadpis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 17px;
+  color: #837970;
+  font-size: 16px;
+}
+
+.pdf-obrazok-saly {
+  height: 780px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12px;
+}
+
+.pdf-obrazok-saly canvas {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid #bbb3ad;
+}
+
+.pdf-prehlad {
+  height: 805px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 28px;
+  padding-top: 22px;
+}
+
+.pdf-prehlad h2,
+.pdf-prehlad h3,
+.pdf-prehlad p {
+  margin-top: 0;
+}
+
+.pdf-prehlad h2 {
+  margin-bottom: 15px;
+  color: #594e47;
+  font-size: 25px;
+}
+
+.pdf-zoznam-stolov {
+  columns: 2;
+  column-gap: 20px;
+}
+
+.pdf-stol {
+  break-inside: avoid;
+  margin: 0 0 13px;
+  padding: 12px 14px;
+  border: 1px solid #d8d1cb;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.pdf-stol h3 {
+  margin-bottom: 5px;
+  color: #65584f;
+  font-size: 17px;
+}
+
+.pdf-stol > p {
+  margin-bottom: 7px;
+  color: #80756e;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.pdf-riadok-hosta {
+  padding: 5px 0;
+  border-top: 1px solid #eee9e5;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.pdf-riadok-hosta b {
+  color: #4d4540;
+}
+
+.pdf-detail-hosta {
+  display: block;
+  margin-top: 2px;
+  color: #81766f;
+  font-size: 11px;
+}
+
+.pdf-bez-miesta {
+  break-inside: avoid;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px dashed #c9bdb5;
+  border-radius: 9px;
+}
+
+.pdf-bez-miesta h3 {
+  font-size: 16px;
+}
+
+.pdf-bocne-udaje {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.pdf-karta {
+  padding: 17px;
+  border: 1px solid #d8d1cb;
+  border-radius: 11px;
+  background: #fcfbfa;
+}
+
+.pdf-karta h2 {
+  font-size: 20px;
+}
+
+.pdf-sumar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pdf-sumar div {
+  padding: 10px;
+  border-radius: 8px;
+  background: #f3efec;
+}
+
+.pdf-sumar small,
+.pdf-udaj small {
+  display: block;
+  margin-bottom: 3px;
+  color: #887d75;
+  font-size: 11px;
+}
+
+.pdf-sumar b {
+  font-size: 20px;
+}
+
+.pdf-podujatie {
+  margin-top: auto;
+}
+
+.pdf-udaj {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.pdf-cislo-strany {
+  position: absolute;
+  right: 52px;
+  bottom: 18px;
+  color: #9a918b;
+  font-size: 11px;
+}
+
+.pdf-huste .pdf-stol {
+  margin-bottom: 8px;
+  padding: 8px 10px;
+}
+
+.pdf-huste .pdf-stol h3,
+.pdf-huste .pdf-bez-miesta h3 {
+  font-size: 14px;
+}
+
+.pdf-huste .pdf-stol > p,
+.pdf-huste .pdf-riadok-hosta {
+  font-size: 10px;
+}
+
+.pdf-huste .pdf-riadok-hosta {
+  padding: 3px 0;
+}
+
+.pdf-huste .pdf-detail-hosta {
+  font-size: 9px;
+}
+
+.pdf-velmi-huste .pdf-zoznam-stolov {
+  columns: 3;
+  column-gap: 12px;
+}
+
 @media (max-width: 1100px) and (min-width: 701px) {
   .pracovna-plocha {
     padding: 0;
