@@ -111,6 +111,11 @@ main {
   color: var(--muted);
 }
 
+.seat-map.head .table-preview {
+  width: 210px;
+  height: 72px;
+}
+
 dialog.dialog-fallback[open] {
   position: fixed;
   inset: 50% auto auto 50%;
