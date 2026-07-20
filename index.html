@@ -11,40 +11,40 @@
   <link rel="stylesheet" href="overrides.css">
 </head>
 <body>
-  <div id="legacyBrowser"><div><h1>Prehliadač nie je podporovaný</h1><p>Na používanie editora otvorte stránku v aktuálnom Microsoft Edge, Firefoxe alebo Opere.</p></div></div>
-  <div id="mobileGate"><div><span>♡</span><h1>Svadobný plánovač</h1><p>Editor je možné používať na tablete alebo počítači.</p></div></div>
-  <div class="app-shell">
-    <a class="floor-logo" href="./" aria-label="Svadobný plánovač"><img src="assets/logo.svg" alt="Svadba J a M"></a>
+  <div id="staryPrehliadac"><div><h1>Prehliadač nie je podporovaný</h1><p>Na používanie editora otvorte stránku v aktuálnom Microsoft Edge, Firefoxe alebo Opere.</p></div></div>
+  <div id="mobilneUpozornenie"><div><span>♡</span><h1>Svadobný plánovač</h1><p>Editor je možné používať na tablete alebo počítači.</p></div></div>
+  <div class="obal-aplikacie">
+    <a class="logo-podorysu" href="./" aria-label="Svadobný plánovač"><img src="assets/logo.svg" alt="Svadba J a M"></a>
 
     <main>
-      <section class="workspace">
-        <div id="viewport" aria-label="Editor pôdorysu">
-          <div id="world"><div class="room-label">SVADOBNÁ SÁLA</div><div id="items"></div></div>
-          <div class="zoom-tip">Koliesko: zoom · ťahanie prázdnej plochy: posun</div>
+      <section class="pracovna-plocha">
+        <div id="zobrazeniePodorysu" aria-label="Editor pôdorysu">
+          <div id="podorys"><div class="nazov-saly">SVADOBNÁ SÁLA</div><div id="prvky"></div></div>
+          <div class="napoveda-priblizenia">Koliesko: zoom · ťahanie prázdnej plochy: posun</div>
         </div>
-        <div class="library-wrap">
-          <div class="library-title"><b>Presuňte prvky do pôdorysu</b><a id="resetPlan" href="#">Vyresetovať plán sály</a></div>
-          <div id="library" class="library"></div>
+        <div class="obal-kniznice">
+          <div class="nadpis-kniznice"><b>Presuňte prvky do pôdorysu</b><a id="resetovatPlan" href="#">Vyresetovať plán sály</a></div>
+          <div id="kniznicaPrvkov" class="kniznica-prvkov"></div>
         </div>
       </section>
 
-      <aside id="sidebar">
-        <div class="side-tabs"><button class="active" data-tab="overview">Prehľad</button><button data-tab="table">Detail stola</button><button data-tab="event">Podujatie</button></div>
-        <div id="overviewTab" class="tab-panel active">
-          <section class="card"><h2>Prehľad</h2><div id="stats" class="stats"></div></section>
-          <section class="card guests-card">
-            <div class="section-head"><h2>Zoznam hostí</h2><button id="addGuest" class="primary">＋ Pridať hosťa</button></div>
-            <div class="filters"><input id="guestSearch" placeholder="Vyhľadať hosťa…"><select id="guestFilter"><option value="all">Všetci hostia</option><option value="unseated">Bez miesta</option><option value="allergy">S alergiou</option><option value="child">Deti</option></select></div>
-            <div id="guestList" class="guest-list"></div>
+      <aside id="bocnyPanel">
+        <div class="zalozky-panelu"><button class="aktivne" data-tab="overview">Prehľad</button><button data-tab="table">Detail stola</button><button data-tab="event">Podujatie</button></div>
+        <div id="panelPrehladu" class="obsah-zalozky aktivne">
+          <section class="karta"><h2>Prehľad</h2><div id="statistiky" class="mriezka-statistik"></div></section>
+          <section class="karta karta-hosti">
+            <div class="hlavicka-sekcie"><h2>Zoznam hostí</h2><button id="pridatHosta" class="hlavne">＋ Pridať hosťa</button></div>
+            <div class="filtre"><input id="hladanieHosta" placeholder="Vyhľadať hosťa…"><select id="filterHosti"><option value="all">Všetci hostia</option><option value="unseated">Bez miesta</option><option value="allergy">S alergiou</option><option value="child">Deti</option></select></div>
+            <div id="zoznamHosti" class="zoznam-hosti"></div>
           </section>
         </div>
-        <div id="tableTab" class="tab-panel"><section class="card" id="tableDetail"><div class="empty"><b>Vyberte stôl</b><p>Kliknite na stôl v pôdoryse.</p></div></section></div>
-        <div id="eventTab" class="tab-panel">
-          <section class="card"><h2>Informácie o podujatí</h2><div class="form-grid"><label>Dátum<input type="date" data-event="date"></label><label>Kontaktná osoba<input data-event="contactName"></label><label>Telefón<input data-event="phone"></label><label>E-mail<input type="email" data-event="email"></label><label class="span2">Všeobecná poznámka<textarea data-event="note" rows="5"></textarea></label></div></section>
-          <section class="card submit-card">
-            <div class="project-actions"><button id="importBtn">Import JSON</button><button id="exportBtn">Export JSON</button></div>
-            <button id="pdfBtn" class="large">▧ Vytvoriť PDF</button>
-            <button id="submitPlan" class="primary large">✈ Odoslať celý plán</button>
+        <div id="panelStola" class="obsah-zalozky"><section class="karta" id="detailStola"><div class="prazdne"><b>Vyberte stôl</b><p>Kliknite na stôl v pôdoryse.</p></div></section></div>
+        <div id="panelPodujatia" class="obsah-zalozky">
+          <section class="karta"><h2>Informácie o podujatí</h2><div class="mriezka-formulara"><label>Dátum<input type="date" data-event="date"></label><label>Kontaktná osoba<input data-event="contactName"></label><label>Telefón<input data-event="phone"></label><label>E-mail<input type="email" data-event="email"></label><label class="dva-stlpce">Všeobecná poznámka<textarea data-event="note" rows="5"></textarea></label></div></section>
+          <section class="karta karta-odoslania">
+            <div class="akcie-projektu"><button id="importovatPlan">Import JSON</button><button id="exportovatPlan">Export JSON</button></div>
+            <button id="vytvoritPdf" class="velke">▧ Vytvoriť PDF</button>
+            <button id="odoslatPlan" class="hlavne velke">✈ Odoslať celý plán</button>
             <small>Na GitHub Pages sa finálna verzia bezpečne stiahne ako samostatný JSON súbor.</small>
           </section>
         </div>
@@ -52,21 +52,21 @@
     </main>
   </div>
 
-  <dialog id="guestDialog"><form id="guestForm"><div class="dialog-head"><h2 id="guestDialogTitle">Pridať hosťa</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="form-grid">
+  <dialog id="dialogHosta"><form id="formularHosta"><div class="hlavicka-dialogu"><h2 id="nadpisDialoguHosta">Pridať hosťa</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="mriezka-formulara">
     <label>Meno<input name="firstName" required maxlength="60"></label><label>Priezvisko<input name="lastName" required maxlength="60"></label>
-    <div class="guest-placement-row span2"><label>Typ osoby<select name="personType"><option value="adult">Dospelý</option><option value="child">Dieťa</option></select></label><label>Stôl<select name="tableId"></select></label><label>Číslo miesta<input name="seatNumber" type="number" min="1"></label></div>
-    <fieldset class="span2"><legend>Alergie a intolerancie</legend><div id="allergyChoices" class="checks"></div></fieldset>
-    <label class="span2">Poznámka<textarea name="note" rows="3"></textarea></label>
-  </div><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="saveGuest" type="submit" class="primary">Uložiť hosťa</button></div></form></dialog>
+    <div class="riadok-umiestnenia-hosta dva-stlpce"><label>Typ osoby<select name="personType"><option value="adult">Dospelý</option><option value="child">Dieťa</option></select></label><label>Stôl<select name="tableId"></select></label><label>Číslo miesta<input name="seatNumber" type="number" min="1"></label></div>
+    <fieldset class="dva-stlpce"><legend>Alergie a intolerancie</legend><div id="vyberAlergii" class="zaskrtavacie-polia"></div></fieldset>
+    <label class="dva-stlpce">Poznámka<textarea name="note" rows="3"></textarea></label>
+  </div><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="ulozitHosta" type="submit" class="hlavne">Uložiť hosťa</button></div></form></dialog>
 
-  <dialog id="itemDialog"><form id="itemForm"><div class="dialog-head"><h2>Nastavenie prvku</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="form-grid"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="table-only">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="span2">Poznámka<textarea name="note"></textarea></label></div><div class="dialog-actions"><button id="deleteItem" class="danger" type="button">Odstrániť</button><button id="duplicateItem" type="button">Duplikovať</button><button id="lockItem" type="button">Uzamknúť</button><button type="submit" class="primary">Uložiť</button></div></form></dialog>
-  <dialog id="summaryDialog"><div class="dialog-head"><h2>Rekapitulácia plánu</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div id="summaryContent"></div><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zavrieť</button><button id="confirmSubmit" class="primary">Uložiť finálnu verziu</button></div></dialog>
-  <dialog id="resetDialog"><div class="dialog-head"><h2>Vyresetovať plán sály?</h2><button type="button" class="icon-btn" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><p>Všetky aktuálne zmeny sa nahradia predvoleným rozložením. Túto akciu nie je možné vrátiť späť.</p><div class="dialog-actions"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="confirmReset" type="button" class="danger">Áno, vyresetovať</button></div></dialog>
-  <input id="fileInput" type="file" accept="application/json" hidden>
-  <div id="toast" role="status"></div>
+  <dialog id="dialogPrvku"><form id="formularPrvku"><div class="hlavicka-dialogu"><h2>Nastavenie prvku</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="mriezka-formulara"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="iba-pre-stol">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="dva-stlpce">Poznámka<textarea name="note"></textarea></label></div><div class="akcie-dialogu"><button id="odstranitPrvok" class="nebezpecne" type="button">Odstrániť</button><button id="duplikovatPrvok" type="button">Duplikovať</button><button id="zamknutPrvok" type="button">Uzamknúť</button><button type="submit" class="hlavne">Uložiť</button></div></form></dialog>
+  <dialog id="dialogRekapitulacie"><div class="hlavicka-dialogu"><h2>Rekapitulácia plánu</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div id="obsahRekapitulacie"></div><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zavrieť</button><button id="potvrditOdoslanie" class="hlavne">Uložiť finálnu verziu</button></div></dialog>
+  <dialog id="dialogResetovania"><div class="hlavicka-dialogu"><h2>Vyresetovať plán sály?</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><p>Všetky aktuálne zmeny sa nahradia predvoleným rozložením. Túto akciu nie je možné vrátiť späť.</p><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="potvrditResetovanie" type="button" class="nebezpecne">Áno, vyresetovať</button></div></dialog>
+  <input id="vstupSuboru" type="file" accept="application/json" hidden>
+  <div id="oznam" role="status"></div>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <script type="module" src="js/app.js"></script>
-  <script nomodule>document.getElementById('legacyBrowser').style.display='grid';document.querySelector('.app-shell').style.display='none';</script>
+  <script nomodule>document.getElementById('staryPrehliadac').style.display='grid';document.querySelector('.obal-aplikacie').style.display='none';</script>
 </body>
 </html>
