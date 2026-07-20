@@ -1,20 +1,22 @@
-// Posledná hodnota nastavuje viditeľnosť ikony a textu priamo na ploche pôdorysu.
+// Posledná hodnota nastavuje vzhľad objektu na ploche.
+// shape: "sharp", "rounded", "circle", "chair" alebo "none".
 // Ikona môže byť napr. "fa_house" alebo názov SVG súboru z assets, napr. "stol.svg".
 export const TYPES=[
-  ['round-table','Okrúhly stôl','fa_circle',140,140,8,{icon:false,text:true}],
-  ['rect-table','Obdĺžnikový stôl','fa_table_cells_large',180,100,8,{icon:false,text:true}],
-  ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:true,text:false}],
-  ['chair','Stolička','fa_seat',55,55,0,{icon:true,text:true}],
-  ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:true}],
-  ['speaker','Reproduktor','fa_speaker',60,60,0,{icon:true,text:false}],
-  ['bar','Bar','fa_martini_glass_citrus',170,70,0,{icon:true,text:true}],
-  ['dance-floor','Tanečný parket','fa_shoe_prints',250,200,0,{icon:true,text:true}],
-  ['decoration','Dekorácia','fa_balloon',70,70,0,{icon:true,text:true}],
-  ['plant','Rastlina','fa_flower_tulip',70,70,0,{icon:true,text:true}],
-  ['stage','Pódium','fa_masks_theater',220,110,0,{icon:true,text:true}],
-  ['photo','Fotokútik','fa_camera_retro',180,120,0,{icon:true,text:true}]
+  ['round-table','Okrúhly stôl','fa_circle',140,140,8,{icon:false,text:true,shape:'circle'}],
+  ['rect-table','Obdĺžnikový stôl','fa_table_cells_large',180,100,8,{icon:false,text:true,shape:'rounded'}],
+  ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:false,text:false,shape:'rounded'}],
+  ['chair','Stolička','fa_chair',55,55,0,{icon:true,text:true,shape:'chair'}],
+  ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:true,shape:'rounded'}],
+  ['bar','Bar','fa_martini_glass_citrus',170,70,0,{icon:true,text:true,shape:'rounded'}],
+  ['dance-floor','Tanečný parket','fa_border_all',250,200,0,{icon:true,text:true,shape:'sharp'}],
+  ['decoration','Dekorácia','fa_wand_magic_sparkles',70,70,0,{icon:true,text:true,shape:'none'}],
+  ['plant','Rastlina','fa_seedling',70,70,0,{icon:true,text:true,shape:'none'}],
+  ['stage','Pódium','fa_masks_theater',220,110,0,{icon:true,text:true,shape:'rounded'}],
+  ['photo','Fotokútik','fa_camera_retro',180,120,0,{icon:true,text:true,shape:'rounded'}],
+  ['universal-sharp','Univerzálny – ostré rohy','fa_square',120,80,0,{icon:true,text:true,shape:'sharp'}],
+  ['universal-rounded','Univerzálny – oblé rohy','fa_rectangle',120,80,0,{icon:true,text:true,shape:'rounded'}]
 ];
-export const PERSON_ICONS={adult:'fa_user',child:'fa_child_dress'};
+export const PERSON_ICONS={adult:'fa_user',child:'fa_child_reaching'};
 export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','Sója','Iné'];
 const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'
   ?globalThis.crypto.randomUUID()
