@@ -316,6 +316,28 @@ main {
   color: var(--muted);
 }
 
+.seat-guest-summary {
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.seat-guest-summary p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.seat-guest-summary p + p {
+  margin-top: 4px;
+}
+
+.seat-guest-summary b {
+  color: var(--ink);
+}
+
 .seat-map.head .table-preview {
   width: 210px;
   height: 72px;
