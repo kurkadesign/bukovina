@@ -1,11 +1,11 @@
 // Posledná hodnota nastavuje viditeľnosť ikony a textu priamo na ploche pôdorysu.
 // Ikona môže byť napr. "fa_house" alebo názov SVG súboru z assets, napr. "stol.svg".
 export const TYPES=[
-  ['round-table','Okrúhly stôl','fa_circle',140,140,8,{icon:true,text:true}],
-  ['rect-table','Obdĺžnikový stôl','fa_table_cells_large',180,100,8,{icon:true,text:true}],
-  ['head-table','Hlavný svadobný stôl','fa_crown',260,90,8,{icon:true,text:false}],
+  ['round-table','Okrúhly stôl','fa_circle',140,140,8,{icon:false,text:true}],
+  ['rect-table','Obdĺžnikový stôl','fa_table_cells_large',180,100,8,{icon:false,text:true}],
+  ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:false,text:false}],
   ['chair','Stolička','fa_chair',55,55,0,{icon:true,text:true}],
-  ['dj','DJ pult','fa_compact_disc',150,80,0,{icon:true,text:true}],
+  ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:true}],
   ['bar','Bar','fa_martini_glass_citrus',170,70,0,{icon:true,text:true}],
   ['dance-floor','Tanečný parket','fa_border_all',250,200,0,{icon:true,text:true}],
   ['decoration','Dekorácia','fa_wand_magic_sparkles',70,70,0,{icon:true,text:true}],
