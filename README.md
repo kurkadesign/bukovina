@@ -33,9 +33,23 @@ Napríklad reproduktor s ostrými rohmi možno pridať bez použitia typu DJ:
 ['speaker','Reproduktor','fa_speaker',80,110,0,{icon:true,text:true,shape:'sharp'}]
 ```
 
-V spodnej lište sú pripravené aj dva hotové typy: univerzálny objekt s ostrými rohmi a
-univerzálny objekt s oblými rohmi. Veľkosť oblých rohov sa nastavuje premennou
-`--object-radius-rounded` na začiatku `overrides.css`.
+Veľkosť oblých rohov sa nastavuje premennou `--object-radius-rounded` na začiatku
+`overrides.css`.
+
+## Predvolené rozloženie
+
+Zelená bodka pri vybranom prvku ho uloží do používateľského predvoleného rozloženia.
+Predvolené prvky sa po presune, otočení alebo úprave automaticky aktualizujú. Reset sály
+následne načíta toto rozloženie. Údaje sa ukladajú v prehliadači pod kľúčom
+`wedding-planner-default-items-v1`.
+
+Funkciu možno vypnúť v `js/config.js`:
+
+```js
+export const KONFIGURACIA = {
+  povolitUkladaniePredvolenychPrvkov: false
+};
+```
 
 ## Dôležité obmedzenie GitHub Pages
 
