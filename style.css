@@ -183,6 +183,19 @@ main {
   background: #fff1f1;
 }
 
+.akcie-prvku .zamknutie-prvku.aktivne {
+  color: #506f6f;
+  background: rgba(112, 142, 142, 0.18);
+}
+
+#panelPodujatia textarea[data-event="note"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  resize: vertical;
+}
+
 .akcie-prvku .ulozit-predvolene {
   display: grid;
   place-items: center;
