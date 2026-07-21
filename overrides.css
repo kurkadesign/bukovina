@@ -159,6 +159,29 @@ main {
   background: #fff1f1;
 }
 
+.akcie-prvku .ulozit-predvolene {
+  display: grid;
+  place-items: center;
+  background: #f6fbf7;
+}
+
+.zelena-bodka {
+  width: 11px;
+  height: 11px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #55a568;
+  box-shadow: 0 0 0 1px #4b925c;
+}
+
+.ulozit-predvolene.je-predvolene {
+  background: #e9f6ec;
+}
+
+.ulozit-predvolene.je-predvolene .zelena-bodka {
+  box-shadow: 0 0 0 2px #b9dec2;
+}
+
 .vizualna-ikona {
   display: inline-grid;
   place-items: center;
