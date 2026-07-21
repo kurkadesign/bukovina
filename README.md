@@ -25,7 +25,7 @@ viditeľnosť ikony a textu a nezávislý tvar rohov. Dostupné hodnoty `shape` 
 
 Farbu Font Awesome ikony možno nastaviť v rovnakom objekte cez `iconColor`, napríklad
 `iconColor: '#789b7e'` alebo `iconColor: 'var(--plant-color)'`. Jednotná veľkosť ikon na
-ploche sa nastavuje premennou `--object-icon-size` na začiatku `overrides.css`.
+ploche sa nastavuje premennou `--object-icon-size` v súbore `style.css`.
 
 Napríklad reproduktor s ostrými rohmi možno pridať bez použitia typu DJ:
 
@@ -34,7 +34,7 @@ Napríklad reproduktor s ostrými rohmi možno pridať bez použitia typu DJ:
 ```
 
 Veľkosť oblých rohov sa nastavuje premennou `--object-radius-rounded` na začiatku
-`overrides.css`.
+`style.css`.
 
 ## Predvolené rozloženie
 
