@@ -339,8 +339,14 @@ main {
 .kniznica-prvkov {
   overscroll-behavior-x: contain;
   scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(130, 111, 100, 0.38) transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.kniznica-prvkov::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 #prepinacEditovania,
@@ -505,6 +511,10 @@ dialog.nahradny-dialog[open] {
   box-shadow: none;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+}
+
+#bocnyPanel .karta {
+  border: 0;
 }
 
 .zalozky-panelu,
