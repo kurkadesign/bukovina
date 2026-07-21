@@ -4,7 +4,7 @@
 export const TYPES=[
   ['round-table','Okrúhly stôl','fa_circle',140,140,8,{icon:false,text:true,shape:'circle'}],
   ['rect-table','Obdĺžnikový stôl','fa_table_cells_large',180,100,8,{icon:false,text:true,shape:'rounded'}],
-  ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:true,text:false,shape:'rounded'}],
+  ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:false,text:false,shape:'rounded'}],
   ['chair','Stolička','fa_seat',55,55,0,{icon:true,text:true,shape:'chair'}],
   ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:true,shape:'rounded'}],
   ['speaker','Reproduktor','fa_speaker',55,55,0,{icon:true,text:false,shape:'rounded'}],
@@ -17,14 +17,18 @@ export const TYPES=[
 ];
 export const PERSON_ICONS={adult:'fa_user',child:'fa_child_reaching'};
 export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','Sója','Iné'];
+export const nastaveniePlochy={
+  editovatelnyRezim:true
+};
 const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'
   ?globalThis.crypto.randomUUID()
   :'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
 export function initialState(){const t1=uid(),t2=uid(),t3=uid(),g1=uid(),g2=uid(),g3=uid(),g4=uid();return{schemaVersion:1,projectId:uid(),wedding:{date:'2026-09-12',contactName:'Jana',phone:'',email:'',note:''},settings:{zoom:0.72,panX:60,panY:35},items:[
-  {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:0,seats:6,note:'',locked:false,defaultKey:'hlavny-stol'},
+  {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:0,seats:10,note:'',locked:false,defaultKey:'hlavny-stol'},
   {id:t1,type:'round-table',name:'Stôl 1',x:380,y:350,width:180,height:180,rotation:0,number:1,seats:8,note:'Rodina nevesty',locked:false,defaultKey:'okruhly-stol-1'},
-  {id:uid(),type:'dj',name:'DJ',x:90,y:450,width:150,height:85,rotation:0,number:1,seats:0,note:'',locked:false,defaultKey:'dj-1'},
-  {id:uid(),type:'dance-floor',name:'Tanečný parket',x:1100,y:350,width:360,height:300,rotation:0,number:1,seats:0,note:'',locked:false,defaultKey:'tanecny-parket-1'}],guests:[
+  {id:t2,type:'round-table',name:'Stôl 2',x:800,y:320,width:180,height:180,rotation:0,number:2,seats:8,note:'',locked:false,defaultKey:'okruhly-stol-2'},
+  {id:t3,type:'round-table',name:'Stôl 3',x:610,y:670,width:180,height:180,rotation:0,number:3,seats:8,note:'',locked:false,defaultKey:'okruhly-stol-3'},
+  {id:uid(),type:'dj',name:'DJ',x:90,y:450,width:150,height:85,rotation:0,number:1,seats:0,note:'',locked:false,defaultKey:'dj-1'},{id:uid(),type:'bar',name:'Bar',x:1450,y:880,width:190,height:75,rotation:0,number:1,seats:0,note:'',locked:false,defaultKey:'bar-1'},{id:uid(),type:'dance-floor',name:'Tanečný parket',x:1100,y:350,width:360,height:300,rotation:0,number:1,seats:0,note:'',locked:false,defaultKey:'tanecny-parket-1'}],guests:[
   {id:g1,firstName:'Zuzana',lastName:'Nováková',personType:'adult',tableId:t2,seatNumber:1,menu:'Klasické',allergies:['Arašidy'],note:'',companion:'Peter Novák',group:'Novákovci',rsvp:'yes',color:'#e99499'},
   {id:g2,firstName:'Peter',lastName:'Novák',personType:'adult',tableId:t2,seatNumber:2,menu:'Klasické',allergies:[],note:'',companion:'Zuzana Nováková',group:'Novákovci',rsvp:'yes',color:'#91addc'},
   {id:g3,firstName:'Anna',lastName:'Kováčová',personType:'adult',tableId:t2,seatNumber:3,menu:'Bezlepkové',allergies:['Lepok'],note:'',companion:'',group:'Kováčovci',rsvp:'yes',color:'#d9b776'},
