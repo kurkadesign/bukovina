@@ -1,6 +1,6 @@
 /* Full-canvas editor with floating glass panels */
 :root {
-  --bg: rgba(112, 142, 142, 0.03);
+  --bg: #fff;
   --rose: #708e8e;
   --rose2: #e2e8e8;
   --green: #708e8e;
