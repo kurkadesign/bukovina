@@ -320,13 +320,33 @@ main {
   scrollbar-color: rgba(130, 111, 100, 0.38) transparent;
 }
 
+#prepinacEditovania,
 #resetovatPlan {
   display: inline;
-  color: #c85860;
   font-size: 11px;
   font-weight: 650;
   text-decoration: none;
   cursor: pointer;
+}
+
+.akcie-kniznice {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+#prepinacEditovania {
+  color: #4d79b8;
+}
+
+#prepinacEditovania:hover {
+  color: #315f9f;
+  text-decoration: underline;
+  transform: none;
+}
+
+#resetovatPlan {
+  color: #c85860;
 }
 
 #resetovatPlan:hover {
