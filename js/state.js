@@ -21,7 +21,7 @@ const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function
   ?globalThis.crypto.randomUUID()
   :'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
 export function initialState(){const t1=uid(),t2=uid(),t3=uid(),g1=uid(),g2=uid(),g3=uid(),g4=uid();return{schemaVersion:1,projectId:uid(),wedding:{date:'2026-09-12',contactName:'Jana',phone:'',email:'',note:''},settings:{zoom:0.72,panX:60,panY:35},items:[
-  {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:0,seats:10,note:'',locked:false,defaultKey:'hlavny-stol'},
+  {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:0,seats:6,note:'',locked:false,defaultKey:'hlavny-stol'},
   {id:t1,type:'round-table',name:'Stôl 1',x:380,y:350,width:180,height:180,rotation:0,number:1,seats:8,note:'Rodina nevesty',locked:false,defaultKey:'okruhly-stol-1'},
   {id:uid(),type:'dj',name:'DJ',x:90,y:450,width:150,height:85,rotation:0,number:1,seats:0,note:'',locked:false,defaultKey:'dj-1'},
   {id:uid(),type:'dance-floor',name:'Tanečný parket',x:1100,y:350,width:360,height:300,rotation:0,number:1,seats:0,note:'',locked:false,defaultKey:'tanecny-parket-1'}],guests:[
