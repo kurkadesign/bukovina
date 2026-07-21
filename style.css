@@ -346,6 +346,16 @@ main {
   transform: scale(0.98);
 }
 
+.polozka-kniznice,
+.polozka-kniznice * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.polozka-kniznice {
+  touch-action: none;
+}
+
 .nahlad-presunu {
   position: fixed;
   z-index: 1000;
