@@ -7,7 +7,7 @@
   <title>Svadobný plánovač</title>
   <link rel="stylesheet" href="css/fontawesome.css">
   <link rel="stylesheet" href="css/sharp-light.css">
-  <link rel="stylesheet" href="style.css?v=20260721-2">
+  <link rel="stylesheet" href="style.css?v=20260721-3">
   <style>@import url('https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&display=swap');</style>
 </head>
 <body>
@@ -52,7 +52,7 @@
   </div>
 
   <dialog id="dialogHosta"><form id="formularHosta"><div class="hlavicka-dialogu"><h2 id="nadpisDialoguHosta">Pridať hosťa</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="mriezka-formulara">
-    <label>Meno<input name="firstName" required maxlength="60"></label><label>Priezvisko<input name="lastName" required maxlength="60"></label>
+    <label>Meno alebo prezývka<input name="firstName" required maxlength="60"></label><label>Priezvisko<input name="lastName" maxlength="60"></label>
     <div class="riadok-umiestnenia-hosta dva-stlpce"><label>Typ osoby<select name="personType"><option value="adult">Dospelý</option><option value="child">Dieťa</option></select></label><label>Stôl<select name="tableId"></select></label><label>Číslo miesta<input name="seatNumber" type="number" min="1"></label></div>
     <fieldset class="dva-stlpce"><legend>Alergie a intolerancie</legend><div id="vyberAlergii" class="zaskrtavacie-polia"></div></fieldset>
     <label class="dva-stlpce">Poznámka<textarea name="note" rows="3"></textarea></label>
@@ -65,7 +65,7 @@
   <div id="oznam" role="status"></div>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-<script type="module" src="js/app.js?v=20260721-3"></script>
+<script type="module" src="js/app.js?v=20260721-4"></script>
   <script nomodule>document.getElementById('staryPrehliadac').style.display='grid';document.querySelector('.obal-aplikacie').style.display='none';</script>
 </body>
 </html>
