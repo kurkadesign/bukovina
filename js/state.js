@@ -4,9 +4,9 @@
 export const TYPES=[
   ['round-table','Okrúhly stôl','fa_circle',140,140,8,{icon:false,text:true,shape:'circle'}],
   ['rect-table','Obdĺžnikový stôl','fa_table_cells_large',180,100,8,{icon:false,text:true,shape:'rounded'}],
-  ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:false,text:false,shape:'rounded'}],
-  ['chair','Stolička','fa_seat',55,55,0,{icon:true,text:true,shape:'chair'}],
-  ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:true,shape:'rounded'}],
+  ['head-table','Hlavný svadobný stôl','fa_rings_wedding',260,90,8,{icon:true,text:false,shape:'rounded'}],
+  ['chair','Stolička','fa_seat',55,55,0,{icon:true,text:false,shape:'chair'}],
+  ['dj','DJ pult','fa_turntable',150,80,0,{icon:true,text:false,shape:'rounded'}],
   ['speaker','Reproduktor','fa_speaker',55,55,0,{icon:true,text:false,shape:'rounded'}],
   ['bar','Bar','fa_martini_glass_citrus',170,70,0,{icon:true,text:true,shape:'rounded'}],
   ['dance-floor','Tanečný parket','fa_shoe_prints',250,200,0,{icon:true,text:true,shape:'sharp'}],
