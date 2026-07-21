@@ -132,6 +132,10 @@ main {
   cursor: grabbing;
 }
 
+#podorys {
+  border: 0;
+}
+
 .akcie-prvku {
   position: absolute;
   right: -8px;
@@ -441,8 +445,8 @@ dialog.nahradny-dialog[open] {
 
 .logo-podorysu {
   position: fixed;
-  left: 22px;
-  top: 18px;
+  left: 30px;
+  top: 30px;
   z-index: 18;
   display: block;
   width: 184px;
@@ -461,6 +465,7 @@ dialog.nahradny-dialog[open] {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: left center;
 }
 
 .obal-kniznice {
