@@ -250,7 +250,7 @@ main {
 .ikona-osoby-na-mieste {
   position: absolute;
   left: -5px;
-  top: -7px;
+  bottom: -7px;
   width: 15px;
   height: 15px;
   border-radius: 50%;
@@ -266,7 +266,7 @@ main {
 .cislo-obsadeneho-miesta {
   position: absolute;
   left: -5px;
-  bottom: -7px;
+  top: -7px;
   display: grid;
   place-items: center;
   min-width: 15px;
