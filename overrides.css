@@ -616,10 +616,9 @@ dialog.nahradny-dialog[open] {
 }
 
 .pdf-hlavicka img {
-  width: 245px;
-  height: 74px;
-  object-fit: contain;
-  object-position: left center;
+  display: block;
+  width: 74px;
+  height: auto;
 }
 
 .pdf-hlavicka strong {
@@ -630,7 +629,8 @@ dialog.nahradny-dialog[open] {
 }
 
 .pdf-obrazok-saly {
-  height: 800px;
+  width: 100%;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -639,11 +639,29 @@ dialog.nahradny-dialog[open] {
 
 .pdf-obrazok-saly canvas {
   display: block;
-  width: auto;
-  height: 100%;
-  max-width: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: auto;
   border: 1px solid #bbb3ad;
+}
+
+.pdf-strana.pdf-podorys {
+  padding-top: 24px;
+  padding-right: 60px;
+  padding-bottom: 16px;
+  padding-left: 60px;
+}
+
+.pdf-podorys .pdf-hlavicka {
+  height: 82px;
+  padding-bottom: 8px;
+}
+
+.pdf-podorys .pdf-obrazok-saly {
+  padding-top: 8px;
+}
+
+.pdf-podorys .pdf-cislo-strany {
+  bottom: 3px;
 }
 
 .pdf-prehlad {
