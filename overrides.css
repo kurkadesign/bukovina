@@ -631,7 +631,7 @@ dialog.nahradny-dialog[open] {
 
 .pdf-obrazok-saly {
   width: 100%;
-  height: auto;
+  height: 850px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -640,8 +640,11 @@ dialog.nahradny-dialog[open] {
 
 .pdf-obrazok-saly canvas {
   display: block;
-  width: 100%;
+  width: auto;
   height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   border: 1px solid #bbb3ad;
 }
 
