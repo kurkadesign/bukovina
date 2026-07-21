@@ -529,7 +529,7 @@ dialog.nahradny-dialog[open] {
   min-width: 60px;
   max-width: 200px;
   border: 0;
-  background-color: rgba(112, 142, 142, 0.8) !important;
+  background-color: rgba(112, 142, 142, 0.08) !important;
 }
 
 .polozka-kniznice > span:last-child {
