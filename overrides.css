@@ -515,6 +515,7 @@ dialog.nahradny-dialog[open] {
 
 #bocnyPanel .karta {
   border: 0;
+  background: rgba(112, 142, 142, 0.12);
 }
 
 .zalozky-panelu,
