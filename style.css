@@ -198,17 +198,11 @@ main {
 }
 
 .prvok-podorysu.zamknute::before {
-  content: "\f023";
-  right: -8px;
-  top: -12px;
-  z-index: 10;
-  color: #506f6f;
-  background: transparent;
-  font-family: "Font Awesome 7 Sharp";
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 1;
+  content: none;
+}
+
+.prvok-podorysu.zamknute > .tvar-prvku {
+  border-color: #c85860;
 }
 
 #panelPodujatia textarea[data-event="note"] {
