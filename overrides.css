@@ -263,6 +263,24 @@ main {
   background: #8da5d6;
 }
 
+.cislo-obsadeneho-miesta {
+  position: absolute;
+  left: -5px;
+  bottom: -7px;
+  display: grid;
+  place-items: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border: 1px solid #d98286;
+  border-radius: 8px;
+  background: #fff;
+  color: #9d555a;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .akcie-prvku .vizualna-ikona,
 .akcie-hosta .vizualna-ikona {
   font-size: 13px;
@@ -513,7 +531,8 @@ dialog.nahradny-dialog[open] {
 }
 
 .pdf-obrysy .miesto.ma-alergiu::after,
-.pdf-obrysy .ikona-osoby-na-mieste {
+.pdf-obrysy .ikona-osoby-na-mieste,
+.pdf-obrysy .cislo-obsadeneho-miesta {
   filter: grayscale(1);
 }
 
