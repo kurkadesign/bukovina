@@ -515,7 +515,7 @@ dialog.nahradny-dialog[open] {
 
 #bocnyPanel .karta {
   border: 0;
-  background: rgba(112, 142, 142, 0.8);
+  background-color: rgba(112, 142, 142, 0.8) !important;
 }
 
 .zalozky-panelu,
@@ -529,7 +529,7 @@ dialog.nahradny-dialog[open] {
   min-width: 60px;
   max-width: 200px;
   border: 0;
-  background: rgba(112, 142, 142, 0.8);
+  background-color: rgba(112, 142, 142, 0.8) !important;
 }
 
 .polozka-kniznice > span:last-child {
