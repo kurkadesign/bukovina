@@ -2,6 +2,7 @@ const qs=new URLSearchParams(location.search);
 const editToken=qs.get('token')||'';
 const shareToken=qs.get('share')||'';
 const accessToken=editToken||shareToken;
+if(accessToken)document.querySelector('.logo-podorysu')?.setAttribute('href',location.href);
 let readOnly=!!shareToken;
 let projectLocked=false;
 let loadedProject=null;
