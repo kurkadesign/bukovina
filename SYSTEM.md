@@ -2,9 +2,23 @@
 
 Požiadavky: PHP 8.1+, zapisovateľný priečinok `data/`, Apache alebo nginx s blokovaním verejného prístupu do `data`.
 
-Administrácia: `/admin/`. Pri prvom spustení sa vytvorí účet `admin@example.sk` s heslom `ZmenMa123!`; po prihlásení ho bezodkladne zmeňte v `data/users.json` pomocou PHP `password_hash`.
+Administrácia: `/admin/`. Pri prvom spustení sa vytvorí účet `admin@example.sk` s heslom `ZmenMa123!`; po prihlásení ho bezodkladne zmeňte cez `/admin/settings.php`.
 
 Klientský editor používa `?token=...`, zdieľaný režim `?share=...`. Share token nemá na API právo zápisu. Projekty sa ukladajú samostatne v `data/projects`, odoslané verzie v `data/versions`.
+
+## Zálohovanie a obnova
+
+Kompletnú zálohu je možné stiahnuť cez **Administrácia → Nastavenia → Záloha systému**. Výsledkom je jeden JSON súbor obsahujúci:
+
+- všetky aktuálne projekty,
+- všetky odoslané verzie,
+- administrátorské účty a hashované heslá.
+
+SMTP prihlasovacie údaje v zálohe nie sú, pretože sa načítavajú z prostredia servera.
+
+Pri obnove systém najprv overí formát a obsah súboru. Pred samotným importom automaticky uloží poistnú kópiu aktuálnych dát do `data/backups`. Uchováva sa posledných 10 poistných kópií. Obnova môže projekty zlúčiť s existujúcimi dátami alebo ich pred importom nahradiť. Obnovenie administrátorských účtov je samostatná voľba.
+
+Maximálna veľkosť importovanej zálohy je 50 MB. Priečinok `data/backups` musí byť rovnako ako celý `data` neprístupný z webu.
 
 ## SMTP a e-mailové notifikácie
 
