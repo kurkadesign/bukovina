@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/fontawesome.css">
   <link rel="stylesheet" href="css/sharp-light.css">
   <link rel="stylesheet" href="style.css?v=20260721-7">
+  <link rel="stylesheet" href="panel.css">
   <style>@import url('https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&display=swap');</style>
 </head>
 <body>
@@ -41,7 +42,7 @@
         <div id="panelPodujatia" class="obsah-zalozky">
           <section class="karta"><h2>Informácie o podujatí</h2><div class="mriezka-formulara"><label class="dva-stlpce">Názov podujatia<input data-event="eventName"></label><label>Dátum<input type="date" data-event="date"></label><label>Kontaktná osoba<input data-event="contactName"></label><label>Telefón<input data-event="phone"></label><label>E-mail<input type="email" data-event="email"></label><label class="dva-stlpce">Všeobecná poznámka<textarea data-event="note" rows="5"></textarea></label></div></section>
           <section class="karta karta-odoslania">
-            <div class="akcie-projektu"><button id="importovatPlan">Import JSON</button><button id="exportovatPlan">Export JSON</button></div>
+            <div class="akcie-projektu"><button id="kopirovatShareOdkaz" class="velke">Kopírovať odkaz na share</button></div>
             <button id="vytvoritPdf" class="velke">▧ Vytvoriť PDF</button>
             <button id="odoslatPlan" class="hlavne velke">✈ Odoslať celý plán</button>
             <small>Na GitHub Pages sa finálna verzia bezpečne stiahne ako samostatný JSON súbor.</small>
@@ -61,7 +62,6 @@
   <dialog id="dialogPrvku"><form id="formularPrvku"><div class="hlavicka-dialogu"><h2>Nastavenie prvku</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="mriezka-formulara"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="iba-pre-stol">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="dva-stlpce">Poznámka<textarea name="note"></textarea></label></div><div class="akcie-dialogu"><button id="odstranitPrvok" class="nebezpecne" type="button">Odstrániť</button><button id="duplikovatPrvok" type="button">Duplikovať</button><button id="zamknutPrvok" type="button">Uzamknúť</button><button type="submit" class="hlavne">Uložiť</button></div></form></dialog>
   <dialog id="dialogRekapitulacie"><div class="hlavicka-dialogu"><h2>Rekapitulácia plánu</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div id="obsahRekapitulacie"></div><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zavrieť</button><button id="potvrditOdoslanie" class="hlavne">Uložiť finálnu verziu</button></div></dialog>
   <dialog id="dialogResetovania"><div class="hlavicka-dialogu"><h2>Vyresetovať plán sály?</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><p>Všetky aktuálne zmeny sa nahradia predvoleným rozložením. Túto akciu nie je možné vrátiť späť.</p><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="potvrditResetovanie" type="button" class="nebezpecne">Áno, vyresetovať</button></div></dialog>
-  <input id="vstupSuboru" type="file" accept="application/json" hidden>
   <div id="oznam" role="status"></div>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>

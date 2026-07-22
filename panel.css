@@ -1,0 +1,5 @@
+#bocnyPanel,.obal-kniznice{border:0!important;background:rgba(112,142,142,.08)!important;backdrop-filter:blur(5px)!important;-webkit-backdrop-filter:blur(5px)!important;box-shadow:none!important}
+.polozka-kniznice{background:rgba(255,255,255,.5)!important}
+#bocnyPanel .karta{border:0!important;background:rgba(255,255,255,.5)!important}
+#bocnyPanel .obsah-zalozky,#bocnyPanel .zalozky-panelu{background:transparent!important}
+.akcie-projektu{grid-template-columns:1fr}
