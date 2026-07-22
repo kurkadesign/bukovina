@@ -11,3 +11,43 @@ dialog,
   font-optical-sizing: auto;
   font-style: normal;
 }
+
+.access-denied body {
+  overflow: auto;
+  background: #f5f7f7;
+}
+
+.access-denied-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.access-denied-page section {
+  width: min(520px, 100%);
+  padding: 42px;
+  text-align: center;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 18px 55px #24353518;
+}
+
+.access-denied-page img {
+  display: block;
+  width: 190px;
+  height: auto;
+  margin: 0 auto 30px;
+}
+
+.access-denied-page h1 {
+  margin: 0 0 12px;
+  color: #243535;
+  font-size: 28px;
+}
+
+.access-denied-page p {
+  margin: 0;
+  color: #617575;
+  line-height: 1.6;
+}

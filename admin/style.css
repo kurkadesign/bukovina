@@ -30,3 +30,8 @@ dialog {
   line-height: 18px;
   white-space: nowrap;
 }
+
+a:not(.button-link):hover {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
