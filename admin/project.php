@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../lib/storage.php';
+require_once __DIR__ . '/../lib/mailer.php';
 admin_required();
 ensure_storage();
 
@@ -15,6 +16,7 @@ function status_label(string $status): string {
     ][$status] ?? $status;
 }
 function app_root_url(): string {
+    if (BASE_URL !== '') return BASE_URL;
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $script = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/admin/project.php'));
@@ -26,6 +28,9 @@ $id = preg_replace('/[^a-zA-Z0-9_-]/', '', (string)($_GET['id'] ?? ''));
 $file = project_path($id);
 $project = read_json($file);
 if (!$id || !$project) { http_response_code(404); exit('Projekt sa nenašiel.'); }
+$root = app_root_url();
+$editUrl = $root . '/?token=' . rawurlencode((string)$project['access']['editToken']);
+$shareUrl = $root . '/?share=' . rawurlencode((string)$project['access']['shareToken']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = (string)($_POST['action'] ?? '');
@@ -38,6 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $project['state']['wedding']['contactName'] = $project['client']['name'];
         $project['state']['wedding']['email'] = $project['client']['email'];
         $project['state']['wedding']['date'] = $project['weddingDate'];
+    } elseif ($action === 'send-invite') {
+        $result=send_client_invitation($project,$editUrl);
+        if ($result['ok']) {
+            $project['meta']['invitationSentAt']=gmdate('c');
+            $project['meta']['invitationSentTo']=$project['client']['email']??'';
+            write_json($file,$project);
+            header('Location: project.php?id='.rawurlencode($id).'&mail=sent');
+        } else {
+            header('Location: project.php?id='.rawurlencode($id).'&mail=error&message='.rawurlencode((string)($result['error']??'E-mail sa nepodarilo odoslať.')));
+        }
+        exit;
     } elseif ($action === 'enable-share') {
         $project['access']['shareEnabled'] = true;
     } elseif ($action === 'disable-share') {
@@ -58,9 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$root = app_root_url();
-$editUrl = $root . '/?token=' . rawurlencode((string)$project['access']['editToken']);
-$shareUrl = $root . '/?share=' . rawurlencode((string)$project['access']['shareToken']);
 $versionDir = VERSION_DIR . '/' . $id;
 $versions = is_dir($versionDir) ? array_reverse(glob($versionDir . '/*.json') ?: []) : [];
 $state = $project['state'] ?? [];
@@ -84,6 +97,8 @@ $tableCount = count(array_filter($state['items'] ?? [], fn($i) => str_contains((
     <span class="status large"><?=e(status_label((string)$project['status']))?></span>
   </section>
   <?php if(isset($_GET['saved'])):?><div class="notice">Zmeny boli uložené.</div><?php endif?>
+  <?php if(($_GET['mail']??'')==='sent'):?><div class="notice">Pozvánka bola odoslaná klientovi na <?=e((string)($project['client']['email']??''))?>.</div><?php endif?>
+  <?php if(($_GET['mail']??'')==='error'):?><div class="error"><?=e((string)($_GET['message']??'E-mail sa nepodarilo odoslať.'))?></div><?php endif?>
 
   <div class="detail-grid">
     <section class="card">
@@ -100,13 +115,14 @@ $tableCount = count(array_filter($state['items'] ?? [], fn($i) => str_contains((
 
     <section class="card stats-card">
       <h2>Stav návrhu</h2>
-      <dl><div><dt>Hostia</dt><dd><?=$guestCount?></dd></div><div><dt>Stoly</dt><dd><?=$tableCount?></dd></div><div><dt>Posledná úprava</dt><dd><?=e((string)($project['meta']['updatedAt'] ?? '—'))?></dd></div><div><dt>Odoslané</dt><dd><?=e((string)($project['meta']['submittedAt'] ?? '—'))?></dd></div></dl>
+      <dl><div><dt>Hostia</dt><dd><?=$guestCount?></dd></div><div><dt>Stoly</dt><dd><?=$tableCount?></dd></div><div><dt>Posledná úprava</dt><dd><?=e((string)($project['meta']['updatedAt'] ?? '—'))?></dd></div><div><dt>Odoslané</dt><dd><?=e((string)($project['meta']['submittedAt'] ?? '—'))?></dd></div><div><dt>Pozvánka klientovi</dt><dd><?=e((string)($project['meta']['invitationSentAt'] ?? '—'))?></dd></div></dl>
     </section>
   </div>
 
   <section class="card links-card">
     <h2>Odkazy</h2>
-    <div class="link-row"><div><b>Editačný odkaz klienta</b><code id="editUrl"><?=e($editUrl)?></code></div><div><a class="button-link" target="_blank" href="<?=e($editUrl)?>">Otvoriť</a><button type="button" onclick="copyText('editUrl')">Kopírovať</button><form method="post" class="inline"><button class="secondary" name="action" value="regenerate-edit">Vygenerovať nový</button></form></div></div>
+    <div class="link-row"><div><b>Editačný odkaz klienta</b><code id="editUrl"><?=e($editUrl)?></code></div><div><a class="button-link" target="_blank" href="<?=e($editUrl)?>">Otvoriť</a><button type="button" onclick="copyText('editUrl')">Kopírovať</button><form method="post" class="inline"><button name="action" value="send-invite" <?=mail_configured()?'':'disabled title="Najprv nastavte SMTP"'?>>Odoslať e-mailom</button></form><form method="post" class="inline"><button class="secondary" name="action" value="regenerate-edit">Vygenerovať nový</button></form></div></div>
+    <?php if(!mail_configured()):?><p class="muted">SMTP zatiaľ nie je nastavené. Odkaz môžete stále skopírovať ručne.</p><?php endif?>
     <div class="link-row"><div><b>Share odkaz – iba náhľad</b><code id="shareUrl"><?=e($shareUrl)?></code><small><?=!empty($project['access']['shareEnabled'])?'Aktívny':'Vypnutý'?></small></div><div><?php if(!empty($project['access']['shareEnabled'])):?><a class="button-link" target="_blank" href="<?=e($shareUrl)?>">Otvoriť</a><button type="button" onclick="copyText('shareUrl')">Kopírovať</button><form method="post" class="inline"><button class="secondary" name="action" value="disable-share">Vypnúť</button></form><?php else:?><form method="post" class="inline"><button name="action" value="enable-share">Zapnúť share</button></form><?php endif?><form method="post" class="inline"><button class="secondary" name="action" value="regenerate-share">Nový share odkaz</button></form></div></div>
   </section>
 
