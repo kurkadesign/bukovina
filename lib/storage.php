@@ -7,6 +7,15 @@ function enable_asset_versioning(): void { static $enabled=false;if($enabled)ret
 function read_json(string $file, array $fallback=[]): array { if (!is_file($file)) return $fallback; $v=json_decode((string)file_get_contents($file), true); return is_array($v)?$v:$fallback; }
 function write_json(string $file, array $data): void { ensure_storage(); if(isset($data['access']['shareToken']))$data['access']['shareEnabled']=true;$tmp=$file.'.tmp'; if(file_put_contents($tmp,json_encode($data,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),LOCK_EX)===false) throw new RuntimeException('Súbor sa nepodarilo zapísať.'); if(!rename($tmp,$file)) throw new RuntimeException('Súbor sa nepodarilo uložiť.'); }
 function token(int $bytes=24): string { return bin2hex(random_bytes($bytes)); }
+function default_event_items(): array { return [
+ ['id'=>token(16),'type'=>'head-table','name'=>'Hlavný stôl','x'=>500,'y'=>90,'width'=>520,'height'=>100,'rotation'=>0,'number'=>0,'seats'=>10,'note'=>'','locked'=>false,'defaultKey'=>'hlavny-stol'],
+ ['id'=>token(16),'type'=>'round-table','name'=>'Stôl 1','x'=>380,'y'=>350,'width'=>180,'height'=>180,'rotation'=>0,'number'=>1,'seats'=>8,'note'=>'','locked'=>false,'defaultKey'=>'okruhly-stol-1'],
+ ['id'=>token(16),'type'=>'round-table','name'=>'Stôl 2','x'=>800,'y'=>320,'width'=>180,'height'=>180,'rotation'=>0,'number'=>2,'seats'=>8,'note'=>'','locked'=>false,'defaultKey'=>'okruhly-stol-2'],
+ ['id'=>token(16),'type'=>'round-table','name'=>'Stôl 3','x'=>610,'y'=>670,'width'=>180,'height'=>180,'rotation'=>0,'number'=>3,'seats'=>8,'note'=>'','locked'=>false,'defaultKey'=>'okruhly-stol-3'],
+ ['id'=>token(16),'type'=>'dj','name'=>'DJ','x'=>90,'y'=>450,'width'=>150,'height'=>85,'rotation'=>0,'number'=>1,'seats'=>0,'note'=>'','locked'=>false,'defaultKey'=>'dj-1'],
+ ['id'=>token(16),'type'=>'bar','name'=>'Bar','x'=>1450,'y'=>880,'width'=>190,'height'=>75,'rotation'=>0,'number'=>1,'seats'=>0,'note'=>'','locked'=>false,'defaultKey'=>'bar-1'],
+ ['id'=>token(16),'type'=>'dance-floor','name'=>'Tanečný parket','x'=>1100,'y'=>350,'width'=>360,'height'=>300,'rotation'=>0,'number'=>1,'seats'=>0,'note'=>'','locked'=>false,'defaultKey'=>'tanecny-parket-1'],
+ ]; }
 function format_date_sk(mixed $value,string $fallback='—'): string { $value=trim((string)$value);if($value==='')return $fallback;try{return(new DateTimeImmutable($value))->format('d.m.Y');}catch(Throwable){return $fallback;} }
 function project_path(string $id): string { return PROJECT_DIR.'/'.preg_replace('/[^a-zA-Z0-9_-]/','',$id).'.json'; }
 function all_projects(): array { ensure_storage(); $out=[]; foreach (glob(PROJECT_DIR.'/*.json') ?: [] as $f) { $p=read_json($f); if ($p) $out[]=$p; } usort($out,fn($a,$b)=>strcmp($b['meta']['updatedAt']??'', $a['meta']['updatedAt']??'')); return $out; }
