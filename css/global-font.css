@@ -1,0 +1,13 @@
+html,
+body,
+button,
+input,
+select,
+textarea,
+dialog,
+.server-dialog-card,
+.pdf-strana {
+  font-family: "Mona Sans", sans-serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
