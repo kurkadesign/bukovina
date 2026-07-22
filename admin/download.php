@@ -6,7 +6,7 @@ ensure_storage();
 $id=preg_replace('/[^a-zA-Z0-9_-]/','',(string)($_GET['id']??''));
 $type=(string)($_GET['type']??'current');
 $project=read_json(project_path($id));
-if(!$id||!$project){http_response_code(404);exit('Projekt sa nenašiel.');}
+if(!$id||!$project){http_response_code(404);exit('Event sa nenašiel.');}
 $file=project_path($id);$downloadName=$id.'-aktualny.json';
 if($type==='version'){
   $version=preg_replace('/[^0-9-]/','',(string)($_GET['version']??''));
