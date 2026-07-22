@@ -1,0 +1,4 @@
+data/projects/*.json
+data/versions/**
+!data/projects/.gitkeep
+!data/versions/.gitkeep
