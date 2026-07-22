@@ -44,6 +44,14 @@ body:has(.restore-card) header nav a[href="email-templates.php"] {
   display: none;
 }
 
+@media (max-width: 760px) {
+  header nav {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+}
+
 .review-form {
   display: grid;
   gap: 8px;
