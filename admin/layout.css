@@ -1,2 +1,3 @@
 header{padding-left:max(24px,calc((100vw - 1180px)/2 + 24px));padding-right:max(24px,calc((100vw - 1180px)/2 + 24px))}
 button,.button-link{padding:8px 10px}
+.project-filters input,.project-filters select,.project-filters button,.project-filters .button-link{height:35px;padding-top:0;padding-bottom:0}
