@@ -1,6 +1,6 @@
 <?php
 $html = file_get_contents(__DIR__ . '/index.html');
-$assetFiles=['style.css','panel.css','readonly.css','css/fontawesome.css','css/sharp-light.css','js/bootstrap.js','js/app.js','js/state.js'];
+$assetFiles=['style.css','panel.css','readonly.css','css/fontawesome.css','css/sharp-light.css','js/bootstrap.js','js/app.js','js/state.js','js/vendor/html2canvas.min.js','js/vendor/jspdf.umd.min.js'];
 $version=(string)max(array_map(static fn(string $file):int=>(int)@filemtime(__DIR__.'/'.$file),$assetFiles));
 $html = str_replace('</head>', '<link rel="stylesheet" href="readonly.css"></head>', $html);
 $html = preg_replace('/<script type="module" src="js\/app\.js(?:\?v=[^"]*)?"><\/script>/', '<script type="module" src="js/bootstrap.js"></script>', $html);

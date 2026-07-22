@@ -63,8 +63,8 @@
   <dialog id="dialogRekapitulacie"><div class="hlavicka-dialogu"><h2>Rekapitulácia plánu</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div id="obsahRekapitulacie"></div><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zavrieť</button><button id="potvrditOdoslanie" class="hlavne">Uložiť finálnu verziu</button></div></dialog>
   <dialog id="dialogResetovania"><div class="hlavicka-dialogu"><h2>Vyresetovať plán sály?</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><p>Všetky aktuálne zmeny sa nahradia predvoleným rozložením. Túto akciu nie je možné vrátiť späť.</p><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="potvrditResetovanie" type="button" class="nebezpecne">Áno, vyresetovať</button></div></dialog>
   <div id="oznam" role="status"></div>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="js/vendor/html2canvas.min.js"></script>
+  <script src="js/vendor/jspdf.umd.min.js"></script>
 <script type="module" src="js/app.js?v=20260722-2"></script>
   <script nomodule>document.getElementById('staryPrehliadac').style.display='grid';document.querySelector('.obal-aplikacie').style.display='none';</script>
 </body>
