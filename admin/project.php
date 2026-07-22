@@ -1,141 +1,37 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__ . '/../lib/storage.php';
-require_once __DIR__ . '/../lib/mailer.php';
-admin_required();
-ensure_storage();
-
-function e(string $value): string { return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); }
-function status_label(string $status): string {
-    return [
-        'not-opened' => 'Neotvorené',
-        'editing' => 'Rozpracované',
-        'sent' => 'Odoslané',
-        'changed-after-send' => 'Upravené po odoslaní',
-        'archived' => 'Archivované',
-    ][$status] ?? $status;
+require_once __DIR__.'/../lib/storage.php';
+require_once __DIR__.'/../lib/mailer.php';
+admin_required();ensure_storage();
+function e(string $v):string{return htmlspecialchars($v,ENT_QUOTES,'UTF-8');}
+function status_label(string $s):string{return ['not-opened'=>'Neotvorené','editing'=>'Rozpracované','sent'=>'Odoslané','changed-after-send'=>'Upravené po odoslaní','archived'=>'Archivované'][$s]??$s;}
+function app_root_url():string{if(BASE_URL!=='')return BASE_URL;$scheme=(!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')?'https':'http';$host=$_SERVER['HTTP_HOST']??'localhost';$script=str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME']??'/admin/project.php'));$root=rtrim(dirname($script),'/');return $scheme.'://'.$host.($root==='/'?'':$root);}
+$id=preg_replace('/[^a-zA-Z0-9_-]/','',(string)($_GET['id']??''));$file=project_path($id);$project=read_json($file);if(!$id||!$project){http_response_code(404);exit('Projekt sa nenašiel.');}
+$root=app_root_url();$editUrl=$root.'/?token='.rawurlencode((string)$project['access']['editToken']);$shareUrl=$root.'/?share='.rawurlencode((string)$project['access']['shareToken']);
+if($_SERVER['REQUEST_METHOD']==='POST'){
+ verify_csrf();$action=(string)($_POST['action']??'');
+ if($action==='save-client'){$project['name']=trim((string)($_POST['name']??$project['name']));$project['client']['name']=trim((string)($_POST['clientName']??''));$project['client']['email']=trim((string)($_POST['clientEmail']??''));$project['weddingDate']=(string)($_POST['weddingDate']??'');$project['state']['wedding']['eventName']=$project['name'];$project['state']['wedding']['contactName']=$project['client']['name'];$project['state']['wedding']['email']=$project['client']['email'];$project['state']['wedding']['date']=$project['weddingDate'];}
+ elseif($action==='send-invite'){$result=send_client_invitation($project,$editUrl);if($result['ok']){$project['meta']['invitationSentAt']=gmdate('c');$project['meta']['invitationSentTo']=$project['client']['email']??'';write_json($file,$project);header('Location:project.php?id='.rawurlencode($id).'&mail=sent');}else header('Location:project.php?id='.rawurlencode($id).'&mail=error&message='.rawurlencode((string)($result['error']??'E-mail sa nepodarilo odoslať.')));exit;}
+ elseif($action==='enable-share')$project['access']['shareEnabled']=true;
+ elseif($action==='disable-share')$project['access']['shareEnabled']=false;
+ elseif($action==='regenerate-share'){$project['access']['shareToken']=token();$project['access']['shareEnabled']=true;}
+ elseif($action==='regenerate-edit')$project['access']['editToken']=token();
+ elseif($action==='archive')$project['status']='archived';
+ elseif($action==='restore')$project['status']='editing';
+ elseif($action==='delete'){$confirm=trim((string)($_POST['confirmName']??''));if(!hash_equals((string)$project['name'],$confirm)){header('Location:project.php?id='.rawurlencode($id).'&delete=invalid');exit;}if(is_file($file))unlink($file);$dir=VERSION_DIR.'/'.$id;if(is_dir($dir)){foreach(glob($dir.'/*')?:[] as $v)if(is_file($v))unlink($v);@rmdir($dir);}header('Location:index.php?deleted=1');exit;}
+ $project['meta']['updatedAt']=gmdate('c');write_json($file,$project);header('Location:project.php?id='.rawurlencode($id).'&saved=1');exit;
 }
-function app_root_url(): string {
-    if (BASE_URL !== '') return BASE_URL;
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $script = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/admin/project.php'));
-    $root = rtrim(dirname($script), '/');
-    return $scheme . '://' . $host . ($root === '/' ? '' : $root);
-}
-
-$id = preg_replace('/[^a-zA-Z0-9_-]/', '', (string)($_GET['id'] ?? ''));
-$file = project_path($id);
-$project = read_json($file);
-if (!$id || !$project) { http_response_code(404); exit('Projekt sa nenašiel.'); }
-$root = app_root_url();
-$editUrl = $root . '/?token=' . rawurlencode((string)$project['access']['editToken']);
-$shareUrl = $root . '/?share=' . rawurlencode((string)$project['access']['shareToken']);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = (string)($_POST['action'] ?? '');
-    if ($action === 'save-client') {
-        $project['name'] = trim((string)($_POST['name'] ?? $project['name']));
-        $project['client']['name'] = trim((string)($_POST['clientName'] ?? ''));
-        $project['client']['email'] = trim((string)($_POST['clientEmail'] ?? ''));
-        $project['weddingDate'] = (string)($_POST['weddingDate'] ?? '');
-        $project['state']['wedding']['eventName'] = $project['name'];
-        $project['state']['wedding']['contactName'] = $project['client']['name'];
-        $project['state']['wedding']['email'] = $project['client']['email'];
-        $project['state']['wedding']['date'] = $project['weddingDate'];
-    } elseif ($action === 'send-invite') {
-        $result=send_client_invitation($project,$editUrl);
-        if ($result['ok']) {
-            $project['meta']['invitationSentAt']=gmdate('c');
-            $project['meta']['invitationSentTo']=$project['client']['email']??'';
-            write_json($file,$project);
-            header('Location: project.php?id='.rawurlencode($id).'&mail=sent');
-        } else {
-            header('Location: project.php?id='.rawurlencode($id).'&mail=error&message='.rawurlencode((string)($result['error']??'E-mail sa nepodarilo odoslať.')));
-        }
-        exit;
-    } elseif ($action === 'enable-share') {
-        $project['access']['shareEnabled'] = true;
-    } elseif ($action === 'disable-share') {
-        $project['access']['shareEnabled'] = false;
-    } elseif ($action === 'regenerate-share') {
-        $project['access']['shareToken'] = token();
-        $project['access']['shareEnabled'] = true;
-    } elseif ($action === 'regenerate-edit') {
-        $project['access']['editToken'] = token();
-    } elseif ($action === 'archive') {
-        $project['status'] = 'archived';
-    } elseif ($action === 'restore') {
-        $project['status'] = 'editing';
-    }
-    $project['meta']['updatedAt'] = gmdate('c');
-    write_json($file, $project);
-    header('Location: project.php?id=' . rawurlencode($id) . '&saved=1');
-    exit;
-}
-
-$versionDir = VERSION_DIR . '/' . $id;
-$versions = is_dir($versionDir) ? array_reverse(glob($versionDir . '/*.json') ?: []) : [];
-$state = $project['state'] ?? [];
-$guestCount = count($state['guests'] ?? []);
-$tableCount = count(array_filter($state['items'] ?? [], fn($i) => str_contains((string)($i['type'] ?? ''), 'table')));
-?>
-<!doctype html>
-<html lang="sk">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="style.css">
-  <title><?=e((string)$project['name'])?> – Administrácia</title>
-</head>
-<body>
-<header><b>Bukovina Planner</b><nav><a href="index.php">Projekty</a><a href="index.php?logout=1">Odhlásiť sa</a></nav></header>
-<main>
-  <a class="back" href="index.php">← Späť na projekty</a>
-  <section class="hero project-hero">
-    <div><h1><?=e((string)$project['name'])?></h1><p><?=e((string)($project['client']['name'] ?? ''))?> · <?=e((string)($project['weddingDate'] ?? ''))?></p></div>
-    <span class="status large"><?=e(status_label((string)$project['status']))?></span>
-  </section>
-  <?php if(isset($_GET['saved'])):?><div class="notice">Zmeny boli uložené.</div><?php endif?>
-  <?php if(($_GET['mail']??'')==='sent'):?><div class="notice">Pozvánka bola odoslaná klientovi na <?=e((string)($project['client']['email']??''))?>.</div><?php endif?>
-  <?php if(($_GET['mail']??'')==='error'):?><div class="error"><?=e((string)($_GET['message']??'E-mail sa nepodarilo odoslať.'))?></div><?php endif?>
-
-  <div class="detail-grid">
-    <section class="card">
-      <h2>Projekt</h2>
-      <form method="post" class="form-grid">
-        <input type="hidden" name="action" value="save-client">
-        <label>Názov svadby<input name="name" value="<?=e((string)$project['name'])?>" required></label>
-        <label>Meno klienta<input name="clientName" value="<?=e((string)($project['client']['name'] ?? ''))?>" required></label>
-        <label>E-mail klienta<input type="email" name="clientEmail" value="<?=e((string)($project['client']['email'] ?? ''))?>" required></label>
-        <label>Dátum svadby<input type="date" name="weddingDate" value="<?=e((string)($project['weddingDate'] ?? ''))?>" required></label>
-        <button>Uložiť údaje</button>
-      </form>
-    </section>
-
-    <section class="card stats-card">
-      <h2>Stav návrhu</h2>
-      <dl><div><dt>Hostia</dt><dd><?=$guestCount?></dd></div><div><dt>Stoly</dt><dd><?=$tableCount?></dd></div><div><dt>Posledná úprava</dt><dd><?=e((string)($project['meta']['updatedAt'] ?? '—'))?></dd></div><div><dt>Odoslané</dt><dd><?=e((string)($project['meta']['submittedAt'] ?? '—'))?></dd></div><div><dt>Pozvánka klientovi</dt><dd><?=e((string)($project['meta']['invitationSentAt'] ?? '—'))?></dd></div></dl>
-    </section>
-  </div>
-
-  <section class="card links-card">
-    <h2>Odkazy</h2>
-    <div class="link-row"><div><b>Editačný odkaz klienta</b><code id="editUrl"><?=e($editUrl)?></code></div><div><a class="button-link" target="_blank" href="<?=e($editUrl)?>">Otvoriť</a><button type="button" onclick="copyText('editUrl')">Kopírovať</button><form method="post" class="inline"><button name="action" value="send-invite" <?=mail_configured()?'':'disabled title="Najprv nastavte SMTP"'?>>Odoslať e-mailom</button></form><form method="post" class="inline"><button class="secondary" name="action" value="regenerate-edit">Vygenerovať nový</button></form></div></div>
-    <?php if(!mail_configured()):?><p class="muted">SMTP zatiaľ nie je nastavené. Odkaz môžete stále skopírovať ručne.</p><?php endif?>
-    <div class="link-row"><div><b>Share odkaz – iba náhľad</b><code id="shareUrl"><?=e($shareUrl)?></code><small><?=!empty($project['access']['shareEnabled'])?'Aktívny':'Vypnutý'?></small></div><div><?php if(!empty($project['access']['shareEnabled'])):?><a class="button-link" target="_blank" href="<?=e($shareUrl)?>">Otvoriť</a><button type="button" onclick="copyText('shareUrl')">Kopírovať</button><form method="post" class="inline"><button class="secondary" name="action" value="disable-share">Vypnúť</button></form><?php else:?><form method="post" class="inline"><button name="action" value="enable-share">Zapnúť share</button></form><?php endif?><form method="post" class="inline"><button class="secondary" name="action" value="regenerate-share">Nový share odkaz</button></form></div></div>
-  </section>
-
-  <section class="card">
-    <h2>Odoslané verzie</h2>
-    <?php if(!$versions):?><p class="muted">Projekt zatiaľ nemá odoslanú verziu.</p><?php else:?><div class="versions"><?php foreach($versions as $version): $name=basename($version,'.json');?><div><span><?=e($name)?></span><span><?=e(date('d. m. Y H:i', filemtime($version)))?></span></div><?php endforeach?></div><?php endif?>
-  </section>
-
-  <section class="card danger-zone">
-    <h2>Správa projektu</h2>
-    <form method="post"><?php if(($project['status'] ?? '')==='archived'):?><button name="action" value="restore">Obnoviť projekt</button><?php else:?><button class="danger" name="action" value="archive">Archivovať projekt</button><?php endif?></form>
-  </section>
-</main>
-<script>async function copyText(id){const text=document.getElementById(id).textContent;await navigator.clipboard.writeText(text);alert('Odkaz bol skopírovaný.');}</script>
-</body>
-</html>
+$versionDir=VERSION_DIR.'/'.$id;$versions=is_dir($versionDir)?array_reverse(glob($versionDir.'/*.json')?:[]):[];$state=$project['state']??[];$guestCount=count($state['guests']??[]);$tableCount=count(array_filter($state['items']??[],fn($i)=>str_contains((string)($i['type']??''),'table')));
+?><!doctype html><html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="style.css"><title><?=e((string)$project['name'])?> – Administrácia</title></head><body>
+<header><b>Bukovina Planner</b><nav><a href="index.php">Projekty</a><a href="settings.php">Nastavenia</a><a href="index.php?logout=1">Odhlásiť sa</a></nav></header><main>
+<a class="back" href="index.php">← Späť na projekty</a><section class="hero project-hero"><div><h1><?=e((string)$project['name'])?></h1><p><?=e((string)($project['client']['name']??''))?> · <?=e((string)($project['weddingDate']??''))?></p></div><span class="status large"><?=e(status_label((string)$project['status']))?></span></section>
+<?php if(isset($_GET['saved'])):?><div class="notice">Zmeny boli uložené.</div><?php endif?><?php if(($_GET['mail']??'')==='sent'):?><div class="notice">Pozvánka bola odoslaná klientovi.</div><?php endif?><?php if(($_GET['mail']??'')==='error'):?><div class="error"><?=e((string)($_GET['message']??'E-mail sa nepodarilo odoslať.'))?></div><?php endif?><?php if(($_GET['delete']??'')==='invalid'):?><div class="error">Názov projektu sa nezhoduje. Projekt nebol odstránený.</div><?php endif?>
+<div class="detail-grid"><section class="card"><h2>Projekt</h2><form method="post" class="form-grid"><?=csrf_field()?><input type="hidden" name="action" value="save-client"><label>Názov svadby<input name="name" value="<?=e((string)$project['name'])?>" required></label><label>Meno klienta<input name="clientName" value="<?=e((string)($project['client']['name']??''))?>" required></label><label>E-mail klienta<input type="email" name="clientEmail" value="<?=e((string)($project['client']['email']??''))?>" required></label><label>Dátum svadby<input type="date" name="weddingDate" value="<?=e((string)($project['weddingDate']??''))?>" required></label><button>Uložiť údaje</button></form></section>
+<section class="card stats-card"><h2>Stav návrhu</h2><dl><div><dt>Hostia</dt><dd><?=$guestCount?></dd></div><div><dt>Stoly</dt><dd><?=$tableCount?></dd></div><div><dt>Posledná úprava</dt><dd><?=e((string)($project['meta']['updatedAt']??'—'))?></dd></div><div><dt>Odoslané</dt><dd><?=e((string)($project['meta']['submittedAt']??'—'))?></dd></div></dl></section></div>
+<section class="card"><h2>Export projektu</h2><div class="export-actions"><a class="button-link" href="download.php?id=<?=e($id)?>&type=current">Stiahnuť aktuálny JSON</a><a class="button-link secondary-link" target="_blank" href="<?=e($editUrl)?>">Otvoriť aktuálny návrh</a></div><p class="muted">Export obsahuje celý projekt vrátane hostí, poznámok a rozloženia.</p></section>
+<section class="card links-card"><h2>Odkazy</h2><div class="link-row"><div><b>Editačný odkaz klienta</b><code id="editUrl"><?=e($editUrl)?></code></div><div><a class="button-link" target="_blank" href="<?=e($editUrl)?>">Otvoriť</a><button type="button" onclick="copyText('editUrl')">Kopírovať</button><form method="post" class="inline"><?=csrf_field()?><button name="action" value="send-invite" <?=mail_configured()?'':'disabled'?>>Odoslať e-mailom</button></form><form method="post" class="inline"><?=csrf_field()?><button class="secondary" name="action" value="regenerate-edit">Nový odkaz</button></form></div></div>
+<div class="link-row"><div><b>Share odkaz – iba náhľad</b><code id="shareUrl"><?=e($shareUrl)?></code><small><?=!empty($project['access']['shareEnabled'])?'Aktívny':'Vypnutý'?></small></div><div><?php if(!empty($project['access']['shareEnabled'])):?><a class="button-link" target="_blank" href="<?=e($shareUrl)?>">Otvoriť</a><button type="button" onclick="copyText('shareUrl')">Kopírovať</button><form method="post" class="inline"><?=csrf_field()?><button class="secondary" name="action" value="disable-share">Vypnúť</button></form><?php else:?><form method="post" class="inline"><?=csrf_field()?><button name="action" value="enable-share">Zapnúť share</button></form><?php endif?><form method="post" class="inline"><?=csrf_field()?><button class="secondary" name="action" value="regenerate-share">Nový share odkaz</button></form></div></div></section>
+<section class="card"><h2>Odoslané verzie</h2><?php if(!$versions):?><p class="muted">Projekt zatiaľ nemá odoslanú verziu.</p><?php else:?><div class="versions"><?php foreach($versions as $version):$name=basename($version,'.json');?><div><span><b><?=e($name)?></b><small><?=e(date('d. m. Y H:i',filemtime($version)))?></small></span><a class="button-link small" href="download.php?id=<?=e($id)?>&type=version&version=<?=e($name)?>">Stiahnuť JSON</a></div><?php endforeach?></div><?php endif?></section>
+<section class="card danger-zone"><h2>Správa projektu</h2><div class="danger-actions"><form method="post"><?=csrf_field()?><?php if(($project['status']??'')==='archived'):?><button name="action" value="restore">Obnoviť projekt</button><?php else:?><button class="danger" name="action" value="archive">Archivovať projekt</button><?php endif?></form><button class="danger outline" type="button" onclick="document.getElementById('deleteDialog').showModal()">Natrvalo odstrániť</button></div></section>
+</main><dialog id="deleteDialog"><form method="post" class="delete-form"><?=csrf_field()?><input type="hidden" name="action" value="delete"><h2>Natrvalo odstrániť projekt?</h2><p>Odstráni sa aktuálny JSON aj všetky odoslané verzie. Túto akciu nie je možné vrátiť.</p><label>Pre potvrdenie napíšte presný názov projektu<input name="confirmName" autocomplete="off" required placeholder="<?=e((string)$project['name'])?>"></label><div><button type="button" class="secondary" onclick="this.closest('dialog').close()">Zrušiť</button><button class="danger">Odstrániť projekt</button></div></form></dialog>
+<script>async function copyText(id){const text=document.getElementById(id).textContent;try{await navigator.clipboard.writeText(text);alert('Odkaz bol skopírovaný.')}catch(e){prompt('Skopírujte odkaz:',text)}}</script></body></html>
