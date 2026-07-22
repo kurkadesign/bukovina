@@ -10,11 +10,11 @@ if(!$id||!$project){http_response_code(404);exit('Event sa nenašiel.');}
 $file=project_path($id);$downloadName=$id.'-aktualny.json';
 if($type==='version'){
   $version=preg_replace('/[^0-9-]/','',(string)($_GET['version']??''));
-  $candidate=VERSION_DIR.'/'.$id.'/'.$version.'.json';
+  $candidate=VERSION_DIR.'/'.$id.'/'.$version.'.pdf';
   if(!$version||!is_file($candidate)){http_response_code(404);exit('Verzia sa nenašla.');}
-  $file=$candidate;$downloadName=$id.'-'.$version.'.json';
+  $file=$candidate;$downloadName=$id.'-'.$version.'.pdf';
 }
-header('Content-Type: application/json; charset=utf-8');
+header('Content-Type: '.($type==='version'?'application/pdf':'application/json; charset=utf-8'));
 header('Content-Disposition: attachment; filename="'.$downloadName.'"');
 header('Content-Length: '.filesize($file));
 header('Cache-Control: no-store');
