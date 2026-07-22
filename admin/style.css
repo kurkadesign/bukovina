@@ -40,6 +40,10 @@ a:not(.button-link):hover {
   display: none;
 }
 
+body:has(.restore-card) header nav a[href="email-templates.php"] {
+  display: none;
+}
+
 .review-form {
   display: grid;
   gap: 8px;
