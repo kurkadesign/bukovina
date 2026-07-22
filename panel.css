@@ -3,4 +3,5 @@
 .polozka-kniznice{background:rgba(255,255,255,.8)!important}
 #bocnyPanel .karta{border:0!important;background:rgba(255,255,255,.5)!important}
 #bocnyPanel .obsah-zalozky,#bocnyPanel .zalozky-panelu{background:transparent!important}
+#bocnyPanel .zalozky-panelu button.aktivne{background:#fff!important}
 .akcie-projektu{grid-template-columns:1fr}
