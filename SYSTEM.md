@@ -2,7 +2,25 @@
 
 Požiadavky: PHP 8.1+, zapisovateľný priečinok `data/`, Apache alebo nginx s blokovaním verejného prístupu do `data`.
 
-Administrácia: `/admin/`. Pri prvom spustení sa vytvorí účet `admin@example.sk` s heslom `ZmenMa123!`; po prihlásení ho bezodkladne zmeňte cez `/admin/settings.php`.
+## Prvé spustenie
+
+Po nahratí súborov otvorte:
+
+```text
+https://tvoja-domena.sk/install/
+```
+
+Inštalačný sprievodca:
+
+- overí PHP 8.1 alebo novšie,
+- overí zapisovateľnosť `data`, `data/projects` a `data/versions`,
+- upozorní, ak web nepoužíva HTTPS,
+- vytvorí prvý administrátorský účet s vlastným e-mailom a heslom,
+- vytvorí `data/install.lock` a po dokončení sa automaticky uzamkne.
+
+Systém už nepoužíva verejne známe predvolené prihlasovacie údaje. Ak administrácia nenájde žiadny účet, automaticky presmeruje na inštalátor.
+
+Administrácia je dostupná cez `/admin/`.
 
 Klientský editor používa `?token=...`, zdieľaný režim `?share=...`. Share token nemá na API právo zápisu. Projekty sa ukladajú samostatne v `data/projects`, odoslané verzie v `data/versions`.
 
