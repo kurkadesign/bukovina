@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/../lib/storage.php';require_once __DIR__.'/../lib/mailer.php';admin_required();ensure_storage();
+require_once __DIR__.'/../lib/storage.php';require_once __DIR__.'/../lib/mailer.php';admin_required();ensure_storage();enable_asset_versioning();
 function e(string $v):string{return htmlspecialchars($v,ENT_QUOTES,'UTF-8');}
 function status_label(string $s):string{return ['not-opened'=>'Neotvorené','editing'=>'Rozpracované','sent'=>'Odoslané na kontrolu','revision-requested'=>'Vrátené na dopracovanie','approved'=>'Schválené','changed-after-send'=>'Upravené po odoslaní','archived'=>'Archivované'][$s]??$s;}
 function app_root_url():string{if(BASE_URL!=='')return BASE_URL;$scheme=(!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')?'https':'http';$host=$_SERVER['HTTP_HOST']??'localhost';$script=str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME']??'/admin/project.php'));$root=rtrim(dirname($script),'/');return $scheme.'://'.$host.($root==='/'?'':$root);}

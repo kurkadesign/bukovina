@@ -1,4 +1,4 @@
-import{TYPES,PERSON_ICONS,ALLERGIES,nastaveniePlochy,initialState,load,validProject,download}from'./state.js';
+const{TYPES,PERSON_ICONS,ALLERGIES,nastaveniePlochy,initialState,load,validProject,download}=await import(`./state.js?v=${window.__ASSET_VERSION__||String(Math.floor(10000+Math.random()*90000))}`);
 let state=load(),selectedItem='',editingGuest='',editingItem='',saveTimer,drag=null,space=false,history=[],future=[];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],els={world:$('#podorys'),items:$('#prvky'),viewport:$('#zobrazeniePodorysu'),library:$('#kniznicaPrvkov'),guestList:$('#zoznamHosti'),stats:$('#statistiky'),tableDetail:$('#detailStola')};
 const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'?globalThis.crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)}),isTable=i=>i&&i.type.includes('table'),esc=s=>String(s??'');

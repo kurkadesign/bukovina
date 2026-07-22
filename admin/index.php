@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__.'/../lib/storage.php';
 require_once __DIR__.'/../lib/mailer.php';
+enable_asset_versioning();
 ensure_storage();secure_session_start();
 if(isset($_GET['logout'])){session_destroy();header('Location:index.php');exit;}
 $users=read_json(USER_FILE);if(!$users){header('Location:../install/');exit;}

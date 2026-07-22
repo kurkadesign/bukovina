@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/../lib/storage.php';
-admin_required();ensure_storage();
+admin_required();ensure_storage();enable_asset_versioning();
 $users=read_json(USER_FILE);$current=$_SESSION['admin'];$message='';$error='';
 if($_SERVER['REQUEST_METHOD']==='POST'&&isset($_POST['changePassword'])){verify_csrf();$old=(string)($_POST['oldPassword']??'');$new=(string)($_POST['newPassword']??'');$confirm=(string)($_POST['confirmPassword']??'');$index=array_search(strtolower($current),array_map(fn($u)=>strtolower((string)$u['email']),$users),true);if($index===false||!password_verify($old,(string)$users[$index]['passwordHash']))$error='Aktuálne heslo nie je správne.';elseif(strlen($new)<12)$error='Nové heslo musí mať aspoň 12 znakov.';elseif($new!==$confirm)$error='Nové heslá sa nezhodujú.';else{$users[$index]['passwordHash']=password_hash($new,PASSWORD_DEFAULT);$users[$index]['passwordChangedAt']=gmdate('c');write_json(USER_FILE,$users);session_regenerate_id(true);$message='Heslo bolo zmenené.';}}
 if(($_GET['restore']??'')==='ok')$message='Záloha bola obnovená. Importovaných projektov: '.(int)($_GET['projects']??0).'.';elseif(($_GET['restore']??'')==='upload-error')$error='Súbor zálohy sa nepodarilo nahrať.';elseif(($_GET['restore']??'')==='too-large')$error='Záloha je väčšia ako povolených 50 MB.';elseif(($_GET['restore']??'')==='error')$error=(string)($_GET['message']??'Zálohu sa nepodarilo obnoviť.');
