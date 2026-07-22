@@ -5,3 +5,4 @@
 #bocnyPanel .obsah-zalozky,#bocnyPanel .zalozky-panelu{background:transparent!important}
 #bocnyPanel .zalozky-panelu button.aktivne{background:#fff!important}
 .akcie-projektu{grid-template-columns:1fr}
+.readonly-mode #editorMiesta>small,.readonly-mode #editorMiesta>select,.readonly-mode #editorMiesta>button{display:none!important}
