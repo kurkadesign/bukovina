@@ -12,3 +12,21 @@ dialog {
   font-optical-sizing: auto;
   font-style: normal;
 }
+
+.link-actions {
+  align-items: center;
+}
+
+.link-actions .inline {
+  display: flex;
+  align-items: center;
+}
+
+.link-actions .button-link,
+.link-actions button {
+  min-height: 34px;
+  padding: 8px 10px;
+  font-size: 15px;
+  line-height: 18px;
+  white-space: nowrap;
+}
