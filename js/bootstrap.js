@@ -2,130 +2,26 @@ const qs=new URLSearchParams(location.search);
 const editToken=qs.get('token')||'';
 const shareToken=qs.get('share')||'';
 const accessToken=editToken||shareToken;
-const readOnly=!!shareToken;
+let readOnly=!!shareToken;
+let projectLocked=false;
 let loadedProject=null;
 let lastSavedState='';
 let saving=false;
 let saveQueued=false;
 
 const escapeHtml=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
-const status=document.createElement('div');
-status.id='serverSaveStatus';
-status.dataset.state=accessToken?'loading':'local';
-status.innerHTML=`<span class="status-dot"></span><span class="status-text">${accessToken?'Načítavam projekt…':'Lokálny režim'}</span>`;
-document.body.append(status);
+const status=document.createElement('div');status.id='serverSaveStatus';status.dataset.state=accessToken?'loading':'local';status.innerHTML=`<span class="status-dot"></span><span class="status-text">${accessToken?'Načítavam projekt…':'Lokálny režim'}</span>`;document.body.append(status);
 const setStatus=(text,state='saved')=>{status.dataset.state=state;status.querySelector('.status-text').textContent=text};
-
-async function api(action,body){
-  const response=await fetch(`api/project.php?action=${encodeURIComponent(action)}&token=${encodeURIComponent(accessToken)}`,{
-    method:body?'POST':'GET',
-    headers:body?{'Content-Type':'application/json'}:{},
-    body:body?JSON.stringify({token:accessToken,action,...body}):undefined,
-    cache:'no-store'
-  });
-  let data;
-  try{data=await response.json()}catch{throw new Error('Server vrátil neplatnú odpoveď.')}
-  if(!response.ok)throw new Error(data.error||'Chyba servera');
-  return data;
-}
-
-function createClientBar(){
-  if(!accessToken)return;
-  const bar=document.createElement('div');
-  bar.id='clientProjectBar';
-  const title=escapeHtml(loadedProject?.name||'Svadobný plán');
-  bar.innerHTML=`<div class="client-project-title"><small>${readOnly?'Zdieľaný náhľad':'Plánovanie svadobnej sály'}</small><strong>${title}</strong></div><div class="client-project-actions"></div>`;
-  document.body.append(bar);
-  return bar.querySelector('.client-project-actions');
-}
-
-async function copyText(text){
-  try{await navigator.clipboard.writeText(text);return true}catch{
-    const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.append(area);area.select();const copied=document.execCommand('copy');area.remove();return copied;
-  }
-}
-
-function showShareDialog(){
-  let dialog=document.getElementById('serverShareDialog');
-  if(!dialog){
-    dialog=document.createElement('dialog');dialog.id='serverShareDialog';
-    dialog.innerHTML=`<form method="dialog" class="server-dialog-card"><div class="server-dialog-head"><div><small>Zdieľanie</small><h2>Zdieľaný náhľad</h2></div><button value="cancel" class="dialog-close" aria-label="Zavrieť">×</button></div><p>Osoba s týmto odkazom uvidí rozloženie sály a hostí, ale nebude môcť nič upravovať ani vymazať.</p><label class="server-check"><input id="shareShowDiet" type="checkbox"> Zobraziť alergie a stravovacie údaje</label><div class="server-dialog-actions"><button value="cancel" class="secondary">Zrušiť</button><button id="createShareLink" value="default" type="button">Vytvoriť a skopírovať odkaz</button></div></form>`;
-    document.body.append(dialog);
-    dialog.querySelector('#createShareLink').addEventListener('click',async()=>{
-      const button=dialog.querySelector('#createShareLink');button.disabled=true;button.textContent='Vytváram…';
-      try{
-        const result=await api('share',{showDiet:dialog.querySelector('#shareShowDiet').checked});
-        const url=new URL(location.href);url.search='';url.searchParams.set('share',result.shareToken);
-        const copied=await copyText(url.href);
-        button.textContent=copied?'Odkaz skopírovaný':'Odkaz vytvorený';
-        setTimeout(()=>dialog.close(),900);
-      }catch(error){button.textContent=error.message;setTimeout(()=>{button.textContent='Vytvoriť a skopírovať odkaz';button.disabled=false},1800)}
-    });
-  }
-  dialog.showModal();
-}
-
-function showSubmitDialog(){
-  let dialog=document.getElementById('serverSubmitDialog');
-  if(!dialog){
-    dialog=document.createElement('dialog');dialog.id='serverSubmitDialog';
-    dialog.innerHTML=`<form method="dialog" class="server-dialog-card"><div class="server-dialog-head"><div><small>Finálna verzia</small><h2>Odoslať organizátorom?</h2></div><button value="cancel" class="dialog-close" aria-label="Zavrieť">×</button></div><p>Aktuálny návrh sa uloží ako samostatná verzia. Neskôr ho môžete ďalej upravovať a odoslať novú verziu.</p><div class="server-dialog-actions"><button value="cancel" class="secondary">Ešte nie</button><button id="confirmServerSubmit" value="default" type="button">Odoslať návrh</button></div></form>`;
-    document.body.append(dialog);
-    dialog.querySelector('#confirmServerSubmit').addEventListener('click',async()=>{
-      const button=dialog.querySelector('#confirmServerSubmit');button.disabled=true;button.textContent='Odosielam…';
-      try{
-        await flushSave();
-        const state=JSON.parse(localStorage.getItem('wedding-planner-v1')||'{}');
-        await api('submit',{state});
-        setStatus('Odoslané organizátorom','submitted');
-        button.textContent='Návrh bol odoslaný';
-        setTimeout(()=>dialog.close(),1000);
-      }catch(error){button.textContent=error.message;setStatus('Odoslanie zlyhalo','error');setTimeout(()=>{button.textContent='Odoslať návrh';button.disabled=false},2000)}
-    });
-  }
-  dialog.showModal();
-}
-
-async function flushSave(){
-  if(!editToken||saving)return;
-  const current=localStorage.getItem('wedding-planner-v1')||'';
-  if(!current||current===lastSavedState)return;
-  saving=true;setStatus('Ukladám…','saving');
-  try{await api('save',{state:JSON.parse(current)});lastSavedState=current;setStatus('Uložené','saved')}
-  catch(error){setStatus('Chyba ukladania','error');throw error}
-  finally{saving=false;if(saveQueued){saveQueued=false;flushSave().catch(()=>{})}}
-}
-
-if(accessToken){
-  try{
-    const data=await api('load');loadedProject=data.project;
-    localStorage.setItem('wedding-planner-v1',JSON.stringify(data.project.state));
-    lastSavedState=JSON.stringify(data.project.state);
-    document.title=`${data.project.name} – Svadobný plánovač`;
-    setStatus(readOnly?'Iba na prezeranie':'Uložené',readOnly?'readonly':'saved');
-  }catch(error){setStatus(error.message,'error');document.documentElement.classList.add('project-load-error')}
-}
-
-if(readOnly){
-  document.documentElement.classList.add('readonly-mode');
-  window.addEventListener('pointerdown',event=>{if(event.target.closest('.prvok-podorysu,.miesto'))event.stopImmediatePropagation()},true);
-  window.addEventListener('dblclick',event=>{if(event.target.closest('.prvok-podorysu,.miesto')){event.preventDefault();event.stopImmediatePropagation()}},true);
-  window.addEventListener('keydown',event=>{if(['Delete','Backspace'].includes(event.key)&&!event.target.matches('input,textarea'))event.preventDefault()},true);
-}
-
+async function api(action,body){const response=await fetch(`api/project.php?action=${encodeURIComponent(action)}&token=${encodeURIComponent(accessToken)}`,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify({token:accessToken,action,...body}):undefined,cache:'no-store'});let data;try{data=await response.json()}catch{throw new Error('Server vrátil neplatnú odpoveď.')}if(!response.ok)throw new Error(data.error||'Chyba servera');return data;}
+function createClientBar(){if(!accessToken)return;const bar=document.createElement('div');bar.id='clientProjectBar';const title=escapeHtml(loadedProject?.name||'Svadobný plán');bar.innerHTML=`<div class="client-project-title"><small>${readOnly?'Zdieľaný náhľad':'Plánovanie svadobnej sály'}</small><strong>${title}</strong></div><div class="client-project-actions"></div>`;document.body.append(bar);return bar.querySelector('.client-project-actions');}
+function showReviewBanner(){const review=loadedProject?.review;if(!review&&!projectLocked)return;const banner=document.createElement('div');banner.id='projectReviewBanner';const approved=loadedProject?.status==='approved';banner.className=approved?'approved':'revision';banner.innerHTML=`<strong>${approved?'Návrh bol schválený':'Návrh bol vrátený na dopracovanie'}</strong>${review?.note?`<p>${escapeHtml(review.note).replace(/\n/g,'<br>')}</p>`:''}`;document.body.append(banner);}
+async function copyText(text){try{await navigator.clipboard.writeText(text);return true}catch{const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.append(area);area.select();const copied=document.execCommand('copy');area.remove();return copied;}}
+function showShareDialog(){let dialog=document.getElementById('serverShareDialog');if(!dialog){dialog=document.createElement('dialog');dialog.id='serverShareDialog';dialog.innerHTML=`<form method="dialog" class="server-dialog-card"><div class="server-dialog-head"><div><small>Zdieľanie</small><h2>Zdieľaný náhľad</h2></div><button value="cancel" class="dialog-close" aria-label="Zavrieť">×</button></div><p>Osoba s týmto odkazom uvidí rozloženie sály a hostí, ale nebude môcť nič upravovať ani vymazať.</p><label class="server-check"><input id="shareShowDiet" type="checkbox"> Zobraziť alergie a stravovacie údaje</label><div class="server-dialog-actions"><button value="cancel" class="secondary">Zrušiť</button><button id="createShareLink" value="default" type="button">Vytvoriť a skopírovať odkaz</button></div></form>`;document.body.append(dialog);dialog.querySelector('#createShareLink').addEventListener('click',async()=>{const button=dialog.querySelector('#createShareLink');button.disabled=true;button.textContent='Vytváram…';try{const result=await api('share',{showDiet:dialog.querySelector('#shareShowDiet').checked});const url=new URL(location.href);url.search='';url.searchParams.set('share',result.shareToken);const copied=await copyText(url.href);button.textContent=copied?'Odkaz skopírovaný':'Odkaz vytvorený';setTimeout(()=>dialog.close(),900)}catch(error){button.textContent=error.message;setTimeout(()=>{button.textContent='Vytvoriť a skopírovať odkaz';button.disabled=false},1800)}})}dialog.showModal();}
+function showSubmitDialog(){let dialog=document.getElementById('serverSubmitDialog');if(!dialog){dialog=document.createElement('dialog');dialog.id='serverSubmitDialog';dialog.innerHTML=`<form method="dialog" class="server-dialog-card"><div class="server-dialog-head"><div><small>Finálna verzia</small><h2>Odoslať organizátorom?</h2></div><button value="cancel" class="dialog-close" aria-label="Zavrieť">×</button></div><p>Aktuálny návrh sa uloží ako samostatná verzia a organizátor ho skontroluje.</p><div class="server-dialog-actions"><button value="cancel" class="secondary">Ešte nie</button><button id="confirmServerSubmit" value="default" type="button">Odoslať návrh</button></div></form>`;document.body.append(dialog);dialog.querySelector('#confirmServerSubmit').addEventListener('click',async()=>{const button=dialog.querySelector('#confirmServerSubmit');button.disabled=true;button.textContent='Odosielam…';try{await flushSave();const state=JSON.parse(localStorage.getItem('wedding-planner-v1')||'{}');await api('submit',{state});setStatus('Odoslané na kontrolu','submitted');button.textContent='Návrh bol odoslaný';document.getElementById('projectReviewBanner')?.remove();setTimeout(()=>dialog.close(),1000)}catch(error){button.textContent=error.message;setStatus('Odoslanie zlyhalo','error');setTimeout(()=>{button.textContent='Odoslať návrh';button.disabled=false},2000)}})}dialog.showModal();}
+async function flushSave(){if(!editToken||saving||projectLocked)return;const current=localStorage.getItem('wedding-planner-v1')||'';if(!current||current===lastSavedState)return;saving=true;setStatus('Ukladám…','saving');try{await api('save',{state:JSON.parse(current)});lastSavedState=current;setStatus('Uložené','saved')}catch(error){setStatus(error.message,'error');throw error}finally{saving=false;if(saveQueued){saveQueued=false;flushSave().catch(()=>{})}}}
+if(accessToken){try{const data=await api('load');loadedProject=data.project;projectLocked=!!data.project.locked;if(projectLocked)readOnly=true;localStorage.setItem('wedding-planner-v1',JSON.stringify(data.project.state));lastSavedState=JSON.stringify(data.project.state);document.title=`${data.project.name} – Svadobný plánovač`;setStatus(projectLocked?'Schválené – uzamknuté':(readOnly?'Iba na prezeranie':'Uložené'),projectLocked?'approved':(readOnly?'readonly':'saved'))}catch(error){setStatus(error.message,'error');document.documentElement.classList.add('project-load-error')}}
+if(readOnly){document.documentElement.classList.add('readonly-mode');window.addEventListener('pointerdown',event=>{if(event.target.closest('.prvok-podorysu,.miesto'))event.stopImmediatePropagation()},true);window.addEventListener('dblclick',event=>{if(event.target.closest('.prvok-podorysu,.miesto')){event.preventDefault();event.stopImmediatePropagation()}},true);window.addEventListener('keydown',event=>{if(['Delete','Backspace'].includes(event.key)&&!event.target.matches('input,textarea'))event.preventDefault()},true);}
 await import('./app.js?v=20260721-7');
-const actions=createClientBar();
-if(actions&&readOnly){const badge=document.createElement('span');badge.className='readonly-badge';badge.textContent='Len na prezeranie';actions.append(badge)}
-if(actions&&editToken){
-  const shareButton=document.createElement('button');shareButton.type='button';shareButton.className='secondary';shareButton.textContent='Zdieľať náhľad';shareButton.onclick=showShareDialog;
-  const submitButton=document.createElement('button');submitButton.type='button';submitButton.textContent='Odoslať organizátorom';submitButton.onclick=showSubmitDialog;
-  actions.append(shareButton,submitButton);
-
-  setInterval(()=>{const current=localStorage.getItem('wedding-planner-v1')||'';if(!current||current===lastSavedState)return;if(saving){saveQueued=true;return}flushSave().catch(()=>{})},1400);
-  window.addEventListener('beforeunload',event=>{const current=localStorage.getItem('wedding-planner-v1')||'';if(current&&current!==lastSavedState){event.preventDefault();event.returnValue=''}});
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushSave().catch(()=>{})});
-
-  document.getElementById('serverShareButton')?.remove();
-  const originalSubmit=document.getElementById('potvrditOdoslanie');
-  originalSubmit?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();document.getElementById('dialogRekapitulacie')?.close();showSubmitDialog()},true);
-}
+const actions=createClientBar();showReviewBanner();
+if(actions&&readOnly){const badge=document.createElement('span');badge.className='readonly-badge';badge.textContent=projectLocked?'Schválené':'Len na prezeranie';actions.append(badge)}
+if(actions&&editToken&&!projectLocked){const shareButton=document.createElement('button');shareButton.type='button';shareButton.className='secondary';shareButton.textContent='Zdieľať náhľad';shareButton.onclick=showShareDialog;const submitButton=document.createElement('button');submitButton.type='button';submitButton.textContent='Odoslať organizátorom';submitButton.onclick=showSubmitDialog;actions.append(shareButton,submitButton);setInterval(()=>{const current=localStorage.getItem('wedding-planner-v1')||'';if(!current||current===lastSavedState)return;if(saving){saveQueued=true;return}flushSave().catch(()=>{})},1400);window.addEventListener('beforeunload',event=>{const current=localStorage.getItem('wedding-planner-v1')||'';if(current&&current!==lastSavedState){event.preventDefault();event.returnValue=''}});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushSave().catch(()=>{})});document.getElementById('serverShareButton')?.remove();const originalSubmit=document.getElementById('potvrditOdoslanie');originalSubmit?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();document.getElementById('dialogRekapitulacie')?.close();showSubmitDialog()},true);}
