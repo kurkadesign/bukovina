@@ -36,6 +36,10 @@ a:not(.button-link):hover {
   text-underline-offset: 2px;
 }
 
+.admin-logo + nav > a:first-child {
+  display: none;
+}
+
 .review-form {
   display: grid;
   gap: 8px;
