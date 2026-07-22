@@ -20,7 +20,7 @@ function load_email_templates(): array {
 function save_email_templates(array $templates): void { write_json(email_template_file(),$templates); }
 function email_template_variables(array $project,array $extra=[]): array {
  return array_merge([
-  'project_name'=>(string)($project['name']??''),'client_name'=>(string)($project['client']['name']??''),'client_email'=>(string)($project['client']['email']??''),'wedding_date'=>(string)($project['weddingDate']??''),
+  'project_name'=>(string)($project['name']??''),'client_name'=>(string)($project['client']['name']??''),'client_email'=>(string)($project['client']['email']??''),'wedding_date'=>format_date_sk($project['weddingDate']??''),
   'guest_count'=>(string)count($project['state']['guests']??[]),'item_count'=>(string)count($project['state']['items']??[]),'review_note'=>'',
  ],$extra);
 }

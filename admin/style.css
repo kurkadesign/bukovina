@@ -35,3 +35,19 @@ a:not(.button-link):hover {
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
+
+.review-form {
+  display: grid;
+  gap: 8px;
+}
+
+.review-form > label {
+  font-weight: 650;
+}
+
+.review-form > div,
+.new-project-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

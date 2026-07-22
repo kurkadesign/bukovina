@@ -35,8 +35,9 @@ dialog,
 
 .access-denied-page img {
   display: block;
-  width: 190px;
-  height: auto;
+  width: 184px;
+  height: 66px;
+  object-fit: contain;
   margin: 0 auto 30px;
 }
 
