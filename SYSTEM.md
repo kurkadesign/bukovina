@@ -10,33 +10,45 @@ Po nahratí súborov otvorte:
 https://tvoja-domena.sk/install/
 ```
 
-Inštalačný sprievodca:
+Inštalačný sprievodca overí PHP, zapisovateľnosť dátových priečinkov a vytvorí prvý administrátorský účet. Po dokončení vytvorí `data/install.lock` a automaticky sa uzamkne. Administrácia je dostupná cez `/admin/`.
 
-- overí PHP 8.1 alebo novšie,
-- overí zapisovateľnosť `data`, `data/projects` a `data/versions`,
-- upozorní, ak web nepoužíva HTTPS,
-- vytvorí prvý administrátorský účet s vlastným e-mailom a heslom,
-- vytvorí `data/install.lock` a po dokončení sa automaticky uzamkne.
+Klientský editor používa `?token=...`, zdieľaný režim `?share=...`. Share token nemá na API právo zápisu. Projekty sa ukladajú v `data/projects`, odoslané verzie v `data/versions`.
 
-Systém už nepoužíva verejne známe predvolené prihlasovacie údaje. Ak administrácia nenájde žiadny účet, automaticky presmeruje na inštalátor.
+## E-mailové šablóny
 
-Administrácia je dostupná cez `/admin/`.
+Šablóny sa spravujú cez **Administrácia → E-mailové šablóny** alebo na:
 
-Klientský editor používa `?token=...`, zdieľaný režim `?share=...`. Share token nemá na API právo zápisu. Projekty sa ukladajú samostatne v `data/projects`, odoslané verzie v `data/versions`.
+```text
+/admin/email-templates.php
+```
+
+Je možné upraviť predmet, nadpis, text správy a text tlačidla pre:
+
+- pozvánku klientovi,
+- upozornenie organizátorovi po odoslaní návrhu,
+- potvrdenie klientovi,
+- schválenie návrhu,
+- vrátenie návrhu na dopracovanie.
+
+Dostupné premenné:
+
+```text
+{{project_name}}
+{{client_name}}
+{{client_email}}
+{{wedding_date}}
+{{guest_count}}
+{{item_count}}
+{{review_note}}
+```
+
+Šablóny sú textové a systém ich pri vykreslení bezpečne escapuje. Ukladajú sa do `data/email-templates.json`. Pri chýbajúcom súbore sa automaticky použijú predvolené texty. E-mailové šablóny sú zahrnuté aj v kompletnej systémovej zálohe.
 
 ## Zálohovanie a obnova
 
-Kompletnú zálohu je možné stiahnuť cez **Administrácia → Nastavenia → Záloha systému**. Výsledkom je jeden JSON súbor obsahujúci:
+Kompletnú zálohu je možné stiahnuť cez **Administrácia → Nastavenia → Záloha systému**. Obsahuje aktuálne projekty, odoslané verzie, e-mailové šablóny a administrátorské účty s hashovanými heslami. SMTP prihlasovacie údaje v zálohe nie sú.
 
-- všetky aktuálne projekty,
-- všetky odoslané verzie,
-- administrátorské účty a hashované heslá.
-
-SMTP prihlasovacie údaje v zálohe nie sú, pretože sa načítavajú z prostredia servera.
-
-Pri obnove systém najprv overí formát a obsah súboru. Pred samotným importom automaticky uloží poistnú kópiu aktuálnych dát do `data/backups`. Uchováva sa posledných 10 poistných kópií. Obnova môže projekty zlúčiť s existujúcimi dátami alebo ich pred importom nahradiť. Obnovenie administrátorských účtov je samostatná voľba.
-
-Maximálna veľkosť importovanej zálohy je 50 MB. Priečinok `data/backups` musí byť rovnako ako celý `data` neprístupný z webu.
+Pred obnovou systém vytvorí poistnú kópiu v `data/backups`. Uchováva posledných 10 kópií. Maximálna veľkosť importu je 50 MB. Celý priečinok `data` musí byť neprístupný z webu.
 
 ## SMTP a e-mailové notifikácie
 
@@ -54,8 +66,4 @@ BUKOVINA_SMTP_PASSWORD=bezpecne-heslo
 BUKOVINA_SMTP_ENCRYPTION=tls
 ```
 
-Povolené hodnoty `BUKOVINA_SMTP_ENCRYPTION` sú `tls`, `ssl` alebo prázdna hodnota pre nešifrované spojenie.
-
-Po nastavení SMTP sa v detaile projektu aktivuje tlačidlo **Odoslať e-mailom**. Klient dostane editačný odkaz. Pri odoslaní hotového návrhu dostane organizátor upozornenie a klient potvrdenie.
-
-Pri nginx/HestiaCP nastavte premenné v PHP-FPM pool konfigurácii alebo v bezpečnom serverovom konfiguračnom súbore mimo web rootu a následne reštartujte PHP-FPM.
+Povolené hodnoty `BUKOVINA_SMTP_ENCRYPTION` sú `tls`, `ssl` alebo prázdna hodnota. Po nastavení SMTP sa aktivuje odosielanie pozvánok a automatických upozornení. Pri nginx/HestiaCP nastavte premenné v PHP-FPM pool konfigurácii alebo v bezpečnom konfiguračnom súbore mimo web rootu a reštartujte PHP-FPM.
