@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__.'/../lib/storage.php';
 require_once __DIR__.'/../lib/email_templates.php';
 require_once __DIR__.'/../lib/mailer.php';
-admin_required();ensure_storage();enable_asset_versioning();
+manager_required();ensure_storage();enable_asset_versioning();
 function h(string $v):string{return htmlspecialchars($v,ENT_QUOTES,'UTF-8');}
 $templates=load_email_templates();$selected=(string)($_GET['template']??array_key_first($templates));if(!isset($templates[$selected]))$selected=array_key_first($templates);$message='';$error='';
 if($_SERVER['REQUEST_METHOD']==='POST'){
