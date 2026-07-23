@@ -166,6 +166,18 @@ dialog label { gap: 8px; }
   align-items: end;
 }
 
+.user-add-form > button {
+  grid-column: auto;
+}
+
+.user-add-form select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccd8d8;
+  background: #fff;
+  font: inherit;
+}
+
 .admin-users {
   display: grid;
   gap: 1px;
