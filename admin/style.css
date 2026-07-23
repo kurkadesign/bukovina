@@ -157,6 +157,22 @@ dialog label { gap: 8px; }
 .recovery-form label { display: grid; gap: 8px; font-weight: 650; }
 .recovery-form button { justify-self: start; }
 
+.event-list-page h1,
+.event-list-page h2,
+.event-list-page .project-title {
+  color: #785265;
+}
+
+.event-list-page button,
+.event-list-page .button-link {
+  background: #785265;
+  color: #fff;
+}
+
+.event-list-page .projects article {
+  background: rgba(120, 82, 101, 0.08);
+}
+
 @media (max-width: 760px) {
   header { align-items: center; }
   header nav { flex-direction: row; align-items: center; gap: 12px; }
