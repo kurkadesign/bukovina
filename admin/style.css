@@ -67,3 +67,238 @@ body:has(.restore-card) header nav a[href="email-templates.php"] {
   justify-content: flex-end;
   gap: 10px;
 }
+
+/* V2 admin UI: hranatý, čistý a bezrámikový vzhľad. */
+body {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+main {
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.hero {
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.hero h1 {
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.hero p,
+.projects p,
+.empty-state p {
+  margin-top: 0;
+}
+
+.card,
+.dashboard-stats a,
+.project-filters,
+.projects article,
+.empty-state,
+.login-card,
+dialog form {
+  border: 0;
+  border-radius: 0;
+}
+
+.card {
+  padding: 26px;
+  margin-bottom: 22px;
+}
+
+.card h2 {
+  margin: 0 0 18px;
+  line-height: 1.25;
+}
+
+.card h3 {
+  margin: 24px 0 12px;
+}
+
+.card p {
+  margin: 0 0 14px;
+}
+
+.detail-grid {
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.dashboard-stats {
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.dashboard-stats a {
+  padding: 20px;
+  gap: 8px;
+}
+
+.project-filters {
+  gap: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.projects {
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.projects article {
+  padding: 20px;
+  gap: 18px;
+}
+
+.projects h2 {
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+.projects small {
+  margin-top: 8px;
+  line-height: 1.45;
+}
+
+button,
+.button-link,
+.button-link.small,
+.variable-chip,
+.template-list a,
+.status,
+.status.large {
+  border-radius: 0;
+}
+
+button,
+.button-link,
+.button-link.small {
+  padding: 8px 10px;
+  min-height: 36px;
+  line-height: 1.3;
+}
+
+.status {
+  padding: 6px 9px;
+  font-weight: 700;
+}
+
+.status.large {
+  padding: 8px 10px;
+}
+
+input,
+textarea,
+select,
+dialog,
+code,
+.versions div,
+.activity-timeline p,
+.warning-box,
+.preview-subject,
+.preview-card iframe,
+.notice,
+.error {
+  border-radius: 0;
+}
+
+input,
+textarea,
+select {
+  line-height: 1.4;
+}
+
+.form-grid {
+  gap: 18px;
+}
+
+.form-grid label,
+.login-card label,
+dialog label {
+  gap: 8px;
+}
+
+.link-row {
+  gap: 24px;
+  padding: 20px 0;
+}
+
+.link-row > div:first-child {
+  gap: 8px;
+}
+
+.link-row > div:last-child {
+  gap: 10px;
+}
+
+.stats-card dl {
+  gap: 14px;
+}
+
+.stats-card dl div {
+  gap: 24px;
+  padding-bottom: 12px;
+}
+
+.versions {
+  gap: 10px;
+}
+
+.versions div {
+  padding: 14px;
+  gap: 20px;
+}
+
+.activity-timeline article {
+  gap: 14px;
+  padding-bottom: 22px;
+}
+
+.activity-dot {
+  border-radius: 0;
+}
+
+.template-layout {
+  gap: 22px;
+}
+
+.template-list {
+  gap: 8px;
+}
+
+.template-list a {
+  padding: 12px 14px;
+}
+
+.preview-card iframe {
+  border: 0;
+}
+
+.backup-card::after {
+  display: none;
+}
+
+.danger-zone,
+.restore-card {
+  border: 0;
+}
+
+@media (max-width: 760px) {
+  main {
+    padding: 32px 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .login-card,
+  dialog form {
+    padding: 24px;
+  }
+}
