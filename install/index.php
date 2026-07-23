@@ -31,7 +31,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
  elseif(strlen($password)<12)$error='Heslo musí mať aspoň 12 znakov.';
  elseif($password!==$confirm)$error='Heslá sa nezhodujú.';
  else{
-  write_json(USER_FILE,[['email'=>$email,'name'=>$name,'passwordHash'=>password_hash($password,PASSWORD_DEFAULT),'createdAt'=>gmdate('c')]]);
+  write_json(USER_FILE,[['email'=>$email,'name'=>$name,'role'=>'manager','passwordHash'=>password_hash($password,PASSWORD_DEFAULT),'createdAt'=>gmdate('c')]]);
   if(file_put_contents($lockFile,json_encode(['installedAt'=>gmdate('c'),'php'=>PHP_VERSION],JSON_PRETTY_PRINT),LOCK_EX)===false){@unlink(USER_FILE);throw new RuntimeException('Inštaláciu sa nepodarilo uzamknúť.');}
   session_regenerate_id(true);$_SESSION['admin']=$email;
   header('Location:../admin/');exit;

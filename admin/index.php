@@ -5,13 +5,12 @@ require_once __DIR__.'/../lib/mailer.php';
 enable_asset_versioning();
 ensure_storage();
 secure_session_start();
-$users=read_json(USER_FILE);
+$users=normalize_admin_users(read_json(USER_FILE));
 if(!$users){header('Location:../install/');exit;}
 restore_admin_from_cookie($users);
 if(isset($_GET['logout'])){revoke_current_admin_token($users);$_SESSION=[];if(ini_get('session.use_cookies')){$p=session_get_cookie_params();setcookie(session_name(),'',time()-42000,$p['path'],$p['domain'],$p['secure'],$p['httponly']);}session_destroy();header('Location:index.php');exit;}
 $error='';$message='';$lockedUntil=(int)($_SESSION['login_locked_until']??0);
 function admin_root_url():string{if(BASE_URL!=='')return BASE_URL;$scheme=(!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')?'https':'http';$host=$_SERVER['HTTP_HOST']??'localhost';$script=str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME']??'/admin/index.php'));$root=rtrim(dirname($script),'/');return $scheme.'://'.$host.($root==='/'?'':$root);}
-function generated_admin_password(int $length=16):string{$alphabet='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';$out='';$max=strlen($alphabet)-1;for($i=0;$i<$length;$i++)$out.=$alphabet[random_int(0,$max)];return$out;}
 if(isset($_POST['login'])){
  verify_csrf();
  if(time()<$lockedUntil){$error='Príliš veľa pokusov. Skúste to neskôr.';}
@@ -22,7 +21,7 @@ if(isset($_POST['login'])){
   $validReset=$index!==null&&!empty($users[$index]['resetPasswordHash'])&&password_verify($password,(string)$users[$index]['resetPasswordHash']);
   if($index!==null&&($validCurrent||$validReset)){
    if($validReset){$users[$index]['passwordHash']=$users[$index]['resetPasswordHash'];$users[$index]['passwordChangedAt']=gmdate('c');unset($users[$index]['resetPasswordHash'],$users[$index]['resetPasswordCreatedAt']);}
-   session_regenerate_id(true);$_SESSION['admin']=$users[$index]['email'];unset($_SESSION['login_attempts'],$_SESSION['login_locked_until']);issue_admin_remember_token($users,$index);header('Location:index.php');exit;
+   session_regenerate_id(true);$_SESSION['admin']=$users[$index]['email'];unset($_SESSION['login_attempts'],$_SESSION['login_locked_until']);issue_admin_remember_token($users,$index);header('Location:'.(!empty($users[$index]['mustChangePassword'])?'settings.php?password=required':'index.php'));exit;
   }
   $_SESSION['login_attempts']=(int)($_SESSION['login_attempts']??0)+1;if($_SESSION['login_attempts']>=5){$_SESSION['login_locked_until']=time()+600;$_SESSION['login_attempts']=0;}$error='Nesprávny e-mail alebo heslo.';
  }

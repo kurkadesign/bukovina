@@ -161,6 +161,36 @@ dialog label { gap: 8px; }
 .recovery-form label { display: grid; gap: 8px; font-weight: 650; }
 .recovery-form button { justify-self: start; }
 
+.user-add-form {
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, .45fr) auto;
+  align-items: end;
+}
+
+.admin-users {
+  display: grid;
+  gap: 1px;
+  background: rgba(112, 142, 142, .2);
+}
+
+.admin-users > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 16px;
+  background: #fff;
+}
+
+.admin-users span,
+.admin-users small {
+  display: block;
+}
+
+.admin-users small {
+  margin-top: 3px;
+  color: #718181;
+}
+
 .projects h2,
 .projects .project-title {
   color: #785265;
@@ -192,4 +222,6 @@ dialog label { gap: 8px; }
   .login-card,
   dialog form { padding: 24px; }
   .password-recovery { padding: 16px 20px; }
+  .user-add-form { grid-template-columns: 1fr; }
+  .admin-users > div { align-items: flex-start; }
 }

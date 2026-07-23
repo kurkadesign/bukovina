@@ -7,6 +7,18 @@ function enable_asset_versioning(): void { static $enabled=false;if($enabled)ret
 function read_json(string $file, array $fallback=[]): array { if (!is_file($file)) return $fallback; $v=json_decode((string)file_get_contents($file), true); return is_array($v)?$v:$fallback; }
 function write_json(string $file, array $data): void { ensure_storage(); if(isset($data['access']['shareToken']))$data['access']['shareEnabled']=true;$tmp=$file.'.tmp'; if(file_put_contents($tmp,json_encode($data,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),LOCK_EX)===false) throw new RuntimeException('Súbor sa nepodarilo zapísať.'); if(!rename($tmp,$file)) throw new RuntimeException('Súbor sa nepodarilo uložiť.'); }
 function token(int $bytes=24): string { return bin2hex(random_bytes($bytes)); }
+function generated_admin_password(int $length=16): string { $alphabet='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';$out='';$max=strlen($alphabet)-1;for($i=0;$i<$length;$i++)$out.=$alphabet[random_int(0,$max)];return$out; }
+function admin_role_label(string $role): string { return $role==='manager'?'Správca':'Administrátor'; }
+function normalize_admin_users(array $users): array {
+ $hasManager=false;
+ foreach($users as &$user){$role=(string)($user['role']??'');if(!in_array($role,['manager','administrator'],true))$role='administrator';$user['role']=$role;if($role==='manager')$hasManager=true;}
+ unset($user);
+ if(!$hasManager&&!empty($users))$users[array_key_first($users)]['role']='manager';
+ return array_values($users);
+}
+function admin_user_index(array $users,string $email): ?int { foreach($users as $i=>$user)if(strcasecmp((string)($user['email']??''),$email)===0)return$i;return null; }
+function current_admin_user(): ?array { secure_session_start();$email=(string)($_SESSION['admin']??'');if($email==='')return null;$users=normalize_admin_users(read_json(USER_FILE));$index=admin_user_index($users,$email);return$index===null?null:$users[$index]; }
+function admin_is_manager(): bool { return (current_admin_user()['role']??'')==='manager'; }
 function default_event_items(): array { return [
  ['id'=>token(16),'type'=>'head-table','name'=>'Hlavný stôl','x'=>500,'y'=>90,'width'=>520,'height'=>100,'rotation'=>0,'number'=>0,'seats'=>10,'note'=>'','locked'=>false,'defaultKey'=>'hlavny-stol'],
  ['id'=>token(16),'type'=>'round-table','name'=>'Stôl 1','x'=>380,'y'=>350,'width'=>180,'height'=>180,'rotation'=>0,'number'=>1,'seats'=>8,'note'=>'','locked'=>false,'defaultKey'=>'okruhly-stol-1'],
@@ -26,7 +38,8 @@ function admin_cookie_options(int $expires): array { return ['expires'=>$expires
 function issue_admin_remember_token(array &$users,int $index): void { $raw=token(32);$expires=time()+86400*365*5;$items=array_values(array_filter((array)($users[$index]['rememberTokens']??[]),fn($x)=>(int)($x['expiresAt']??0)>time()));$items[]=['hash'=>hash('sha256',$raw),'expiresAt'=>$expires,'createdAt'=>gmdate('c')];$users[$index]['rememberTokens']=array_slice($items,-10);write_json(USER_FILE,$users);setcookie('bukovina_admin',$raw,admin_cookie_options($expires)); }
 function restore_admin_from_cookie(array &$users): bool { secure_session_start();if(!empty($_SESSION['admin']))return true;$raw=(string)($_COOKIE['bukovina_admin']??'');if($raw==='')return false;$hash=hash('sha256',$raw);$changed=false;foreach($users as $i=>&$user){$valid=[];foreach((array)($user['rememberTokens']??[]) as $item){if((int)($item['expiresAt']??0)<=time()){$changed=true;continue;}$valid[]=$item;if(hash_equals((string)($item['hash']??''),$hash)){$_SESSION['admin']=$user['email'];$user['rememberTokens']=$valid;if($changed)write_json(USER_FILE,$users);return true;}}$user['rememberTokens']=$valid;}unset($user);if($changed)write_json(USER_FILE,$users);setcookie('bukovina_admin','',admin_cookie_options(time()-3600));return false; }
 function revoke_current_admin_token(array &$users): void { $raw=(string)($_COOKIE['bukovina_admin']??'');if($raw!==''){$hash=hash('sha256',$raw);foreach($users as &$user)$user['rememberTokens']=array_values(array_filter((array)($user['rememberTokens']??[]),fn($x)=>!hash_equals((string)($x['hash']??''),$hash)));unset($user);write_json(USER_FILE,$users);}setcookie('bukovina_admin','',admin_cookie_options(time()-3600)); }
-function admin_required(): void { secure_session_start();$users=read_json(USER_FILE);restore_admin_from_cookie($users);if(empty($_SESSION['admin'])){header('Location: index.php');exit;} }
+function admin_required(): void { secure_session_start();$users=normalize_admin_users(read_json(USER_FILE));restore_admin_from_cookie($users);$index=admin_user_index($users,(string)($_SESSION['admin']??''));if($index===null){unset($_SESSION['admin']);header('Location: index.php');exit;}if(!empty($users[$index]['mustChangePassword'])&&basename((string)($_SERVER['SCRIPT_NAME']??''))!=='settings.php'){header('Location: settings.php?password=required');exit;} }
+function manager_required(): void { admin_required();if(!admin_is_manager()){http_response_code(403);exit('Táto akcia je dostupná iba správcovi.');} }
 function csrf_token(): string { secure_session_start(); return $_SESSION['csrf'] ??= token(24); }
 function csrf_field(): string { return '<input type="hidden" name="csrf" value="'.htmlspecialchars(csrf_token(),ENT_QUOTES,'UTF-8').'">'; }
 function verify_csrf(): void { secure_session_start(); if(!hash_equals((string)($_SESSION['csrf']??''),(string)($_POST['csrf']??''))){http_response_code(419);exit('Platnosť formulára vypršala. Obnovte stránku a skúste to znova.');} }

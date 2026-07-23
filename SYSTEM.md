@@ -48,6 +48,12 @@ Dostupné premenné:
 
 Kompletnú zálohu je možné stiahnuť cez **Administrácia → Nastavenia → Záloha systému**. Obsahuje aktuálne projekty, odoslané verzie, e-mailové šablóny a administrátorské účty s hashovanými heslami. SMTP prihlasovacie údaje v zálohe nie sú.
 
+## Používatelia a role
+
+Prvý účet vytvorený inštalátorom má rolu **Správca**. Správca môže v nastaveniach pridávať ďalších správcov alebo administrátorov. Novému používateľovi systém odošle dočasné heslo e-mailom a po prvom prihlásení vynúti jeho zmenu.
+
+Rola **Administrátor** môže vytvárať eventy a meniť ich stav. Nemôže vytvárať ani obnovovať systémové zálohy, spravovať používateľov, archivovať eventy alebo ich natrvalo odstraňovať. Tieto obmedzenia sú kontrolované aj na serveri, nie iba skrytím ovládacích prvkov.
+
 Pred obnovou systém vytvorí poistnú kópiu v `data/backups`. Uchováva posledných 10 kópií. Maximálna veľkosť importu je 50 MB. Celý priečinok `data` musí byť neprístupný z webu.
 
 ## SMTP a e-mailové notifikácie
