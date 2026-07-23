@@ -157,19 +157,17 @@ dialog label { gap: 8px; }
 .recovery-form label { display: grid; gap: 8px; font-weight: 650; }
 .recovery-form button { justify-self: start; }
 
-.event-list-page h1,
-.event-list-page h2,
-.event-list-page .project-title {
+.projects h2,
+.projects .project-title {
   color: #785265;
 }
 
-.event-list-page button,
-.event-list-page .button-link {
+.projects article .button-link {
   background: #785265;
   color: #fff;
 }
 
-.event-list-page .projects article {
+.projects article {
   background: rgba(120, 82, 101, 0.08);
 }
 
