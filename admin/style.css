@@ -161,6 +161,9 @@ dialog label { gap: 8px; }
   header { align-items: center; }
   header nav { flex-direction: row; align-items: center; gap: 12px; }
   main { padding: 32px 16px; }
+  .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dashboard-stats a { min-width: 0; padding: 16px; }
+  .dashboard-stats span { overflow-wrap: anywhere; }
   .card { padding: 20px; }
   .login-card,
   dialog form { padding: 24px; }
