@@ -162,12 +162,11 @@ dialog label { gap: 8px; }
 .recovery-form button { justify-self: start; }
 
 .user-add-form {
-  grid-template-columns: minmax(220px, 1fr) minmax(180px, .45fr) auto;
-  align-items: end;
+  grid-template-columns: 1fr;
 }
 
 .user-add-form > button {
-  grid-column: auto;
+  grid-column: 1;
 }
 
 .user-add-form select {
@@ -180,8 +179,8 @@ dialog label { gap: 8px; }
 
 .admin-users {
   display: grid;
-  gap: 1px;
-  background: rgba(112, 142, 142, .2);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .admin-users > div {
@@ -190,7 +189,7 @@ dialog label { gap: 8px; }
   justify-content: space-between;
   gap: 18px;
   padding: 14px 16px;
-  background: #fff;
+  background: rgba(112, 142, 142, .08);
 }
 
 .admin-users span,
@@ -221,6 +220,7 @@ dialog label { gap: 8px; }
   .dashboard-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .admin-users { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 760px) {
@@ -234,6 +234,6 @@ dialog label { gap: 8px; }
   .login-card,
   dialog form { padding: 24px; }
   .password-recovery { padding: 16px 20px; }
-  .user-add-form { grid-template-columns: 1fr; }
+  .admin-users { grid-template-columns: 1fr; }
   .admin-users > div { align-items: flex-start; }
 }
