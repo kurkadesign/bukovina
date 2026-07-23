@@ -236,4 +236,9 @@ dialog label { gap: 8px; }
   .password-recovery { padding: 16px 20px; }
   .admin-users { grid-template-columns: 1fr; }
   .admin-users > div { align-items: flex-start; }
+  .projects article { grid-template-columns: minmax(0, 1fr) auto; }
+  .projects article > div:first-child { grid-column: 1 / -1; }
+  .projects .project-editor-link { display: none; }
+  .projects .status { grid-column: 1; justify-self: start; }
+  .projects .project-detail-link { grid-column: 2; justify-self: end; }
 }
