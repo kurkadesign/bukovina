@@ -216,8 +216,13 @@ dialog label { gap: 8px; }
   background: rgba(120, 82, 101, 0.08);
 }
 
-.dashboard-stats .review-count-card {
-  background: rgba(120, 82, 101, 0.08);
+.dashboard-stats .review-count-card.has-events {
+  background: #785265;
+  color: #fff;
+}
+
+.dashboard-stats .review-count-card.has-events span {
+  color: #fff;
 }
 
 @media (max-width: 900px) {
