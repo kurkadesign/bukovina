@@ -6,6 +6,10 @@ const VERSION_DIR = DATA_DIR . '/versions';
 const USER_FILE = DATA_DIR . '/users.json';
 const APP_NAME = 'Bukovina Planner';
 
+$mailConfigFile = DATA_DIR . '/mail-config.json';
+$mailConfig = is_file($mailConfigFile) ? json_decode((string)file_get_contents($mailConfigFile), true) : [];
+if (!is_array($mailConfig)) $mailConfig = [];
+
 define('BASE_URL', rtrim((string)(getenv('BUKOVINA_BASE_URL') ?: ''), '/'));
 define('MAIL_FROM', (string)(getenv('BUKOVINA_MAIL_FROM') ?: ''));
 define('MAIL_FROM_NAME', (string)(getenv('BUKOVINA_MAIL_FROM_NAME') ?: 'Svadobná sála'));
