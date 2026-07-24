@@ -9,7 +9,7 @@
 #bocnyPanel .karta,#bocnyPanel fieldset,#bocnyPanel input,#bocnyPanel select,#bocnyPanel textarea,#bocnyPanel button,.obal-kniznice button{border-radius:0!important}
 
 /* Compact controls in the editor sidebar. */
-#pridatHosta,#detailStola .hlavicka-sekcie>button{padding:8px 10px}
+#pridatHosta,#detailStola .hlavicka-sekcie>button{padding:8px 10px; font-size:13px;}
 #hladanieHosta,#filterHosti,#editorMiesta select{padding:8px 10px}
 #odoslatPlan{background:#785265;border-color:#785265}
 
