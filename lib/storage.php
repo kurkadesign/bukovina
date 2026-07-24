@@ -9,6 +9,33 @@ function write_json(string $file, array $data): void { ensure_storage(); if(isse
 function token(int $bytes=24): string { return bin2hex(random_bytes($bytes)); }
 function generated_admin_password(int $length=16): string { $alphabet='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';$out='';$max=strlen($alphabet)-1;for($i=0;$i<$length;$i++)$out.=$alphabet[random_int(0,$max)];return$out; }
 function generated_admin_numeric_password(): string { return str_pad((string)random_int(0,999999),6,'0',STR_PAD_LEFT); }
+function external_storage_security_check(string $baseUrl=BASE_URL): array {
+ ensure_storage();
+ $baseUrl=rtrim($baseUrl,'/');
+ $probeName='.bukovina-security-'.token(6).'.txt';
+ $targets=[
+  ['label'=>'Používateľské účty','dir'=>DATA_DIR,'url'=>$baseUrl.'/data/'.$probeName],
+  ['label'=>'Eventy','dir'=>PROJECT_DIR,'url'=>$baseUrl.'/data/projects/'.$probeName],
+ ];
+ $results=[];
+ foreach($targets as $target){
+  $file=$target['dir'].'/'.$probeName;
+  if(file_put_contents($file,'bukovina-security-probe',LOCK_EX)===false){$results[]=['label'=>$target['label'],'status'=>'unknown','httpCode'=>0,'message'=>'Kontrolný súbor sa nepodarilo vytvoriť.'];continue;}
+  $code=0;
+  try{
+   $context=stream_context_create(['http'=>['method'=>'GET','timeout'=>5,'ignore_errors'=>true,'follow_location'=>1,'max_redirects'=>3],'ssl'=>['verify_peer'=>true,'verify_peer_name'=>true]]);
+   $http_response_header=[];
+   @file_get_contents($target['url'],false,$context);
+   foreach($http_response_header as $header)if(preg_match('~^HTTP/\S+\s+(\d{3})~i',$header,$match))$code=(int)$match[1];
+  }finally{@unlink($file);}
+  if($code===200)$results[]=['label'=>$target['label'],'status'=>'unsafe','httpCode'=>$code,'message'=>'Kontrolný súbor je verejne dostupný.'];
+  elseif(in_array($code,[401,403,404],true))$results[]=['label'=>$target['label'],'status'=>'safe','httpCode'=>$code,'message'=>'Prístup zvonku je zablokovaný.'];
+  else $results[]=['label'=>$target['label'],'status'=>'unknown','httpCode'=>$code,'message'=>'Verejnú dostupnosť sa nepodarilo spoľahlivo overiť.'];
+ }
+ $statuses=array_column($results,'status');
+ $overall=in_array('unsafe',$statuses,true)?'unsafe':(in_array('unknown',$statuses,true)?'unknown':'safe');
+ return['status'=>$overall,'checkedAt'=>gmdate('c'),'baseUrl'=>$baseUrl,'targets'=>$results];
+}
 function admin_role_label(string $role): string { return $role==='manager'?'Správca':'Administrátor'; }
 function normalize_admin_users(array $users): array {
  $hasManager=false;
