@@ -1914,3 +1914,65 @@ body.install-page {
     grid-column: auto;
   }
 }
+/* Upstream rules preserved during main merge */
+@media (max-width: 700px) {
+  .obal-aplikacie {
+    display: none;
+  }
+  #mobilneUpozornenie {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding: 28px;
+    text-align: center;
+    background: #fffaf7;
+  }
+  #mobilneUpozornenie span {
+    font-size: 48px;
+    color: var(--rose);
+  }
+  #mobilneUpozornenie h1 {
+    font-family: cursive;
+    font-size: 34px;
+    margin: 10px;
+  }
+}
+.pdf-huste .pdf-stol > p {
+  font-size: 10px;
+}
+.server-dialog-card > p {
+  margin: 0;
+  padding: 10px 24px;
+  color: #536767;
+  line-height: 1.55;
+}
+#detailStola .hlavicka-sekcie > button {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+@media (max-width: 1100px) and (min-width: 701px) {
+  #bocnyPanel {
+    transform: translateX(calc(100% + 20px));
+    transition: 0.25s;
+  }
+  #bocnyPanel.otvorene {
+    transform: none;
+  }
+  header {
+    padding-left: 12px;
+  }
+  .panel-nastrojov span {
+    display: none;
+  }
+  .pracovna-plocha {
+    padding: 0;
+  }
+  .obal-kniznice {
+    right: 20px;
+  }
+}
+@media (max-width: 850px) {
+  #projectReviewBanner {
+    top: 78px;
+  }
+}
