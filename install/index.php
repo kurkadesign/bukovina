@@ -78,13 +78,9 @@ $defaultBaseUrl=((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')?'https':
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width,initial-scale=1">
  <title>Inštalácia – Bukovina Planner</title>
- <link rel="stylesheet" href="../css/global-font.css">
- <style>
- @import url('https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&display=swap');
- *{box-sizing:border-box}body{margin:0;background:#f5f7f7;color:#243535;font:15px "Mona Sans",sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px}.wrap{width:min(760px,100%);background:#fff;padding:30px;box-shadow:0 18px 60px #20353518}h1{margin:0 0 6px;font-size:32px}h2{margin:26px 0 6px}p{color:#718181}.steps{color:#785265;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0}.check{display:flex;justify-content:space-between;padding:12px;background:#f5f8f8}.ok{color:#2e7d4f;font-weight:700}.bad{color:#a33b3b;font-weight:700}.warn{color:#9a6a1d;font-weight:700}form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}label{display:grid;align-content:start;gap:6px;font-weight:650}.full{grid-column:1/-1}input,select{padding:10px 12px;border:1px solid #ccd8d8;border-radius:0;font:inherit;background:#fff}button{grid-column:1/-1;justify-self:start;border:0;border-radius:0;min-height:36px;padding:8px 10px;background:#708e8e;color:#fff;font-weight:700;cursor:pointer}.error{padding:13px;background:#f7e5e5;color:#7c3434;margin:15px 0}small{color:#7a8888;font-weight:400;line-height:1.45}@media(max-width:650px){.checks,form{grid-template-columns:1fr}.full{grid-column:auto}}
- </style>
+ <link rel="stylesheet" href="../style.css">
 </head>
-<body>
+<body class="install-page">
 <main class="wrap">
  <div class="steps">Krok <?=$step==='smtp'?'2 z 2':'1 z 2'?></div>
  <h1>Bukovina Planner</h1>
