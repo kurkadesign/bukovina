@@ -1,45 +1,14 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../config.php';
-function ensure_storage(): void {
- foreach([DATA_DIR,PROJECT_DIR,VERSION_DIR]as$d)if(!is_dir($d))mkdir($d,0775,true);
- $protectionFile=DATA_DIR.'/.htaccess';
- if(is_dir(DATA_DIR)&&is_writable(DATA_DIR)&&!is_file($protectionFile))file_put_contents($protectionFile,"Require all denied\nDeny from all\n",LOCK_EX);
-}
+function ensure_storage(): void { foreach ([DATA_DIR, PROJECT_DIR, VERSION_DIR] as $d) if (!is_dir($d)) mkdir($d, 0775, true); }
 function json_response(array $data, int $status=200): never { http_response_code($status); header('Content-Type: application/json; charset=utf-8'); header('Cache-Control: no-store'); echo json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); exit; }
-function enable_asset_versioning(): void { static $enabled=false;if($enabled)return;$enabled=true;$version=(string)max((int)@filemtime(__DIR__.'/../admin/style.css'),(int)@filemtime(__DIR__.'/../css/fontawesome.css'),(int)@filemtime(__DIR__.'/../css/sharp-light.css'));ob_start(static function(string $html)use($version):string{$html=str_replace('<header><b>Bukovina Planner</b>','<header><a class="admin-logo" href="index.php" aria-label="Bukovina Planner"><img src="../assets/bukovina.png" alt="Bukovina Planner"></a>',$html);$html=str_replace('<h1>Bukovina Planner</h1>','<h1 class="admin-login-logo"><img src="../assets/bukovina.png" alt="Bukovina Planner"></h1>',$html);$html=strtr($html,['Názov svadby'=>'Názov eventu','názov svadby'=>'názov eventu','Dátum svadby'=>'Dátum eventu','dátum svadby'=>'dátum eventu','Svadba Novákovci'=>'Event Novákovci','Svadobné'=>'Eventové','Svadobná'=>'Eventová','Svadobný'=>'Eventový','svadobné'=>'eventové','svadobná'=>'eventová','svadobný'=>'eventový','projektov'=>'eventov','Projektov'=>'Eventov','projektu'=>'eventu','Projektu'=>'Eventu','projektom'=>'eventom','Projektom'=>'Eventom','projekty'=>'eventy','Projekty'=>'Eventy','projekt'=>'event','Projekt'=>'Event']);return(string)preg_replace('/((?:href|src)="(?!https?:\/\/)[^"?]+\.(?:css|js))(?:\?v=[^"]*)?"/','$1?v='.$version.'"',$html);}); }
+function enable_asset_versioning(): void { static $enabled=false;if($enabled)return;$enabled=true;$version=(string)max((int)@filemtime(__DIR__.'/../admin/style.css'),(int)@filemtime(__DIR__.'/../admin/icons.css'),(int)@filemtime(__DIR__.'/../admin/layout.css'),(int)@filemtime(__DIR__.'/../css/fontawesome.css'),(int)@filemtime(__DIR__.'/../css/sharp-light.css'));ob_start(static function(string $html)use($version):string{$html=str_replace('<header><b>Bukovina Planner</b>','<header><a class="admin-logo" href="index.php" aria-label="Bukovina Planner"><img src="../assets/bukovina.png" alt="Bukovina Planner"></a>',$html);$html=str_replace('<h1>Bukovina Planner</h1>','<h1 class="admin-login-logo"><img src="../assets/bukovina.png" alt="Bukovina Planner"></h1>',$html);$html=strtr($html,['Názov svadby'=>'Názov eventu','názov svadby'=>'názov eventu','Dátum svadby'=>'Dátum eventu','dátum svadby'=>'dátum eventu','Svadba Novákovci'=>'Event Novákovci','Svadobné'=>'Eventové','Svadobná'=>'Eventová','Svadobný'=>'Eventový','svadobné'=>'eventové','svadobná'=>'eventová','svadobný'=>'eventový','projektov'=>'eventov','Projektov'=>'Eventov','projektu'=>'eventu','Projektu'=>'Eventu','projektom'=>'eventom','Projektom'=>'Eventom','projekty'=>'eventy','Projekty'=>'Eventy','projekt'=>'event','Projekt'=>'Event']);$html=str_replace('</head>','<link rel="stylesheet" href="layout.css"></head>',$html);return(string)preg_replace('/((?:href|src)="(?!https?:\/\/)[^"?]+\.(?:css|js))(?:\?v=[^"]*)?"/','$1?v='.$version.'"',$html);}); }
 function read_json(string $file, array $fallback=[]): array { if (!is_file($file)) return $fallback; $v=json_decode((string)file_get_contents($file), true); return is_array($v)?$v:$fallback; }
 function write_json(string $file, array $data): void { ensure_storage(); if(isset($data['access']['shareToken']))$data['access']['shareEnabled']=true;$tmp=$file.'.tmp'; if(file_put_contents($tmp,json_encode($data,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),LOCK_EX)===false) throw new RuntimeException('Súbor sa nepodarilo zapísať.'); if(!rename($tmp,$file)) throw new RuntimeException('Súbor sa nepodarilo uložiť.'); }
 function token(int $bytes=24): string { return bin2hex(random_bytes($bytes)); }
 function generated_admin_password(int $length=16): string { $alphabet='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';$out='';$max=strlen($alphabet)-1;for($i=0;$i<$length;$i++)$out.=$alphabet[random_int(0,$max)];return$out; }
 function generated_admin_numeric_password(): string { return str_pad((string)random_int(0,999999),6,'0',STR_PAD_LEFT); }
-function external_storage_security_check(string $baseUrl=BASE_URL): array {
- ensure_storage();
- $baseUrl=rtrim($baseUrl,'/');
- $probeName='.bukovina-security-'.token(6).'.txt';
- $targets=[
-  ['label'=>'Používateľské účty','dir'=>DATA_DIR,'url'=>$baseUrl.'/data/'.$probeName],
-  ['label'=>'Eventy','dir'=>PROJECT_DIR,'url'=>$baseUrl.'/data/projects/'.$probeName],
- ];
- $results=[];
- foreach($targets as $target){
-  $file=$target['dir'].'/'.$probeName;
-  if(file_put_contents($file,'bukovina-security-probe',LOCK_EX)===false){$results[]=['label'=>$target['label'],'status'=>'unknown','httpCode'=>0,'message'=>'Kontrolný súbor sa nepodarilo vytvoriť.'];continue;}
-  $code=0;
-  try{
-   $context=stream_context_create(['http'=>['method'=>'GET','timeout'=>5,'ignore_errors'=>true,'follow_location'=>1,'max_redirects'=>3],'ssl'=>['verify_peer'=>true,'verify_peer_name'=>true]]);
-   $http_response_header=[];
-   @file_get_contents($target['url'],false,$context);
-   foreach($http_response_header as $header)if(preg_match('~^HTTP/\S+\s+(\d{3})~i',$header,$match))$code=(int)$match[1];
-  }finally{@unlink($file);}
-  if($code===200)$results[]=['label'=>$target['label'],'status'=>'unsafe','httpCode'=>$code,'message'=>'Kontrolný súbor je verejne dostupný.'];
-  elseif(in_array($code,[401,403,404],true))$results[]=['label'=>$target['label'],'status'=>'safe','httpCode'=>$code,'message'=>'Prístup zvonku je zablokovaný.'];
-  else $results[]=['label'=>$target['label'],'status'=>'unknown','httpCode'=>$code,'message'=>'Verejnú dostupnosť sa nepodarilo spoľahlivo overiť.'];
- }
- $statuses=array_column($results,'status');
- $overall=in_array('unsafe',$statuses,true)?'unsafe':(in_array('unknown',$statuses,true)?'unknown':'safe');
- return['status'=>$overall,'checkedAt'=>gmdate('c'),'baseUrl'=>$baseUrl,'targets'=>$results];
-}
 function admin_role_label(string $role): string { return $role==='manager'?'Správca':'Administrátor'; }
 function normalize_admin_users(array $users): array {
  $hasManager=false;
