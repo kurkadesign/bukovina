@@ -21,7 +21,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   elseif(admin_user_index($users,$email)!==null)$error='Používateľ s týmto e-mailom už existuje.';
   elseif(!mail_configured())$error='Používateľa nemožno pridať, kým nie je nastavené SMTP odosielanie.';
   else{
-   $password=generated_admin_password();$result=send_admin_user_invitation($email,$password,$role);
+   $password=generated_admin_numeric_password();$result=send_admin_user_invitation($email,$password,$role);
    if(!$result['ok'])$error='Pozvánku sa nepodarilo odoslať: '.($result['error']??'Neznáma chyba.');
    else{$users[]=['email'=>$email,'name'=>'','role'=>$role,'passwordHash'=>password_hash($password,PASSWORD_DEFAULT),'mustChangePassword'=>true,'createdAt'=>gmdate('c'),'invitedBy'=>$current];write_json(USER_FILE,$users);$message='Používateľ bol pridaný a dočasné heslo mu bolo odoslané e-mailom.';}
   }
