@@ -43,7 +43,7 @@ header nav .header-icon:hover {
 .link-actions { align-items: center; }
 .link-actions .inline { display: flex; align-items: center; }
 .link-actions .button-link,
-.link-actions button { min-height: 34px; padding: 8px 10px; font-size: 15px; line-height: 18px; white-space: nowrap; border-bottom-right-radius: 15px;}
+.link-actions button { min-height: 34px; padding: 8px 10px; font-size: 15px; line-height: 18px; white-space: nowrap;}
 a:not(.button-link):hover { text-decoration-thickness: 1px; text-underline-offset: 2px; }
 .admin-logo + nav > a:first-child { display: none; }
 body:has(.restore-card) header nav a[href="email-templates.php"] { display: none; }
