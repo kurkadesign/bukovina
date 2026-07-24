@@ -60,6 +60,10 @@ body:has(.restore-card) header nav a[href="email-templates.php"] { display: none
   background: #785265;
 }
 
+section.card.review-card h2 {
+    color: #785265; /* sem daj svoju farbu */
+}
+
 body { font-size: 15px; line-height: 1.55; }
 main { padding-top: 48px; padding-bottom: 48px; }
 .hero { gap: 24px; margin-bottom: 28px; }
