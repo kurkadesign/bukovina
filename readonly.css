@@ -18,7 +18,21 @@
 #dialogHosta textarea{resize:vertical}
 
 /* Match the compact admin event-creation button treatment. */
-#dialogHosta .akcie-dialogu button,#pridatHosta{border:0;border-radius:0;background:#708e8e;color:#fff;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;min-height:36px;line-height:1.3}
-#dialogPrvku .akcie-dialogu button{border-radius:0;font-size:13px}
+#dialogHosta .akcie-dialogu button,#pridatHosta{border:1px solid #708e8e;border-radius:0;background:#708e8e;color:#fff;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;min-height:36px;line-height:1.3}
+#dialogHosta .akcie-dialogu button:not(.hlavne){background:#fff;color:#000}
+#dialogPrvku .akcie-dialogu button{border:1px solid #708e8e;border-radius:0;background:#fff;color:#000;font-size:13px}
+#dialogPrvku .akcie-dialogu button.hlavne{background:#708e8e;color:#fff}
+#dialogPrvku .akcie-dialogu button.nebezpecne{color:#b94e55}
 #dialogPrvku input,#dialogPrvku select,#dialogPrvku textarea{border-radius:0}
 #dialogPrvku textarea{resize:vertical}
+
+/* Submission dialog follows the sharp editor treatment and the plan-submit color. */
+#serverSubmitDialog,.server-dialog-card,#serverSubmitDialog .server-dialog-actions button,#serverSubmitDialog .dialog-close{border-radius:0}
+#serverSubmitDialog .server-dialog-actions button{border:1px solid #708e8e;background:#fff;color:#000}
+#serverSubmitDialog .server-dialog-actions #confirmServerSubmit{border-color:#785265;background:#785265;color:#fff}
+#serverShareDialog,#serverShareDialog .server-dialog-card,#serverShareDialog .server-dialog-actions button,#serverShareDialog .dialog-close{border-radius:0}
+#serverShareDialog .server-dialog-actions button{border:1px solid #708e8e}
+#serverShareDialog .server-dialog-actions button.secondary{background:#fff;color:#476565}
+#serverShareDialog .server-check input{appearance:none;-webkit-appearance:none;display:grid;place-content:center;width:18px;height:18px;margin:0;border:1px solid #708e8e;border-radius:0;background:#fff}
+#serverShareDialog .server-check input:checked{background:#708e8e}
+#serverShareDialog .server-check input:checked::after{content:"";width:8px;height:4px;border:solid #fff;border-width:0 0 2px 2px;transform:translateY(-1px) rotate(-45deg)}
