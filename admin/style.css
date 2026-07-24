@@ -126,6 +126,11 @@ code,
 .preview-card iframe,
 .notice,
 .error { border-radius: 0; }
+.security-check-card form { margin-bottom: 16px; }
+.security-result { display: grid; gap: 5px; padding: 14px; background: #fff5df; color: #7b5a23; }
+.security-result.safe { background: #e7f3ed; color: #2e6f4a; }
+.security-result.unsafe { background: #f7e5e5; color: #7c3434; }
+.security-result span { display: block; }
 input,
 textarea,
 select { line-height: 1.4; }
