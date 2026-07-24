@@ -56,6 +56,10 @@ body:has(.restore-card) header nav a[href="email-templates.php"] { display: none
   background: rgba(120, 82, 101, 0.08);
 }
 
+.second-color {
+  background: #785265;
+}
+
 body { font-size: 15px; line-height: 1.55; }
 main { padding-top: 48px; padding-bottom: 48px; }
 .hero { gap: 24px; margin-bottom: 28px; }
