@@ -52,6 +52,10 @@ body:has(.restore-card) header nav a[href="email-templates.php"] { display: none
 .review-form > div,
 .new-project-actions { display: flex; justify-content: flex-end; gap: 10px; }
 
+.review-card {
+  background: rgba(120, 82, 101, 0.08);
+}
+
 body { font-size: 15px; line-height: 1.55; }
 main { padding-top: 48px; padding-bottom: 48px; }
 .hero { gap: 24px; margin-bottom: 28px; }
