@@ -64,6 +64,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
    if(file_put_contents($mailConfigFile,json_encode($mailConfig,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),LOCK_EX)===false)throw new RuntimeException('Nastavenie e-mailov sa nepodarilo uložiť.');
    write_json(USER_FILE,[['email'=>$admin['email'],'name'=>$admin['name'],'role'=>'manager','passwordHash'=>$admin['passwordHash'],'createdAt'=>gmdate('c')]]);
    if(file_put_contents($lockFile,json_encode(['installedAt'=>gmdate('c'),'php'=>PHP_VERSION],JSON_PRETTY_PRINT),LOCK_EX)===false){@unlink(USER_FILE);@unlink($mailConfigFile);throw new RuntimeException('Inštaláciu sa nepodarilo uzamknúť.');}
+   $_SESSION['install_security_result']=external_storage_security_check($baseUrl);
    unset($_SESSION['install_admin']);
    session_regenerate_id(true);$_SESSION['admin']=$admin['email'];
    header('Location:../admin/');exit;
