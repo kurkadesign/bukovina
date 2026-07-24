@@ -64,7 +64,7 @@ section.card.review-card h2 {
     color: #785265; /* sem daj svoju farbu */
 }
 
-textarea.card.review-card {
+section.card.review-card textarea {
     resize: vertical;
 }
 
