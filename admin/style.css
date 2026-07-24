@@ -93,11 +93,14 @@ dialog form { border: 0; border-radius: 0; }
   margin: 28px 0;
 }
 .dashboard-stats a { padding: 20px; gap: 8px; }
-.project-filters { grid-template-columns: 1fr 230px auto; gap: 16px; padding: 20px; margin-bottom: 24px; }
-.project-filters.has-reset { grid-template-columns: 1fr 230px auto auto; }
+.project-filters { grid-template-columns: 1fr 230px; gap: 16px; padding: 20px; margin-bottom: 24px; }
 .project-filters input,
 .project-filters select { border-radius: 0; }
 .projects { gap: 16px; margin-top: 24px; }
+.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+.pagination a { display: grid; place-items: center; min-width: 38px; min-height: 38px; padding: 6px; border: 1px solid #dce5e5; color: #243535; text-decoration: none; }
+.pagination a:hover,
+.pagination a.active { border-color: #708e8e; background: #708e8e; color: #fff; }
 .projects article { padding: 20px; gap: 18px; }
 .projects h2 { margin-bottom: 8px; line-height: 1.25; }
 .projects small { margin-top: 8px; line-height: 1.45; }
@@ -255,8 +258,7 @@ dialog label { gap: 8px; }
   .dashboard-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .project-filters,
-  .project-filters.has-reset { grid-template-columns: 1fr 1fr; }
+  .project-filters { grid-template-columns: 1fr 1fr; }
   .admin-users { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -265,8 +267,7 @@ dialog label { gap: 8px; }
   header nav { flex-direction: row; align-items: center; gap: 12px; }
   main { padding: 32px 16px; }
   .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .project-filters,
-  .project-filters.has-reset { grid-template-columns: 1fr; }
+  .project-filters { grid-template-columns: 1fr; }
   .dashboard-stats a { min-width: 0; padding: 16px; }
   .dashboard-stats span { overflow-wrap: anywhere; }
   .card { padding: 20px; }
