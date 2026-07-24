@@ -8,6 +8,7 @@ function read_json(string $file, array $fallback=[]): array { if (!is_file($file
 function write_json(string $file, array $data): void { ensure_storage(); if(isset($data['access']['shareToken']))$data['access']['shareEnabled']=true;$tmp=$file.'.tmp'; if(file_put_contents($tmp,json_encode($data,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),LOCK_EX)===false) throw new RuntimeException('Súbor sa nepodarilo zapísať.'); if(!rename($tmp,$file)) throw new RuntimeException('Súbor sa nepodarilo uložiť.'); }
 function token(int $bytes=24): string { return bin2hex(random_bytes($bytes)); }
 function generated_admin_password(int $length=16): string { $alphabet='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';$out='';$max=strlen($alphabet)-1;for($i=0;$i<$length;$i++)$out.=$alphabet[random_int(0,$max)];return$out; }
+function generated_admin_numeric_password(): string { return str_pad((string)random_int(0,999999),6,'0',STR_PAD_LEFT); }
 function admin_role_label(string $role): string { return $role==='manager'?'Správca':'Administrátor'; }
 function normalize_admin_users(array $users): array {
  $hasManager=false;
