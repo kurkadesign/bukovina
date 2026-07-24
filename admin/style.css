@@ -150,6 +150,9 @@ dialog label { gap: 8px; }
 .template-layout { gap: 22px; }
 .template-list { gap: 8px; }
 .template-list a { padding: 12px 14px; }
+.signature-fields { display: grid; gap: 14px; margin: 8px 0; padding: 18px; border: 1px solid #dce5e5; }
+.signature-fields legend { padding: 0 8px; font-weight: 750; color: #243535; }
+.signature-fields small { line-height: 1.45; }
 .preview-card iframe { border: 0; }
 .backup-card::after { display: none; }
 .danger-zone,
