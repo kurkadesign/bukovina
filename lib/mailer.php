@@ -28,9 +28,16 @@ function send_app_mail(string $to,string $subject,string $html,string $text=''):
   smtp_command($s,'RCPT TO:<'.$to.'>',[250,251],'príjemca');
   smtp_command($s,'DATA',[354],'začiatok správy');
   $b='b'.bin2hex(random_bytes(12));
+  $related='r'.bin2hex(random_bytes(12));
   $plain=$text!==''?$text:trim(strip_tags(str_replace(['<br>','<br/>','<br />'],"\n",$html)));
-  $headers=['From: '.MAIL_FROM_NAME.' <'.MAIL_FROM.'>','To: <'.$to.'>','Subject: =?UTF-8?B?'.base64_encode($subject).'?=','MIME-Version: 1.0','Content-Type: multipart/alternative; boundary="'.$b.'"','Date: '.date(DATE_RFC2822),'Message-ID: <'.bin2hex(random_bytes(12)).'@'.($_SERVER['SERVER_NAME']??'localhost').'>'];
-  $body=implode("\r\n",$headers)."\r\n\r\n".'--'.$b."\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n".$plain."\r\n".'--'.$b."\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n".$html."\r\n".'--'.$b."--\r\n";
+  $logoPath=__DIR__.'/../assets/bukovina.png';
+  $logoData=is_file($logoPath)?file_get_contents($logoPath):false;
+  if($logoData!==false)$html=str_replace(htmlspecialchars(mail_public_url().'/assets/bukovina.png',ENT_QUOTES),'cid:bukovina-logo',$html);
+  $headers=['From: '.MAIL_FROM_NAME.' <'.MAIL_FROM.'>','To: <'.$to.'>','Subject: =?UTF-8?B?'.base64_encode($subject).'?=','MIME-Version: 1.0','Content-Type: multipart/related; boundary="'.$related.'"','Date: '.date(DATE_RFC2822),'Message-ID: <'.bin2hex(random_bytes(12)).'@'.($_SERVER['SERVER_NAME']??'localhost').'>'];
+  $alternative='--'.$b."\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n".$plain."\r\n".'--'.$b."\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n".$html."\r\n".'--'.$b."--\r\n";
+  $body=implode("\r\n",$headers)."\r\n\r\n".'--'.$related."\r\nContent-Type: multipart/alternative; boundary=\"".$b."\"\r\n\r\n".$alternative;
+  if($logoData!==false)$body.='--'.$related."\r\nContent-Type: image/png; name=\"bukovina.png\"\r\nContent-Transfer-Encoding: base64\r\nContent-ID: <bukovina-logo>\r\nContent-Disposition: inline; filename=\"bukovina.png\"\r\n\r\n".chunk_split(base64_encode($logoData),76,"\r\n");
+  $body.='--'.$related."--\r\n";
   $payload=str_replace("\r\n.","\r\n..",$body).".\r\n";
   if(fwrite($s,$payload)===false)throw new RuntimeException('SMTP správu sa nepodarilo odoslať.');
   smtp_expect($s,[250],'odoslanie správy');
