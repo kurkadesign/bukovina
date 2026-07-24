@@ -11,7 +11,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   if($currentIndex===null||!password_verify($old,(string)($users[$currentIndex]['passwordHash']??'')))$error='Aktuálne heslo nie je správne.';
   elseif(strlen($new)<12)$error='Nové heslo musí mať aspoň 12 znakov.';
   elseif($new!==$confirm)$error='Nové heslá sa nezhodujú.';
-  else{$users[$currentIndex]['passwordHash']=password_hash($new,PASSWORD_DEFAULT);$users[$currentIndex]['passwordChangedAt']=gmdate('c');unset($users[$currentIndex]['mustChangePassword']);write_json(USER_FILE,$users);session_regenerate_id(true);$message='Heslo bolo zmenené.';}
+  else{$users[$currentIndex]['passwordHash']=password_hash($new,PASSWORD_DEFAULT);$users[$currentIndex]['passwordChangedAt']=gmdate('c');unset($users[$currentIndex]['mustChangePassword']);write_json(USER_FILE,$users);session_regenerate_id(true);if($mustChange){header('Location:index.php');exit;}$message='Heslo bolo zmenené.';}
  }elseif($mustChange){$error='Najprv si zmeňte dočasné heslo.';
  }elseif($action==='add-user'){
   if(!$isManager){http_response_code(403);exit('Táto akcia je dostupná iba správcovi.');}
