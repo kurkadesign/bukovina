@@ -6,10 +6,11 @@ require_once __DIR__.'/../lib/mailer.php';
 admin_required();ensure_storage();enable_asset_versioning();
 function h(string $v):string{return htmlspecialchars($v,ENT_QUOTES,'UTF-8');}
 
-$user=current_admin_user();$userEmail=(string)($user['email']??'');
-$templates=load_email_templates($userEmail);$signature=load_email_signature($userEmail);
+$user=current_admin_user();$userEmail=(string)($user['email']??($_SESSION['admin']??''));
+$templates=default_email_templates();$signature=default_email_signature($userEmail);$startupError='';
+try{$templates=load_email_templates($userEmail);$signature=load_email_signature($userEmail);}catch(Throwable $exception){$startupError='Uložené šablóny sa nepodarilo načítať. Zobrazujú sa predvolené hodnoty: '.$exception->getMessage();}
 $selected=(string)($_GET['template']??array_key_first($templates));if(!isset($templates[$selected]))$selected=array_key_first($templates);
-$message='';$error='';
+$message='';$error=$startupError;
 if($_SERVER['REQUEST_METHOD']==='POST'){
  verify_csrf();$selected=(string)($_POST['templateKey']??'');$action=(string)($_POST['action']??'save');
  if(!isset($templates[$selected]))$error='Neznáma šablóna.';
@@ -22,20 +23,21 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
    'website'=>trim((string)($_POST['signatureWebsite']??'')),
   ];
   if($action==='reset'){
-   $templates[$selected]=default_email_templates()[$selected];save_email_templates($templates,$signature,$userEmail);$message='Šablóna bola obnovená na pôvodný text.';
+   try{$templates[$selected]=default_email_templates()[$selected];save_email_templates($templates,$signature,$userEmail);$message='Šablóna bola obnovená na pôvodný text.';}catch(Throwable $exception){$error='Šablónu sa nepodarilo uložiť: '.$exception->getMessage();}
   }else{
    $subject=trim((string)($_POST['subject']??''));$title=trim((string)($_POST['title']??''));$body=trim((string)($_POST['body']??''));$button=trim((string)($_POST['buttonLabel']??''));
    $signatureLength=array_sum(array_map('strlen',$signature));
    if($subject===''||$title===''||$body==='')$error='Predmet, nadpis a text sú povinné.';
    elseif(strlen($subject)>200||strlen($title)>160||strlen($body)>10000||strlen($button)>100||$signatureLength>1000)$error='Niektoré pole je príliš dlhé.';
    elseif($signature['website']!==''&&!filter_var($signature['website'],FILTER_VALIDATE_URL))$error='Webová URL v podpise nie je platná.';
-   else{$templates[$selected]['subject']=$subject;$templates[$selected]['title']=$title;$templates[$selected]['body']=$body;$templates[$selected]['buttonLabel']=$button;save_email_templates($templates,$signature,$userEmail);$message='Šablóna a podpis boli uložené.';}
+   else{try{$templates[$selected]['subject']=$subject;$templates[$selected]['title']=$title;$templates[$selected]['body']=$body;$templates[$selected]['buttonLabel']=$button;save_email_templates($templates,$signature,$userEmail);$message='Šablóna a podpis boli uložené.';}catch(Throwable $exception){$error='Šablónu sa nepodarilo uložiť: '.$exception->getMessage();}}
   }
  }
 }
 $t=$templates[$selected];
 $sample=['name'=>'Svadobný event','client'=>['name'=>'Ján Novák','email'=>'jan@example.sk'],'weddingDate'=>'2026-09-12','state'=>['guests'=>array_fill(0,86,[]),'items'=>array_fill(0,14,[])],'meta'=>['templateOwner'=>$userEmail]];
-$preview=get_rendered_email_template($selected,$sample,['review_note'=>'Prosíme upraviť sedenie pri stole číslo 4.'],$userEmail);
+$preview=['subject'=>(string)$t['subject'],'title'=>(string)$t['title'],'body'=>render_template_body((string)$t['body'],email_template_variables($sample,['review_note'=>'Prosíme upraviť sedenie pri stole číslo 4.'])),'buttonLabel'=>(string)$t['buttonLabel'],'signature'=>''];
+try{$preview=get_rendered_email_template($selected,$sample,['review_note'=>'Prosíme upraviť sedenie pri stole číslo 4.'],$userEmail);}catch(Throwable $exception){if($error==='')$error='Náhľad sa nepodarilo pripraviť: '.$exception->getMessage();}
 $previewHtml=email_layout($preview['title'],$preview['body'],$preview['buttonLabel'],'https://example.sk/planovac',$preview['signature']);
 $vars=['{{project_name}}','{{client_name}}','{{client_email}}','{{wedding_date}}','{{guest_count}}','{{item_count}}','{{review_note}}'];
 ?>
