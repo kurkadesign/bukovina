@@ -15,6 +15,7 @@
 
 /* Guest form controls. */
 #dialogHosta input,#dialogHosta select,#dialogHosta textarea{border-radius:0}
+#dialogHosta fieldset,#dialogHosta fieldset legend,#dialogHosta .zaskrtavacie-polia label{border-radius:0}
 #dialogHosta textarea{resize:vertical}
 
 /* Match the compact admin event-creation button treatment. */
