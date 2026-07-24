@@ -18,9 +18,14 @@ if(isset($_POST['login'])){
   $email=trim((string)($_POST['email']??''));$password=(string)($_POST['password']??'');$index=null;
   foreach($users as $i=>$candidate)if(strcasecmp((string)($candidate['email']??''),$email)===0){$index=$i;break;}
   $validCurrent=$index!==null&&password_verify($password,(string)($users[$index]['passwordHash']??''));
-  $validReset=$index!==null&&!empty($users[$index]['resetPasswordHash'])&&password_verify($password,(string)$users[$index]['resetPasswordHash']);
+  $hasReset=$index!==null&&!empty($users[$index]['resetPasswordHash']);
+  $resetCreatedAt=$hasReset?strtotime((string)($users[$index]['resetPasswordCreatedAt']??'')):false;
+  $resetActive=$hasReset&&$resetCreatedAt!==false&&$resetCreatedAt>=time()-(12*60*60);
+  if($hasReset&&!$resetActive){unset($users[$index]['resetPasswordHash'],$users[$index]['resetPasswordCreatedAt']);write_json(USER_FILE,$users);}
+  $validReset=$resetActive&&password_verify($password,(string)$users[$index]['resetPasswordHash']);
   if($index!==null&&($validCurrent||$validReset)){
    if($validReset){$users[$index]['passwordHash']=$users[$index]['resetPasswordHash'];$users[$index]['passwordChangedAt']=gmdate('c');unset($users[$index]['resetPasswordHash'],$users[$index]['resetPasswordCreatedAt']);}
+   elseif($validCurrent){unset($users[$index]['resetPasswordHash'],$users[$index]['resetPasswordCreatedAt']);}
    session_regenerate_id(true);$_SESSION['admin']=$users[$index]['email'];unset($_SESSION['login_attempts'],$_SESSION['login_locked_until']);issue_admin_remember_token($users,$index);header('Location:'.(!empty($users[$index]['mustChangePassword'])?'settings.php?password=required':'index.php'));exit;
   }
   $_SESSION['login_attempts']=(int)($_SESSION['login_attempts']??0)+1;if($_SESSION['login_attempts']>=5){$_SESSION['login_locked_until']=time()+600;$_SESSION['login_attempts']=0;}$error='Nesprávny e-mail alebo heslo.';
