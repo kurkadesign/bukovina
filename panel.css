@@ -6,3 +6,8 @@
 #bocnyPanel .zalozky-panelu button.aktivne{background:#fff!important}
 .akcie-projektu{grid-template-columns:1fr}
 .readonly-mode #editorMiesta>small,.readonly-mode #editorMiesta>select,.readonly-mode #editorMiesta>button{display:none!important}
+
+#panelPodujatia .mriezka-formulara label{font-size:12px}
+#panelPodujatia .mriezka-formulara input,
+#panelPodujatia .mriezka-formulara select,
+#panelPodujatia .mriezka-formulara textarea{font-size:16px}
