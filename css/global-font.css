@@ -6,6 +6,9 @@ select,
 textarea,
 dialog,
 .server-dialog-card,
+#serverSaveStatus,
+#projectReviewBanner,
+.obal-aplikacie,
 .pdf-strana {
   font-family: "Mona Sans", sans-serif !important;
   font-optical-sizing: auto;
