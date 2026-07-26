@@ -503,18 +503,18 @@ main, #zobrazeniePodorysu {
 	box-shadow: inset 0 0 0 3px #fff
 }
 
-#serverShareDialog, #serverSubmitDialog {
+#serverShareDialog, #serverSubmitDialog, #dialogResetovania {
 	border-radius: 20px;
 	border: 0;
 	box-shadow: 0 20px 80px #10252533;
 	padding: 0
 }
 
-#serverShareDialog, #serverSubmitDialog, #serverShareDialog .server-dialog-card, #serverSubmitDialog .server-dialog-card {
+#serverShareDialog, #serverSubmitDialog, #dialogResetovania, #serverShareDialog .server-dialog-card, #serverSubmitDialog .server-dialog-card, #dialogResetovania .server-dialog-card {
 	border-radius: 0
 }
 
-#serverShareDialog::backdrop, #serverSubmitDialog::backdrop {
+#serverShareDialog::backdrop, #serverSubmitDialog::backdrop, #dialogResetovania::backdrop {
 	backdrop-filter: blur(3px);
 	background: #10252566
 }
@@ -522,6 +522,15 @@ main, #zobrazeniePodorysu {
 #serverSubmitDialog .server-dialog-actions button:not(.secondary) {
 	background: #785265;
 	color: #fff
+}
+
+#dialogResetovania .server-dialog-actions button:not(.secondary) {
+	background: #b94e55;
+	color: #fff
+}
+
+#dialogResetovania .server-dialog-actions button {
+	border-radius: 0
 }
 
 #staryPrehliadac {
