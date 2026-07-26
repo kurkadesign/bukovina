@@ -13,7 +13,7 @@ if (!is_array($mailConfig)) $mailConfig = [];
 
 define('BASE_URL', rtrim((string)($mailConfig['baseUrl'] ?? ''), '/'));
 define('MAIL_FROM', (string)($mailConfig['mailFrom'] ?? ''));
-define('MAIL_FROM_NAME', (string)($mailConfig['mailFromName'] ?? 'Svadobná sála'));
+define('MAIL_FROM_NAME', (string)($mailConfig['mailFromName'] ?? 'Eventová sála'));
 define('ORGANIZER_EMAIL', (string)($mailConfig['organizerEmail'] ?? ''));
 define('SMTP_HOST', (string)($mailConfig['smtpHost'] ?? ''));
 define('SMTP_PORT', (int)($mailConfig['smtpPort'] ?? 587));

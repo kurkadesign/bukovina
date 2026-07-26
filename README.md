@@ -1,4 +1,4 @@
-# Svadobný plánovač
+# Eventový plánovač
 
 Responzívna statická webová aplikácia v čistom HTML, CSS a JavaScripte. Je pripravená pre GitHub Pages.
 
