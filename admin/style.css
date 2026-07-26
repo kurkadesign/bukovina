@@ -192,6 +192,15 @@ dialog form { border: 0; border-radius: 0; }
   margin-bottom: 0;
 }
 
+.settings-secondary-column {
+  display: grid;
+  gap: 22px;
+}
+
+.settings-secondary-column .card {
+  height: auto;
+}
+
 .smtp-settings-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -211,6 +220,13 @@ dialog form { border: 0; border-radius: 0; }
   width: 100%;
   min-width: 0;
   border-radius: 0;
+}
+
+.smtp-settings-grid select {
+  padding: 12px;
+  border: 1px solid #ccd8d8;
+  background: #fff;
+  font: inherit;
 }
 
 .smtp-settings-grid button {
