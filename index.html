@@ -23,7 +23,7 @@
           <div id="podorys"><div id="prvky"></div></div>
         </div>
         <div class="obal-kniznice">
-          <div class="nadpis-kniznice"><b>Presuňte prvky do pôdorysu</b><span class="akcie-kniznice"><a id="prepinacEditovania" href="#" role="button">Vypnúť editovateľný režim</a><a id="resetovatPlan" href="#">Vyresetovať plán sály</a></span></div>
+          <div class="nadpis-kniznice"><b>Presuňte prvky do pôdorysu</b><span class="akcie-kniznice"><a id="resetovatPlan" href="#">Vyresetovať plán sály</a></span></div>
           <div id="kniznicaPrvkov" class="kniznica-prvkov"></div>
         </div>
       </section>
@@ -61,7 +61,7 @@
 
   <dialog id="dialogPrvku"><form id="formularPrvku"><div class="hlavicka-dialogu"><h2>Nastavenie prvku</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div class="mriezka-formulara"><label>Názov<input name="name" required></label><label>Číslo<input name="number" type="number" min="1"></label><label>Šírka<input name="width" type="number" min="40" max="800"></label><label>Výška<input name="height" type="number" min="40" max="800"></label><label>Rotácia<input name="rotation" type="number" min="-360" max="360"></label><label class="iba-pre-stol">Počet miest<input name="seats" type="number" min="1" max="30"></label><label class="dva-stlpce">Poznámka<textarea name="note"></textarea></label></div><div class="akcie-dialogu"><button id="odstranitPrvok" class="nebezpecne" type="button">Odstrániť</button><button id="duplikovatPrvok" type="button">Duplikovať</button><button id="zamknutPrvok" type="button">Uzamknúť</button><button type="submit" class="hlavne">Uložiť</button></div></form></dialog>
   <dialog id="dialogRekapitulacie"><div class="hlavicka-dialogu"><h2>Rekapitulácia plánu</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><div id="obsahRekapitulacie"></div><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zavrieť</button><button id="potvrditOdoslanie" class="hlavne">Uložiť finálnu verziu</button></div></dialog>
-  <dialog id="dialogResetovania"><div class="hlavicka-dialogu"><h2>Vyresetovať plán sály?</h2><button type="button" class="ikonove-tlacidlo" onclick="closePlannerDialog(this.closest('dialog'))">×</button></div><p>Všetky aktuálne zmeny sa nahradia predvoleným rozložením. Túto akciu nie je možné vrátiť späť.</p><div class="akcie-dialogu"><button type="button" onclick="closePlannerDialog(this.closest('dialog'))">Zrušiť</button><button id="potvrditResetovanie" type="button" class="nebezpecne">Áno, vyresetovať</button></div></dialog>
+  <dialog id="dialogResetovania"><form method="dialog" class="server-dialog-card"><div class="server-dialog-head"><div><small>Predvolené rozloženie</small><h2>Vyresetovať plán sály?</h2></div></div><p>Všetky aktuálne zmeny sa nahradia predvoleným rozložením. Túto akciu nie je možné vrátiť späť.</p><div class="server-dialog-actions"><button value="cancel" class="secondary">Zrušiť</button><button id="potvrditResetovanie" value="default" type="button" class="nebezpecne">Áno, vyresetovať</button></div></form></dialog>
   <div id="oznam" role="status"></div>
   <script src="js/vendor/html2canvas.min.js"></script>
   <script src="js/vendor/jspdf.umd.min.js"></script>
