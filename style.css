@@ -1458,6 +1458,10 @@ main, #zobrazeniePodorysu {
 	border-color: #c85860
 }
 
+.prvok-podorysu.zamknute::before {
+	content: none
+}
+
 .rastlina .tvar-prvku {
 	color: var(--plant-color)
 }
