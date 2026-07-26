@@ -5,11 +5,11 @@ require_once __DIR__.'/storage.php';
 function email_template_file(): string { return DATA_DIR.'/email-templates.json'; }
 function default_email_templates(): array {
  return [
-  'invitation'=>['label'=>'Pozvánka do plánovača','subject'=>'{{project_name}}','title'=>'Váš svadobný plánovač','body'=>"Dobrý deň,\n\nna nasledujúcom odkaze môžete pripraviť rozloženie stolov a zasadací poriadok pre projekt {{project_name}}.\n\nZmeny sa ukladajú automaticky a k návrhu sa môžete kedykoľvek vrátiť.",'buttonLabel'=>'Otvoriť plánovač'],
-  'submission_organizer'=>['label'=>'Návrh odoslaný organizátorovi','subject'=>'Odoslaný návrh – {{project_name}}','title'=>'Nový návrh bol odoslaný','body'=>"Klient {{client_name}} odoslal nový návrh projektu {{project_name}}.\n\nPočet hostí: {{guest_count}}\nPočet prvkov: {{item_count}}\nDátum svadby: {{wedding_date}}",'buttonLabel'=>'Otvoriť projekt'],
-  'submission_client'=>['label'=>'Potvrdenie klientovi','subject'=>'Potvrdenie odoslania – {{project_name}}','title'=>'Návrh bol odoslaný','body'=>"Potvrdzujeme, že návrh projektu {{project_name}} bol úspešne odoslaný organizátorom.\n\nAk návrh neskôr upravíte, môžete odoslať jeho aktualizovanú verziu.",'buttonLabel'=>''],
-  'approved'=>['label'=>'Schválenie návrhu','subject'=>'Návrh bol schválený – {{project_name}}','title'=>'Návrh bol schválený','body'=>"Váš návrh projektu {{project_name}} bol organizátorom schválený.\n\n{{review_note}}",'buttonLabel'=>''],
-  'revision'=>['label'=>'Vrátenie na dopracovanie','subject'=>'Návrh je potrebné dopracovať – {{project_name}}','title'=>'Prosíme o dopracovanie návrhu','body'=>"Organizátor vrátil projekt {{project_name}} na dopracovanie.\n\n{{review_note}}",'buttonLabel'=>'Otvoriť plánovač'],
+  'invitation'=>['label'=>'Pozvánka do plánovača','subject'=>'{{project_name}}','title'=>'Váš eventový plánovač','body'=>"Dobrý deň,\n\nna nasledujúcom odkaze môžete pripraviť rozloženie stolov a zasadací poriadok pre event {{project_name}}.\n\nZmeny sa ukladajú automaticky a k návrhu sa môžete kedykoľvek vrátiť.",'buttonLabel'=>'Otvoriť plánovač'],
+  'submission_organizer'=>['label'=>'Návrh odoslaný organizátorovi','subject'=>'Odoslaný návrh – {{project_name}}','title'=>'Nový návrh bol odoslaný','body'=>"Klient {{client_name}} odoslal nový návrh eventu {{project_name}}.\n\nPočet hostí: {{guest_count}}\nPočet prvkov: {{item_count}}\nDátum eventu: {{wedding_date}}",'buttonLabel'=>'Otvoriť event'],
+  'submission_client'=>['label'=>'Potvrdenie klientovi','subject'=>'Potvrdenie odoslania – {{project_name}}','title'=>'Návrh bol odoslaný','body'=>"Potvrdzujeme, že návrh eventu {{project_name}} bol úspešne odoslaný organizátorom.\n\nAk návrh neskôr upravíte, môžete odoslať jeho aktualizovanú verziu.",'buttonLabel'=>''],
+  'approved'=>['label'=>'Schválenie návrhu','subject'=>'Návrh bol schválený – {{project_name}}','title'=>'Návrh bol schválený','body'=>"Váš návrh eventu {{project_name}} bol organizátorom schválený.\n\n{{review_note}}",'buttonLabel'=>''],
+  'revision'=>['label'=>'Vrátenie na dopracovanie','subject'=>'Návrh je potrebné dopracovať – {{project_name}}','title'=>'Prosíme o dopracovanie návrhu','body'=>"Organizátor vrátil event {{project_name}} na dopracovanie.\n\n{{review_note}}",'buttonLabel'=>'Otvoriť plánovač'],
  ];
 }
 function default_email_signature(string $userEmail=''): array {
@@ -37,6 +37,8 @@ function save_email_template_store(array $store): void { $store['version']=2;wri
 function merge_email_templates(array $saved): array {
  $templates=default_email_templates();
  foreach($templates as $key=>$tpl)if(isset($saved[$key])&&is_array($saved[$key]))$templates[$key]=array_merge($tpl,array_intersect_key($saved[$key],$tpl));
+ foreach($templates as &$tpl)foreach(['label','subject','title','body','buttonLabel'] as $field)if(isset($tpl[$field]))$tpl[$field]=strtr((string)$tpl[$field],['Svadobný'=>'Eventový','Svadobná'=>'Eventová','Svadobné'=>'Eventové','svadobný'=>'eventový','svadobná'=>'eventová','svadobné'=>'eventové','Svadba'=>'Event','svadba'=>'event','svadby'=>'eventu']);
+ unset($tpl);
  return$templates;
 }
 function load_email_templates(string $userEmail=''): array {

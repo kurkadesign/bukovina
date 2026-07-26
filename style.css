@@ -1890,7 +1890,7 @@ main, #zobrazeniePodorysu {
 	}
 
 	.pracovna-plocha:before {
-		content: "Svadobný plán – pôdorys";
+		content: "Eventový plán – pôdorys";
 		display: block;
 		font-size: 24px;
 		margin: 0 0 12px
