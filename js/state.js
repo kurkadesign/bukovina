@@ -18,13 +18,13 @@ export const TYPES=[
 export const PERSON_ICONS={adult:'fa_user',child:'fa_child_reaching'};
 export const ALLERGIES=['Lepok','Laktóza','Arašidy','Orechy','Vajcia','Ryby','Sója','Iné'];
 export const nastaveniePlochy={
-  editovatelnyRezim:true
+  editovatelnyRezim:false
 };
 const uid=()=>globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function'
   ?globalThis.crypto.randomUUID()
   :'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
 export function initialState(){const t1=uid(),t2=uid(),t3=uid(),g1=uid(),g2=uid(),g3=uid(),g4=uid();return{schemaVersion:1,projectId:uid(),wedding:{eventName:'Svadba J a M',date:'2026-09-12',contactName:'Jana',phone:'',email:'',note:''},settings:{zoom:0.72,panX:60,panY:35},items:[
-  {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:0,seats:10,note:'',locked:false,defaultKey:'hlavny-stol'},
+  {id:uid(),type:'head-table',name:'Hlavný stôl',x:500,y:90,width:520,height:100,rotation:0,number:1,seats:10,note:'',locked:false,defaultKey:'hlavny-stol'},
   {id:t1,type:'round-table',name:'Stôl 1',x:380,y:350,width:180,height:180,rotation:0,number:1,seats:8,note:'Rodina nevesty',locked:false,defaultKey:'okruhly-stol-1'},
   {id:t2,type:'round-table',name:'Stôl 2',x:800,y:320,width:180,height:180,rotation:0,number:2,seats:8,note:'',locked:false,defaultKey:'okruhly-stol-2'},
   {id:t3,type:'round-table',name:'Stôl 3',x:610,y:670,width:180,height:180,rotation:0,number:3,seats:8,note:'',locked:false,defaultKey:'okruhly-stol-3'},

@@ -1,38 +1,362 @@
-#serverSaveStatus{position:fixed;left:16px;bottom:128px;z-index:10020;display:flex;align-items:center;gap:8px;background:#fff;padding:8px 14px;border-radius:999px;box-shadow:0 3px 18px #0002;font:650 13px/1.2 system-ui;color:#425d5d;transition:opacity .2s,transform .2s}#serverSaveStatus.is-hidden{opacity:0;transform:translateY(6px);pointer-events:none}.status-dot{width:8px;height:8px;border-radius:50%;background:#7f9999}#serverSaveStatus[data-state="saving"] .status-dot,#serverSaveStatus[data-state="loading"] .status-dot{background:#c89642;animation:savePulse 1s infinite}#serverSaveStatus[data-state="saved"] .status-dot{background:#4b9d71}#serverSaveStatus[data-state="submitted"] .status-dot{background:#4d78aa}#serverSaveStatus[data-state="readonly"] .status-dot{background:#708e8e}#serverSaveStatus[data-state="approved"] .status-dot{background:#2f8b57}#serverSaveStatus[data-state="error"]{color:#a32828}#serverSaveStatus[data-state="error"] .status-dot{background:#c43f3f}.readonly-mode #serverSaveStatus{bottom:16px}@keyframes savePulse{50%{opacity:.35;transform:scale(.7)}}
-#projectReviewBanner{position:fixed;z-index:10005;top:82px;left:50%;transform:translateX(-50%);width:min(720px,calc(100vw - 32px));padding:14px 18px;border-radius:14px;box-shadow:0 8px 28px #24353522;font:14px/1.45 system-ui;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}#projectReviewBanner strong{display:block;margin-bottom:4px}#projectReviewBanner p{margin:0;white-space:pre-line}#projectReviewBanner.revision{background:#fff4df;color:#76501c;border:1px solid #edd6aa}#projectReviewBanner.approved{background:#e9f6ee;color:#286343;border:1px solid #bfe1cb}#projectReviewBanner .review-banner-close{flex:0 0 auto;width:30px;height:30px;min-height:0;padding:0;border:0;border-radius:50%;background:transparent;color:currentColor;font:24px/1 system-ui;cursor:pointer}#projectReviewBanner .review-banner-close:hover{background:#0000000d}
-.server-dialog-card{padding:0;background:#fff;border-radius:20px;overflow:hidden;font-family:system-ui}.server-dialog-head{display:flex;justify-content:space-between;align-items:flex-start;padding:24px 24px 10px}.server-dialog-head small{color:#718181;font-weight:650}.server-dialog-head h2{margin:4px 0 0;color:#243535}.server-dialog-card>p,.server-check{margin:0;padding:10px 24px;color:#536767;line-height:1.55}.server-check{display:flex;align-items:center;gap:10px}.server-check input{width:18px;height:18px}.server-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:20px 24px 24px}.server-dialog-actions button,.dialog-close{border:0;border-radius:10px;padding:11px 16px;background:#708e8e;color:#fff;font-weight:700;cursor:pointer}.server-dialog-actions button.secondary{background:#eef3f3;color:#476565}.dialog-close{background:transparent;color:#536767;font-size:24px;padding:0 4px}.server-dialog-actions button:disabled{opacity:.7;cursor:wait}#serverShareDialog,#serverSubmitDialog{border:0;padding:0;border-radius:20px;box-shadow:0 20px 80px #10252533}#serverShareDialog::backdrop,#serverSubmitDialog::backdrop{background:#10252566;backdrop-filter:blur(3px)}
-.readonly-mode .obal-kniznice,.readonly-mode #pridatHosta,.readonly-mode .akcie-projektu,.readonly-mode .karta-odoslania,.readonly-mode #resetovatPlan,.readonly-mode #prepinacEditovania,.readonly-mode .akcie-prvku,.readonly-mode #dialogHosta,.readonly-mode #dialogPrvku,.readonly-mode #dialogResetovania{display:none!important}.readonly-mode input,.readonly-mode textarea,.readonly-mode select{pointer-events:none;background:#f5f5f5}.readonly-mode #bocnyPanel{user-select:text}.readonly-mode .prvok-podorysu,.readonly-mode .miesto{cursor:default!important}.readonly-mode .pracovna-plocha{padding-bottom:0}.project-load-error .obal-aplikacie{pointer-events:none;opacity:.45}
-@media(max-width:850px){#projectReviewBanner{top:78px}}
+#bocnyPanel .karta, #bocnyPanel button, #bocnyPanel fieldset, #bocnyPanel input, #bocnyPanel select, #bocnyPanel textarea, .obal-kniznice button {
+	border-radius: 0 !important
+}
 
-/* Editor panels and notifications use sharp corners; library items remain rounded. */
-#bocnyPanel,.obal-kniznice,#serverSaveStatus,#projectReviewBanner,#oznam{border-radius:0!important}
-#bocnyPanel .karta,#bocnyPanel fieldset,#bocnyPanel input,#bocnyPanel select,#bocnyPanel textarea,#bocnyPanel button,.obal-kniznice button{border-radius:0!important}
+#bocnyPanel, #oznam, #projectReviewBanner, #serverSaveStatus, .obal-kniznice {
+	border-radius: 0 !important
+}
 
-/* Compact controls in the editor sidebar. */
-#pridatHosta,#detailStola .hlavicka-sekcie>button{padding:8px 10px}
-#hladanieHosta,#filterHosti,#editorMiesta select{padding:8px 10px}
-#odoslatPlan{background:#785265;border-color:#785265}
+#detailStola .hlavicka-sekcie>button, #pridatHosta {
+	padding: 8px 10px
+}
 
-/* Guest form controls. */
-#dialogHosta input,#dialogHosta select,#dialogHosta textarea{border-radius:0}
-#dialogHosta textarea{resize:vertical}
+#dialogHosta .akcie-dialogu button, #pridatHosta {
+	align-items: center;
+	background: #708e8e;
+	border-radius: 0;
+	border: 0;
+	border: 1px solid #708e8e;
+	color: #fff;
+	display: inline-flex;
+	font-size: 13px;
+	font-weight: 700;
+	justify-content: center;
+	line-height: 1.3;
+	min-height: 36px;
+	padding: 8px 10px
+}
 
-/* Match the compact admin event-creation button treatment. */
-#dialogHosta .akcie-dialogu button,#pridatHosta{border:0;border-radius:0;background:#708e8e;color:#fff;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;min-height:36px;line-height:1.3}
-#dialogPrvku .akcie-dialogu button{border-radius:0;font-size:13px}
-#dialogPrvku input,#dialogPrvku select,#dialogPrvku textarea{border-radius:0}
-#dialogPrvku textarea{resize:vertical}
+#dialogHosta .akcie-dialogu button:not(.hlavne) {
+	background: #fff;
+	color: #000
+}
 
-/* Sharp editor dialogs and outlined secondary actions. */
-#dialogHosta fieldset,#dialogHosta legend,#dialogHosta .zaskrtavacie-polia label{border-radius:0}
-#dialogHosta .akcie-dialogu button,#pridatHosta{border:1px solid #708e8e}
-#dialogHosta .akcie-dialogu button:not(.hlavne){background:#fff;color:#000}
-#dialogPrvku .akcie-dialogu button{border:1px solid #708e8e;background:#fff;color:#000}
-#dialogPrvku .akcie-dialogu button.hlavne{background:#708e8e;color:#fff}
-#dialogPrvku .akcie-dialogu button.nebezpecne{color:#b94e55}
-#serverShareDialog,#serverSubmitDialog,#serverShareDialog .server-dialog-card,#serverSubmitDialog .server-dialog-card{border-radius:0}
-#serverShareDialog .server-dialog-actions button,#serverSubmitDialog .server-dialog-actions button{border:1px solid #785265;border-radius:0;background:#fff;color:#000}
-#serverShareDialog .server-dialog-actions button:not(.secondary){background:#708e8e;border-color:#708e8e;color:#fff}
-#serverSubmitDialog .server-dialog-actions button:not(.secondary){background:#785265;color:#fff}
-#serverShareDialog input[type="checkbox"]{width:17px;height:17px;border:1px solid #708e8e;border-radius:0;appearance:none;background:#fff}
-#serverShareDialog input[type="checkbox"]:checked{background:#708e8e;box-shadow:inset 0 0 0 3px #fff}
+#dialogHosta .zaskrtavacie-polia label, #dialogHosta fieldset, #dialogHosta legend {
+	border-radius: 0
+}
+
+#dialogHosta input, #dialogHosta select, #dialogHosta textarea {
+	border-radius: 0
+}
+
+#dialogHosta textarea {
+	resize: vertical
+}
+
+#dialogPrvku .akcie-dialogu button {
+	background: #fff;
+	border-radius: 0;
+	border: 1px solid #708e8e;
+	color: #000;
+	font-size: 13px
+}
+
+#dialogPrvku .akcie-dialogu button.hlavne {
+	background: #708e8e;
+	color: #fff
+}
+
+#dialogPrvku .akcie-dialogu button.nebezpecne {
+	color: #b94e55
+}
+
+#dialogPrvku input, #dialogPrvku select, #dialogPrvku textarea {
+	border-radius: 0
+}
+
+#dialogPrvku textarea {
+	resize: vertical
+}
+
+#editorMiesta select, #filterHosti, #hladanieHosta {
+	padding: 8px 10px
+}
+
+#odoslatPlan {
+	background: #785265;
+	border-color: #785265
+}
+
+#projectReviewBanner {
+	align-items: flex-start;
+	border-radius: 14px;
+	box-shadow: 0 8px 28px #24353522;
+	display: flex;
+	font: 14px/1.45 system-ui;
+	gap: 16px;
+	justify-content: space-between;
+	left: 50%;
+	padding: 14px 18px;
+	position: fixed;
+	top: 82px;
+	transform: translateX(-50%);
+	width: min(720px, calc(100vw - 32px));
+	z-index: 10005
+}
+
+#projectReviewBanner .review-banner-close {
+	background: transparent;
+	border-radius: 50%;
+	border: 0;
+	color: currentColor;
+	cursor: pointer;
+	flex: 0 0 auto;
+	font: 24px/1 system-ui;
+	height: 30px;
+	min-height: 0;
+	padding: 0;
+	width: 30px
+}
+
+#projectReviewBanner .review-banner-close:hover {
+	background: #0000000d
+}
+
+#projectReviewBanner p {
+	margin: 0;
+	white-space: pre-line
+}
+
+#projectReviewBanner strong {
+	display: block;
+	margin-bottom: 4px
+}
+
+#projectReviewBanner.approved {
+	background: #e9f6ee;
+	border: 1px solid #bfe1cb;
+	color: #286343
+}
+
+#projectReviewBanner.revision {
+	background: #fff4df;
+	border: 1px solid #edd6aa;
+	color: #76501c
+}
+
+#serverSaveStatus {
+	align-items: center;
+	background: #fff;
+	border-radius: 999px;
+	bottom: 128px;
+	box-shadow: 0 3px 18px #0002;
+	color: #425d5d;
+	display: flex;
+	font: 650 13px/1.2 system-ui;
+	gap: 8px;
+	left: 16px;
+	padding: 8px 14px;
+	position: fixed;
+	transition: opacity .2s, transform .2s;
+	z-index: 10020
+}
+
+#serverSaveStatus.is-hidden {
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(6px)
+}
+
+#serverSaveStatus[data-state="approved"] .status-dot {
+	background: #2f8b57
+}
+
+#serverSaveStatus[data-state="error"] {
+	color: #a32828
+}
+
+#serverSaveStatus[data-state="error"] .status-dot {
+	background: #c43f3f
+}
+
+#serverSaveStatus[data-state="loading"] .status-dot, #serverSaveStatus[data-state="saving"] .status-dot {
+	animation: savePulse 1s infinite;
+	background: #c89642
+}
+
+#serverSaveStatus[data-state="readonly"] .status-dot {
+	background: #708e8e
+}
+
+#serverSaveStatus[data-state="saved"] .status-dot {
+	background: #4b9d71
+}
+
+#serverSaveStatus[data-state="submitted"] .status-dot {
+	background: #4d78aa
+}
+
+#serverShareDialog .server-dialog-actions button, #serverSubmitDialog .server-dialog-actions button {
+	background: #fff;
+	border-radius: 0;
+	border: 1px solid #785265;
+	color: #000
+}
+
+#serverShareDialog .server-dialog-actions button:not(.secondary) {
+	background: #708e8e;
+	border-color: #708e8e;
+	color: #fff
+}
+
+#serverShareDialog input[type="checkbox"] {
+	appearance: none;
+	background: #fff;
+	border-radius: 0;
+	border: 1px solid #708e8e;
+	height: 17px;
+	width: 17px
+}
+
+#serverShareDialog input[type="checkbox"]:checked {
+	background: #708e8e;
+	box-shadow: inset 0 0 0 3px #fff
+}
+
+#serverShareDialog, #serverSubmitDialog {
+	border-radius: 20px;
+	border: 0;
+	box-shadow: 0 20px 80px #10252533;
+	padding: 0
+}
+
+#serverShareDialog, #serverSubmitDialog, #serverShareDialog .server-dialog-card, #serverSubmitDialog .server-dialog-card {
+	border-radius: 0
+}
+
+#serverShareDialog::backdrop, #serverSubmitDialog::backdrop {
+	backdrop-filter: blur(3px);
+	background: #10252566
+}
+
+#serverSubmitDialog .server-dialog-actions button:not(.secondary) {
+	background: #785265;
+	color: #fff
+}
+
+.dialog-close {
+	background: transparent;
+	color: #536767;
+	font-size: 24px;
+	padding: 0 4px
+}
+
+.dialog-close, .server-dialog-actions button {
+	background: #708e8e;
+	border-radius: 10px;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	font-weight: 700;
+	padding: 11px 16px
+}
+
+.project-load-error .obal-aplikacie {
+	opacity: .45;
+	pointer-events: none
+}
+
+.readonly-mode #bocnyPanel {
+	user-select: text
+}
+
+.readonly-mode #dialogHosta, .readonly-mode #dialogPrvku, .readonly-mode #dialogResetovania, .readonly-mode #prepinacEditovania, .readonly-mode #pridatHosta, .readonly-mode #resetovatPlan, .readonly-mode .akcie-projektu, .readonly-mode .akcie-prvku, .readonly-mode .karta-odoslania, .readonly-mode .obal-kniznice {
+	display: none !important
+}
+
+.readonly-mode #serverSaveStatus {
+	bottom: 16px
+}
+
+.readonly-mode .miesto, .readonly-mode .prvok-podorysu {
+	cursor: default !important
+}
+
+.readonly-mode .pracovna-plocha {
+	padding-bottom: 0
+}
+
+.readonly-mode input, .readonly-mode select, .readonly-mode textarea {
+	background: #f5f5f5;
+	pointer-events: none
+}
+
+.server-check {
+	align-items: center;
+	display: flex;
+	gap: 10px
+}
+
+.server-check input {
+	height: 18px;
+	width: 18px
+}
+
+.server-check, .server-dialog-card>p {
+	color: #536767;
+	line-height: 1.55;
+	margin: 0;
+	padding: 10px 24px
+}
+
+.server-dialog-actions {
+	display: flex;
+	gap: 10px;
+	justify-content: flex-end;
+	padding: 20px 24px 24px
+}
+
+.server-dialog-actions button.secondary {
+	background: #eef3f3;
+	color: #476565
+}
+
+.server-dialog-actions button:disabled {
+	cursor: wait;
+	opacity: .7
+}
+
+.server-dialog-card {
+	background: #fff;
+	border-radius: 20px;
+	font-family: system-ui;
+	overflow: hidden;
+	padding: 0
+}
+
+.server-dialog-head {
+	align-items: flex-start;
+	display: flex;
+	justify-content: space-between;
+	padding: 24px 24px 10px
+}
+
+.server-dialog-head h2 {
+	color: #243535;
+	margin: 4px 0 0
+}
+
+.server-dialog-head small {
+	color: #718181;
+	font-weight: 650
+}
+
+.status-dot {
+	background: #7f9999;
+	border-radius: 50%;
+	height: 8px;
+	width: 8px
+}
+
+@keyframes savePulse {
+	50% {
+		opacity: .35;
+		transform: scale(.7)
+	}
+}
+
+@media(max-width:850px) {
+	#projectReviewBanner {
+		top: 78px
+	}
+}
