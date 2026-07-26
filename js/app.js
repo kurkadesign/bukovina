@@ -1,5 +1,5 @@
 import{TYPES,PERSON_ICONS,ALLERGIES,nastaveniePlochy,initialState,load,validProject,download}from'./state.js?v=20260725-1';
-import'./pdf-font-data.js';
+import'./pdf-font-data.js'; 
 const EVENT_STORAGE_KEY=String(window.__EVENT_STORAGE_KEY__||'event-planner-v1');
 let state=load(),selectedItem='',editingGuest='',editingItem='',saveTimer,drag=null,space=false,history=[],future=[];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],els={world:$('#podorys'),items:$('#prvky'),viewport:$('#zobrazeniePodorysu'),library:$('#kniznicaPrvkov'),guestList:$('#zoznamHosti'),stats:$('#statistiky'),tableDetail:$('#detailStola')};
