@@ -1233,6 +1233,10 @@ main, #zobrazeniePodorysu {
 	border: 1.5px solid #8d8985 !important
 }
 
+.pdf-obrysy .tvar-bez-pozadia .tvar-prvku {
+	border: 0 !important
+}
+
 .pdf-podorys .pdf-cislo-strany {
 	bottom: 3px
 }

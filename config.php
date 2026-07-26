@@ -5,6 +5,10 @@ const DEFAULT_ROOM_FILE = DATA_DIR . '/default-room.json';
 const PROJECT_DIR = DATA_DIR . '/projects';
 const VERSION_DIR = DATA_DIR . '/versions';
 const USER_FILE = DATA_DIR . '/users.json';
+const BACKUP_DIR = __DIR__ . '/backup';
+const BACKUP_META_FILE = BACKUP_DIR . '/backup-meta.json';
+const AUTOMATIC_BACKUP_INTERVAL_DAYS = 2;
+const AUTOMATIC_BACKUP_RETENTION = 5;
 const APP_NAME = 'Bukovina Planner';
 
 $mailConfigFile = DATA_DIR . '/mail-config.json';

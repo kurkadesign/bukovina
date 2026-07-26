@@ -1,12 +1,75 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/../lib/storage.php';
-require_once __DIR__.'/../lib/email_templates.php';
-manager_required();ensure_storage();
-function safe_id(string $v):string{return preg_replace('/[^a-zA-Z0-9_-]/','',$v);}
-function backup_payload():array{$projects=[];$versions=[];foreach(glob(PROJECT_DIR.'/*.json')?:[] as $f){$d=read_json($f);if($d)$projects[basename($f,'.json')]=$d;}foreach(glob(VERSION_DIR.'/*',GLOB_ONLYDIR)?:[] as $dir){$id=basename($dir);foreach(glob($dir.'/*.json')?:[] as $f){$d=read_json($f);if($d)$versions[$id][basename($f,'.json')]=$d;}}return['format'=>'bukovina-backup','version'=>1,'createdAt'=>gmdate('c'),'projects'=>$projects,'versions'=>$versions,'users'=>read_json(USER_FILE),'emailTemplates'=>load_email_template_store()];}
-function validate_backup(array $d):array{if(($d['format']??'')!=='bukovina-backup'||(int)($d['version']??0)!==1)throw new RuntimeException('Súbor nie je platná záloha Bukovina Planner.');foreach(['projects','versions','users']as$k)if(!isset($d[$k])||!is_array($d[$k]))throw new RuntimeException('Záloha nemá kompletnú štruktúru.');foreach($d['projects']as$id=>$p)if(safe_id((string)$id)!==(string)$id||!is_array($p)||($p['id']??'')!==$id)throw new RuntimeException('Záloha obsahuje neplatný projekt.');foreach($d['versions']as$id=>$items){if(safe_id((string)$id)!==(string)$id||!is_array($items))throw new RuntimeException('Záloha obsahuje neplatné verzie.');foreach($items as$name=>$v)if(!preg_match('/^[0-9]{8}-[0-9]{6}$/',(string)$name)||!is_array($v))throw new RuntimeException('Záloha obsahuje neplatnú verziu projektu.');}foreach($d['users']as$u)if(!is_array($u)||!filter_var($u['email']??'',FILTER_VALIDATE_EMAIL)||empty($u['passwordHash'])||(isset($u['role'])&&!in_array($u['role'],['manager','administrator'],true)))throw new RuntimeException('Záloha obsahuje neplatného používateľa.');$d['users']=normalize_admin_users($d['users']);if(isset($d['emailTemplates'])&&!is_array($d['emailTemplates']))throw new RuntimeException('Záloha obsahuje neplatné e-mailové šablóny.');return$d;}
-function store_internal_backup(array $p):void{$dir=DATA_DIR.'/backups';if(!is_dir($dir)&&!mkdir($dir,0775,true)&&!is_dir($dir))throw new RuntimeException('Nepodarilo sa vytvoriť priečinok záloh.');write_json($dir.'/before-restore-'.gmdate('Ymd-His').'.json',$p);$files=glob($dir.'/before-restore-*.json')?:[];rsort($files);foreach(array_slice($files,10)as$old)@unlink($old);}
-if($_SERVER['REQUEST_METHOD']==='GET'&&($_GET['action']??'')==='download'){$p=backup_payload();$json=json_encode($p,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);header('Content-Type: application/json; charset=utf-8');header('Content-Disposition: attachment; filename="bukovina-backup-'.gmdate('Y-m-d-His').'.json"');header('Content-Length: '.strlen((string)$json));header('Cache-Control: no-store');echo$json;exit;}
-if($_SERVER['REQUEST_METHOD']!=='POST'){http_response_code(405);exit('Nepovolená metóda.');}verify_csrf();if(!isset($_FILES['backup'])||($_FILES['backup']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_OK){header('Location:settings.php?restore=upload-error');exit;}if(($_FILES['backup']['size']??0)>50*1024*1024){header('Location:settings.php?restore=too-large');exit;}
-try{$raw=file_get_contents((string)$_FILES['backup']['tmp_name']);$d=validate_backup(json_decode((string)$raw,true,512,JSON_THROW_ON_ERROR));store_internal_backup(backup_payload());$replace=!empty($_POST['replace']);if($replace){foreach(glob(PROJECT_DIR.'/*.json')?:[]as$f)@unlink($f);foreach(glob(VERSION_DIR.'/*',GLOB_ONLYDIR)?:[]as$dir){foreach(glob($dir.'/*')?:[]as$f)if(is_file($f))@unlink($f);@rmdir($dir);}}foreach($d['projects']as$id=>$p)write_json(project_path((string)$id),$p);foreach($d['versions']as$id=>$items){$dir=VERSION_DIR.'/'.safe_id((string)$id);if(!is_dir($dir))mkdir($dir,0775,true);foreach($items as$name=>$v)write_json($dir.'/'.safe_id((string)$name).'.json',$v);}if(!empty($_POST['restoreUsers']))write_json(USER_FILE,$d['users']);if(isset($d['emailTemplates']))save_email_template_store($d['emailTemplates']);header('Location:settings.php?restore=ok&projects='.count($d['projects']));exit;}catch(Throwable $e){header('Location:settings.php?restore=error&message='.rawurlencode($e->getMessage()));exit;}
+require_once __DIR__.'/../lib/backup.php';
+manager_required();ensure_storage();ensure_backup_storage();
+
+function backup_redirect(string $status,string $message=''): never {
+    $query=['restore'=>$status];
+    if($message!=='')$query['message']=$message;
+    header('Location:settings.php?'.http_build_query($query).'#backup-settings');
+    exit;
+}
+function send_backup_file(string $path): never {
+    $name=basename($path);
+    header('Content-Type: application/zip');
+    header('Content-Disposition: attachment; filename="'.$name.'"');
+    header('Content-Length: '.filesize($path));
+    header('Cache-Control: no-store');
+    readfile($path);
+    exit;
+}
+
+if(($_SERVER['REQUEST_METHOD']??'GET')==='GET'){
+    http_response_code(405);exit('Nepovolená metóda.');
+}
+
+verify_csrf();
+$action=(string)($_POST['action']??'restore');
+if($action==='delete'){
+    $selected=basename((string)($_POST['storedBackup']??''));
+    if(!preg_match('/^\d{8}-\d{6}(?:-man)?\.zip$/',$selected))backup_redirect('error','Vyberte platnú ZIP zálohu na vymazanie.');
+    $path=BACKUP_DIR.'/'.$selected;
+    if(!is_file($path)||!unlink($path))backup_redirect('error','Vybranú zálohu sa nepodarilo vymazať.');
+    $meta=backup_metadata();
+    $meta['history']=array_values(array_filter((array)$meta['history'],fn(array $item):bool=>(string)($item['file']??'')!==$selected));
+    foreach(['automatic','manual'] as $type){
+        $items=array_values(array_filter($meta['history'],fn(array $item):bool=>($item['type']??'')===$type&&is_file(BACKUP_DIR.'/'.basename((string)($item['file']??'')))));
+        $last=$items?end($items):null;$prefix=$type==='automatic'?'Automatic':'Manual';
+        $meta['last'.$prefix.'At']=$last['createdAt']??null;
+        $meta['last'.$prefix.'File']=$last['file']??null;
+    }
+    write_json(BACKUP_META_FILE,$meta);
+    backup_redirect('backup-deleted');
+}
+if($action==='download'){
+    $selected=basename((string)($_POST['storedBackup']??''));
+    if(!preg_match('/^\d{8}-\d{6}-man\.zip$/',$selected))backup_redirect('error','Vyberte manuálnu ZIP zálohu na stiahnutie.');
+    $path=BACKUP_DIR.'/'.$selected;
+    if(!is_file($path))backup_redirect('error','Vybraná manuálna záloha neexistuje.');
+    send_backup_file($path);
+}
+if($action==='create'){
+    try{create_data_backup(true);backup_redirect('backup-created');}
+    catch(Throwable $error){backup_redirect('error',$error->getMessage());}
+}
+
+$source=(string)($_POST['restoreSource']??'stored');
+$zipPath='';
+$uploadedTmp='';
+if($source==='upload'){
+    if(!isset($_FILES['backup'])||($_FILES['backup']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_OK)backup_redirect('upload-error');
+    if(($_FILES['backup']['size']??0)>500*1024*1024)backup_redirect('too-large');
+    $uploadedTmp=(string)$_FILES['backup']['tmp_name'];$zipPath=$uploadedTmp;
+}else{
+    $selected=basename((string)($_POST['storedBackup']??''));
+    if($selected===''||!preg_match('/^\d{8}-\d{6}(?:-man)?\.zip$/',$selected))backup_redirect('error','Vyberte platnú uloženú zálohu.');
+    $zipPath=BACKUP_DIR.'/'.$selected;
+    if(!is_file($zipPath))backup_redirect('error','Vybraná záloha neexistuje.');
+}
+
+try{
+    restore_data_backup($zipPath);
+    backup_redirect('ok');
+}catch(Throwable $error){
+    backup_redirect('error',$error->getMessage());
+}

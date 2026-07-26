@@ -32,6 +32,7 @@ if(accessGranted){
  if(readOnly){document.documentElement.classList.add('readonly-mode');window.addEventListener('pointerdown',event=>{if(event.target.closest('.prvok-podorysu,.miesto'))event.stopImmediatePropagation()},true);window.addEventListener('dblclick',event=>{if(event.target.closest('.prvok-podorysu,.miesto')){event.preventDefault();event.stopImmediatePropagation()}},true);window.addEventListener('keydown',event=>{if(['Delete','Backspace'].includes(event.key)&&!event.target.matches('input,textarea'))event.preventDefault()},true);}
  const assetVersion=window.__ASSET_VERSION__||String(Math.floor(10000+Math.random()*90000));
  await import(`./app.js?v=${assetVersion}`);
+ fetch(`api/auto-backup.php?token=${encodeURIComponent(accessToken)}`,{cache:'no-store'}).catch(()=>{});
  if(qs.get('export')==='pdf'&&editToken)setTimeout(()=>document.getElementById('vytvoritPdf')?.click(),400);
  showReviewBanner();setupEventActions();
  if(editToken&&!projectLocked){setInterval(()=>{const current=localStorage.getItem(eventStorageKey)||'';if(!current||current===lastSavedState)return;if(saving){saveQueued=true;return}flushSave().catch(()=>{})},1400);window.addEventListener('beforeunload',event=>{const current=localStorage.getItem(eventStorageKey)||'';if(current&&current!==lastSavedState){event.preventDefault();event.returnValue=''}});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushSave().catch(()=>{})});document.getElementById('serverShareButton')?.remove();}

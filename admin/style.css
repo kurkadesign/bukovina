@@ -373,6 +373,105 @@ dialog label { gap: 8px; }
 .danger-zone,
 .restore-card { border: 0; }
 
+.backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.backup-actions form {
+  margin: 0;
+}
+
+.backup-meta {
+  padding: 12px 14px;
+  background: rgba(112, 142, 142, .08);
+}
+
+.backup-source {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid #dce5e5;
+}
+
+.backup-source legend {
+  padding: 0 8px;
+  color: #527878;
+  font-weight: 700;
+}
+
+.backup-source select,
+.backup-manual-form select {
+  min-height: 168px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #cfdada;
+  color: #243535;
+}
+
+.backup-source select option,
+.backup-manual-form select option {
+  padding: 9px 10px;
+}
+
+.backup-manual-form {
+  display: grid;
+  gap: 12px;
+}
+
+.backup-manual-form label {
+  display: grid;
+  gap: 8px;
+  font-weight: 650;
+}
+
+.collapsible-card {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.collapsible-card > h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 76px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.collapsible-card-toggle {
+  display: grid;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid #708e8e;
+  background: #fff;
+  color: #527878;
+}
+
+.collapsible-card-toggle i {
+  transition: transform .2s ease;
+}
+
+.collapsible-card-content {
+  display: none;
+  padding-bottom: 26px;
+}
+
+.collapsible-card.is-open .collapsible-card-content {
+  display: block;
+}
+
+.collapsible-card.is-open .collapsible-card-toggle i {
+  transform: rotate(180deg);
+}
+
 .login-stack {
   width: min(430px, 90vw);
   display: grid;
