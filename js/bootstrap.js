@@ -1,7 +1,9 @@
 const qs=new URLSearchParams(location.search);
 const editToken=qs.get('token')||'';
 const shareToken=qs.get('share')||'';
-const accessToken=editToken||shareToken;
+const roomSettings=window.__ROOM_SETTINGS__===true;
+const accessToken=editToken||shareToken||(roomSettings?'room-settings':'');
+if(roomSettings)document.documentElement.classList.add('room-settings-mode');
 if(accessToken)document.querySelector('.logo-podorysu')?.setAttribute('href',location.href);
 let readOnly=!!shareToken;
 let projectLocked=false;
@@ -15,6 +17,7 @@ let eventStorageKey='event-planner-v1';
 const escapeHtml=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
 const status=document.createElement('div');status.id='serverSaveStatus';status.dataset.state=accessToken?'loading':'local';status.innerHTML=`<span class="status-dot"></span><span class="status-text">${accessToken?'Načítavam projekt…':'Lokálny režim'}</span>`;document.body.append(status);
 let statusHideTimer;const setStatus=(text,state='saved')=>{clearTimeout(statusHideTimer);status.classList.remove('is-hidden');status.dataset.state=state;status.querySelector('.status-text').textContent=text;if(state==='saved')statusHideTimer=setTimeout(()=>status.classList.add('is-hidden'),2000)};
+window.__setEditorSaveStatus=setStatus;
 async function api(action,body){const response=await fetch(`api/project.php?action=${encodeURIComponent(action)}&token=${encodeURIComponent(accessToken)}`,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify({token:accessToken,action,...body}):undefined,cache:'no-store'});let data;try{data=await response.json()}catch{throw new Error('Server vrátil neplatnú odpoveď.')}if(!response.ok)throw new Error(data.error||'Chyba servera');return data;}
 function showReviewBanner(){const review=loadedProject?.review;if(!review&&!projectLocked)return;const banner=document.createElement('div');banner.id='projectReviewBanner';const approved=loadedProject?.status==='approved';banner.className=approved?'approved':'revision';const content=document.createElement('div'),title=document.createElement('strong');title.textContent=approved?'Návrh bol schválený':'Návrh bol vrátený na dopracovanie';content.append(title);if(review?.note){const note=document.createElement('p');note.textContent=review.note;content.append(note)}const close=document.createElement('button');close.type='button';close.className='review-banner-close';close.setAttribute('aria-label','Zavrieť upozornenie');close.textContent='×';close.addEventListener('click',()=>banner.remove());banner.append(content,close);document.body.append(banner);}
 async function copyText(text){try{await navigator.clipboard.writeText(text);return true}catch{const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.append(area);area.select();const copied=document.execCommand('copy');area.remove();return copied;}}

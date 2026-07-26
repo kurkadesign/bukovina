@@ -2,6 +2,11 @@
 declare(strict_types=1);
 require_once __DIR__.'/../lib/storage.php';require_once __DIR__.'/../lib/mailer.php';ensure_storage();
 $method=$_SERVER['REQUEST_METHOD'];$input=json_decode((string)file_get_contents('php://input'),true)?:[];$access=(string)($_GET['token']??$input['token']??'');$action=(string)($_GET['action']??$input['action']??'load');$mode='';$project=$access?find_project_by_token($access,$mode):null;
+if($access==='room-settings'&&$action==='load'){
+ manager_required();
+ $now=gmdate('c');
+ json_response(['ok'=>true,'mode'=>'edit','project'=>['id'=>'default-room','name'=>'Nastavenie sály','status'=>'editing','state'=>['schemaVersion'=>1,'projectId'=>'default-room','wedding'=>['eventName'=>'Nastavenie sály','date'=>'','contactName'=>'','email'=>'','phone'=>'','note'=>''],'settings'=>['zoom'=>0.72,'panX'=>60,'panY'=>35,'theme'=>'light'],'items'=>default_event_items(),'guests'=>[],'meta'=>['createdAt'=>$now,'updatedAt'=>$now]],'updatedAt'=>$now,'locked'=>false,'review'=>null]]);
+}
 function sync_project_summary(array &$project,array $state):void{$w=$state['wedding']??[];$name=trim((string)($w['eventName']??''));$project['name']=$name!==''?$name:'Nový event';$project['weddingDate']=(string)($w['date']??'');$project['client']['name']=trim((string)($w['contactName']??''));if(trim((string)($w['email']??''))!=='')$project['client']['email']=trim((string)$w['email']);}
 function validated_project_state(mixed $state,array $project):array{if(!is_array($state)||!isset($state['items'],$state['guests'],$state['wedding']))json_response(['ok'=>false,'error'=>'Neplatný formát projektu.'],422);if(!hash_equals((string)$project['id'],(string)($state['projectId']??'')))json_response(['ok'=>false,'error'=>'Dáta patria inému eventu. Obnovte stránku.'],409);return$state;}
 function configured_root_url():string{if(BASE_URL!=='')return BASE_URL;$scheme=(!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')?'https':'http';$host=$_SERVER['HTTP_HOST']??'localhost';$script=str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME']??'/api/project.php'));return $scheme.'://'.$host.rtrim(dirname($script),'/');}

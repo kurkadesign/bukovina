@@ -51,7 +51,7 @@ function normalize_admin_users(array $users): array {
 function admin_user_index(array $users,string $email): ?int { foreach($users as $i=>$user)if(strcasecmp((string)($user['email']??''),$email)===0)return$i;return null; }
 function current_admin_user(): ?array { secure_session_start();$email=(string)($_SESSION['admin']??'');if($email==='')return null;$users=normalize_admin_users(read_json(USER_FILE));$index=admin_user_index($users,$email);return$index===null?null:$users[$index]; }
 function admin_is_manager(): bool { return (current_admin_user()['role']??'')==='manager'; }
-function default_event_items(): array { return [
+function base_default_event_items(): array { return [
  ['id'=>token(16),'type'=>'head-table','name'=>'Hlavný stôl','x'=>500,'y'=>90,'width'=>520,'height'=>100,'rotation'=>0,'number'=>0,'seats'=>10,'note'=>'','locked'=>false,'defaultKey'=>'hlavny-stol'],
  ['id'=>token(16),'type'=>'round-table','name'=>'Stôl 1','x'=>380,'y'=>350,'width'=>180,'height'=>180,'rotation'=>0,'number'=>1,'seats'=>8,'note'=>'','locked'=>false,'defaultKey'=>'okruhly-stol-1'],
  ['id'=>token(16),'type'=>'round-table','name'=>'Stôl 2','x'=>800,'y'=>320,'width'=>180,'height'=>180,'rotation'=>0,'number'=>2,'seats'=>8,'note'=>'','locked'=>false,'defaultKey'=>'okruhly-stol-2'],
@@ -76,3 +76,18 @@ function csrf_token(): string { secure_session_start(); return $_SESSION['csrf']
 function csrf_field(): string { return '<input type="hidden" name="csrf" value="'.htmlspecialchars(csrf_token(),ENT_QUOTES,'UTF-8').'">'; }
 function verify_csrf(): void { secure_session_start(); if(!hash_equals((string)($_SESSION['csrf']??''),(string)($_POST['csrf']??''))){http_response_code(419);exit('Platnosť formulára vypršala. Obnovte stránku a skúste to znova.');} }
 function security_status(): array { ensure_storage(); return ['dataExists'=>is_dir(DATA_DIR),'dataWritable'=>is_writable(DATA_DIR),'projectsWritable'=>is_writable(PROJECT_DIR),'versionsWritable'=>is_writable(VERSION_DIR),'phpVersion'=>PHP_VERSION,'https'=>(!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')]; }
+function default_room_items(): array {
+ $fallback=base_default_event_items();
+ if(!is_file(DEFAULT_ROOM_FILE))return$fallback;
+ $stored=read_json(DEFAULT_ROOM_FILE,[]);
+ $items=isset($stored['items'])&&is_array($stored['items'])?$stored['items']:$stored;
+ if(!is_array($items)||$items===[])return$fallback;
+ $items=array_values(array_filter($items,fn($item)=>is_array($item)&&isset($item['type'],$item['x'],$item['y'])&&is_string($item['type'])&&is_numeric($item['x'])&&is_numeric($item['y'])));
+ return$items?:$fallback;
+}
+function default_event_items(): array {
+ $items=default_room_items();
+ foreach($items as &$item){$item['id']=token(16);$item['locked']=false;}
+ unset($item);
+ return$items;
+}

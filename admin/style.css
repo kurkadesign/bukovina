@@ -193,6 +193,15 @@ dialog form { border: 0; border-radius: 0; }
   margin-bottom: 0;
 }
 
+.settings-secondary-column {
+  display: grid;
+  gap: 22px;
+}
+
+.settings-secondary-column .card {
+  height: auto;
+}
+
 .smtp-settings-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

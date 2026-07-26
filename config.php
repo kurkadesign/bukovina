@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 const DATA_DIR = __DIR__ . '/data';
+const DEFAULT_ROOM_FILE = DATA_DIR . '/default-room.json';
 const PROJECT_DIR = DATA_DIR . '/projects';
 const VERSION_DIR = DATA_DIR . '/versions';
 const USER_FILE = DATA_DIR . '/users.json';
