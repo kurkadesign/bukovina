@@ -1,4 +1,4 @@
-import{TYPES,PERSON_ICONS,ALLERGIES,nastaveniePlochy,initialState,load,validProject,download}from'./state.js?v=20260725-1';
+import{TYPES,PERSON_ICONS,ALLERGIES,nastaveniePlochy,initialState,load,validProject,download}from'./state.js?v=20260727-1';
 import'./pdf-font-data.js';
 const EVENT_STORAGE_KEY=String(window.__EVENT_STORAGE_KEY__||'event-planner-v1');
 let state=load(),selectedItem='',editingGuest='',editingItem='',saveTimer,viewportSaveTimer,regularSavePending=false,drag=null,space=false,history=[],future=[];
@@ -31,7 +31,10 @@ function vytvorStavSPredvolenymiPrvkami(){
   else{kopia.tableId='';kopia.seatNumber=null}
   return kopia;
  });
- return{...state,items,guests,meta:{...state.meta,updatedAt:new Date().toISOString()}};
+ state.items=items;
+ state.guests=guests;
+ state.meta={...state.meta,updatedAt:new Date().toISOString()};
+ return state;
 }
 function toast(t){const e=$('#oznam');e.textContent=t;e.classList.add('zobrazene');setTimeout(()=>e.classList.remove('zobrazene'),1800)}
 function doplnTlacidloZamku(){const actions=els.items.querySelector('.prvok-podorysu.vybrane .akcie-prvku');if(!actions||actions.querySelector('.zamknutie-prvku'))return;const item=state.items.find(i=>i.id===selectedItem);if(!item)return;const ciel=actions.querySelector('.odstranit'),otoc=(smer,ikona,popis)=>{const button=document.createElement('button');button.type='button';button.className='otocenie-prvku';button.append(createVisualIcon(ikona));button.title=popis;button.setAttribute('aria-label',popis);button.onclick=e=>{e.stopPropagation();snapshot();item.rotation=((Number(item.rotation)||0)+smer*45+360)%360;renderItems();changed()};actions.insertBefore(button,ciel)};otoc(-1,'fa_rotate_left','Otočiť o 45° doľava');otoc(1,'fa_rotate_right','Otočiť o 45° doprava');const button=document.createElement('button');button.type='button';button.className='zamknutie-prvku'+(item.locked?' aktivne':'');button.append(createVisualIcon('fa_lock'));button.title=item.locked?'Odomknúť polohu':'Uzamknúť polohu';button.setAttribute('aria-label',button.title);button.setAttribute('aria-pressed',String(item.locked));button.onclick=e=>{e.stopPropagation();snapshot();item.locked=!item.locked;renderItems();changed()};actions.insertBefore(button,ciel)}
