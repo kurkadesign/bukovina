@@ -489,6 +489,16 @@ dialog label { gap: 8px; }
   transform: rotate(180deg);
 }
 
+.project-links-card.collapsible-card {
+  display: block;
+}
+
+.project-links-card.collapsible-card.is-open .collapsible-card-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+}
+
 .login-stack {
   width: min(430px, 90vw);
   display: grid;
@@ -683,6 +693,10 @@ dialog label { gap: 8px; }
   .smtp-settings-grid { grid-template-columns: 1fr; }
   .review-history-meta { grid-template-columns: 1fr; gap: 4px; }
   .links-card { grid-template-columns: 1fr; row-gap: 22px; }
+  .project-links-card.collapsible-card.is-open .collapsible-card-content {
+    grid-template-columns: 1fr;
+    row-gap: 22px;
+  }
   .links-card .link-row + .link-row {
     padding-top: 22px;
     padding-left: 0;
@@ -690,6 +704,18 @@ dialog label { gap: 8px; }
     border-left: 0;
   }
   .admin-users > div { align-items: flex-start; }
+  .danger-actions {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .danger-actions > *,
+  .danger-actions form,
+  .danger-actions button {
+    width: 100%;
+  }
+  .danger-actions button {
+    min-height: 48px;
+  }
   .projects article { grid-template-columns: minmax(0, 1fr) auto; }
   .projects article > div:first-child { grid-column: 1 / -1; }
   .projects .status { grid-column: 1; justify-self: start; }
