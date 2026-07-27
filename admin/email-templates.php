@@ -35,7 +35,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
  }
 }
 $t=$templates[$selected];
-$sample=['name'=>'Firemný event','client'=>['name'=>'Ján Novák','email'=>'jan@example.sk'],'weddingDate'=>'2026-09-12','state'=>['guests'=>array_fill(0,86,[]),'items'=>array_fill(0,14,[])],'meta'=>['templateOwner'=>$userEmail]];
+$sample=['name'=>'Firemný event','client'=>['name'=>'Ján Novák','email'=>'jan@example.sk'],'eventDate'=>'2026-09-12','state'=>['guests'=>array_fill(0,86,[]),'items'=>array_fill(0,14,[])],'meta'=>['templateOwner'=>$userEmail]];
 $preview=['subject'=>(string)$t['subject'],'title'=>(string)$t['title'],'body'=>render_template_body((string)$t['body'],email_template_variables($sample,['review_note'=>'Prosíme upraviť sedenie pri stole číslo 4.'])),'buttonLabel'=>(string)$t['buttonLabel'],'signature'=>''];
 try{$preview=get_rendered_email_template($selected,$sample,['review_note'=>'Prosíme upraviť sedenie pri stole číslo 4.'],$userEmail);}catch(Throwable $exception){if($error==='')$error='Náhľad sa nepodarilo pripraviť: '.$exception->getMessage();}
 $previewHtml=email_layout($preview['title'],$preview['body'],$preview['buttonLabel'],'https://example.sk/planovac',$preview['signature']);
