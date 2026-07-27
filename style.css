@@ -1233,6 +1233,10 @@ main, #zobrazeniePodorysu {
 	border: 1.5px solid #8d8985 !important
 }
 
+.pdf-obrysy .tvar-bez-pozadia .tvar-prvku {
+	border: 0 !important
+}
+
 .pdf-podorys .pdf-cislo-strany {
 	bottom: 3px
 }
@@ -1456,6 +1460,10 @@ main, #zobrazeniePodorysu {
 
 .prvok-podorysu.zamknute>.tvar-prvku {
 	border-color: #c85860
+}
+
+.prvok-podorysu.zamknute::before {
+	content: none
 }
 
 .rastlina .tvar-prvku {
@@ -1886,7 +1894,7 @@ main, #zobrazeniePodorysu {
 	}
 
 	.pracovna-plocha:before {
-		content: "Svadobný plán – pôdorys";
+		content: "Eventový plán – pôdorys";
 		display: block;
 		font-size: 24px;
 		margin: 0 0 12px

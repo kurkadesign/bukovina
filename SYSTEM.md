@@ -63,7 +63,7 @@ SMTP heslo sa nesmie zapisovať do `config.php` ani do GitHubu. Nastavte ho ako 
 ```text
 BUKOVINA_BASE_URL=https://planovac.example.sk
 BUKOVINA_MAIL_FROM=svadby@example.sk
-BUKOVINA_MAIL_FROM_NAME=Svadobná sála
+BUKOVINA_MAIL_FROM_NAME=Eventová sála
 BUKOVINA_ORGANIZER_EMAIL=organizator@example.sk
 BUKOVINA_SMTP_HOST=smtp.example.sk
 BUKOVINA_SMTP_PORT=587
