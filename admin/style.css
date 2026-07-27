@@ -253,7 +253,7 @@ dialog form { border: 0; border-radius: 0; }
   background: transparent;
 }
 .dashboard-stats {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin: 28px 0;
 }
@@ -977,7 +977,7 @@ dialog form { border: 0; border-radius: 0; }
   background: transparent;
 }
 .dashboard-stats {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin: 28px 0;
 }
