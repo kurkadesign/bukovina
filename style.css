@@ -296,6 +296,24 @@ main, #zobrazeniePodorysu {
 	border-color: #785265
 }
 
+#odoslatPlan.is-submitted,
+#odoslatPlan.is-submitted:disabled {
+	background: #e3b33f;
+	border-color: #e3b33f;
+	color: #3f3214;
+	cursor: default;
+	opacity: 1
+}
+
+#odoslatPlan.is-approved,
+#odoslatPlan.is-approved:disabled {
+	background: #4f9a6c;
+	border-color: #4f9a6c;
+	color: #fff;
+	cursor: default;
+	opacity: 1
+}
+
 #oznam {
 	background: #3f3834;
 	border-radius: 9px;
@@ -1476,6 +1494,10 @@ main, #zobrazeniePodorysu {
 
 .readonly-mode #dialogHosta, .readonly-mode #dialogPrvku, .readonly-mode #dialogResetovania, .readonly-mode #prepinacEditovania, .readonly-mode #pridatHosta, .readonly-mode #resetovatPlan, .readonly-mode .akcie-projektu, .readonly-mode .akcie-prvku, .readonly-mode .karta-odoslania, .readonly-mode .obal-kniznice {
 	display: none !important
+}
+
+.readonly-mode.project-approved .karta-odoslania {
+	display: block !important
 }
 
 .readonly-mode #editorMiesta>button, .readonly-mode #editorMiesta>select, .readonly-mode #editorMiesta>small {
