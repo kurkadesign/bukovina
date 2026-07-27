@@ -87,6 +87,18 @@ body:has(.restore-card) header nav a[href="email-templates.php"] { display: none
 .review-form > div,
 .new-project-actions { display: flex; justify-content: flex-end; gap: 10px; }
 
+.dialog-cancel,
+.dialog-cancel:hover {
+  border: 1px solid #708e8e;
+  background: #fff;
+  color: #395656;
+}
+
+#newProject input[type="date"],
+#newProject input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
 .review-card {
   background: rgba(120, 82, 101, 0.08);
 }
@@ -619,9 +631,40 @@ dialog label { gap: 8px; }
 }
 
 @media (max-width: 760px) {
-  header { align-items: center; }
+  header {
+    align-items: center;
+    padding-right: 16px;
+    padding-left: 16px;
+  }
   header nav { flex-direction: row; align-items: center; gap: 12px; }
   main { padding: 32px 16px; }
+  .project-filters {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .project-filters label,
+  .project-filters input,
+  .project-filters select {
+    width: 100%;
+    min-width: 0;
+  }
+  .backup-source select,
+  .backup-manual-form select {
+    width: 100%;
+    min-width: 0;
+    min-height: 210px;
+    padding: 0;
+    font-size: 16px;
+  }
+  .backup-source select option,
+  .backup-manual-form select option {
+    padding: 12px;
+  }
+  #newProject input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    direction: ltr;
+  }
   .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-stats a { min-width: 0; padding: 16px; }
   .dashboard-stats span { overflow-wrap: anywhere; }
