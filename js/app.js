@@ -1,7 +1,7 @@
 import{TYPES,PERSON_ICONS,ALLERGIES,nastaveniePlochy,initialState,load,validProject,download}from'./state.js?v=20260725-1';
 import'./pdf-font-data.js';
 const EVENT_STORAGE_KEY=String(window.__EVENT_STORAGE_KEY__||'event-planner-v1');
-let state=load(),selectedItem='',editingGuest='',editingItem='',saveTimer,drag=null,space=false,history=[],future=[];
+let state=load(),selectedItem='',editingGuest='',editingItem='',saveTimer,viewportSaveTimer,regularSavePending=false,drag=null,space=false,history=[],future=[];
 nastaveniePlochy.editovatelnyRezim=false;
 let roomSaving=false,roomSaveQueued=false,lastRoomSignature='';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],els={world:$('#podorys'),items:$('#prvky'),viewport:$('#zobrazeniePodorysu'),library:$('#kniznicaPrvkov'),guestList:$('#zoznamHosti'),stats:$('#statistiky'),tableDetail:$('#detailStola')};
@@ -44,8 +44,9 @@ function fillItemVisual(container,icon,label,visibility={icon:true,text:true}){c
 function shapeClass(def){return TRIEDY_TVAROV[def?.[6]?.shape]||TRIEDY_TVAROV.sharp}
 window.closePlannerDialog=closeDialog;
 function snapshot(){history.push(JSON.stringify(state));if(history.length>40)history.shift();future=[]}
-function changed(){state.meta.updatedAt=new Date().toISOString();clearTimeout(saveTimer);saveTimer=setTimeout(save,1000);renderStats()}
-function save(){try{localStorage.setItem(EVENT_STORAGE_KEY,JSON.stringify(state))}catch(error){console.error('Projekt sa nepodarilo uložiť.',error)}if(window.__ROOM_SETTINGS__===true)ulozRoomSettings()}
+function changed(){state.meta.updatedAt=new Date().toISOString();regularSavePending=true;clearTimeout(viewportSaveTimer);clearTimeout(saveTimer);saveTimer=setTimeout(()=>{regularSavePending=false;save(false)},1000);renderStats()}
+function save(silent=false){silent=silent===true;const serialized=JSON.stringify(state);try{localStorage.setItem(EVENT_STORAGE_KEY,serialized);window.__EDITOR_SILENT_SAVE_STATE__=silent?serialized:''}catch(error){console.error('Projekt sa nepodarilo uložiť.',error)}if(window.__ROOM_SETTINGS__===true)ulozRoomSettings()}
+function saveViewport(){clearTimeout(viewportSaveTimer);viewportSaveTimer=setTimeout(()=>{if(!regularSavePending)save(true)},350)}
 async function ulozRoomSettings(){state.items.forEach(item=>{if(!item.defaultKey)item.defaultKey=`vlastny-${uid()}`});const signature=JSON.stringify(state.items.map(kopiaPredvolenehoPrvku));if(signature===lastRoomSignature)return;if(roomSaving){roomSaveQueued=true;return}roomSaving=true;window.__setEditorSaveStatus?.('Ukladám nastavenie sály…','saving');try{if(await zapisPredvolenePrvky(state.items)){lastRoomSignature=signature;window.__setEditorSaveStatus?.('Nastavenie sály uložené','saved')}else window.__setEditorSaveStatus?.('Uloženie zlyhalo','error')}finally{roomSaving=false;if(roomSaveQueued){roomSaveQueued=false;ulozRoomSettings()}}}
 function renderAll(){setTransform();renderItems();renderGuests();renderStats();renderEvent();if(selectedItem)renderTableDetail()}
 function setTransform(){const panX=Number(state.settings.panX)||0,panY=Number(state.settings.panY)||0,zoom=Number(state.settings.zoom)||.72;state.settings.panX=panX;state.settings.panY=panY;state.settings.zoom=zoom;els.world.style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`}
@@ -75,17 +76,18 @@ $$('.zalozky-panelu button').forEach(b=>b.onclick=()=>openTab(b.dataset.tab));$(
 $('#resetovatPlan').onclick=e=>{e.preventDefault();showDialog($('#dialogResetovania'))};
 $('#potvrditResetovanie').onclick=()=>{snapshot();state=vytvorStavSPredvolenymiPrvkami();selectedItem='';editingGuest='';editingItem='';save();closeDialog($('#dialogResetovania'));renderAll();openTab('overview');toast('Plán sály bol obnovený z predvoleného rozloženia')};
 function renderEvent(){$$('[data-event]').forEach(e=>e.value=state.wedding[e.dataset.event]||'')};$$('[data-event]').forEach(e=>e.addEventListener('input',()=>{state.wedding[e.dataset.event]=e.value;changed()}));
-function zoom(delta,cx,cy){const old=state.settings.zoom,n=Math.min(1.8,Math.max(.35,old+delta)),r=els.viewport.getBoundingClientRect(),x=cx??r.left+r.width/2,y=cy??r.top+r.height/2,wx=(x-r.left-state.settings.panX)/old,wy=(y-r.top-state.settings.panY)/old;state.settings.zoom=n;state.settings.panX=x-r.left-wx*n;state.settings.panY=y-r.top-wy*n;setTransform();changed()}
+function zoom(delta,cx,cy){const old=state.settings.zoom,n=Math.min(1.8,Math.max(.35,old+delta)),r=els.viewport.getBoundingClientRect(),x=cx??r.left+r.width/2,y=cy??r.top+r.height/2,wx=(x-r.left-state.settings.panX)/old,wy=(y-r.top-state.settings.panY)/old;state.settings.zoom=n;state.settings.panX=x-r.left-wx*n;state.settings.panY=y-r.top-wy*n;setTransform();saveViewport()}
 els.viewport.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?-.07:.07,e.clientX,e.clientY)},{passive:false});
 els.viewport.addEventListener('pointerdown',e=>{
   if(e.target.closest('.prvok-podorysu')||(e.button!==0&&e.button!==1))return;
   e.preventDefault();
   if(selectedItem){selectedItem='';renderItems();renderTableDetail()}
   const sx=e.clientX,sy=e.clientY,px=state.settings.panX,py=state.settings.panY;
+  let moved=false;
   els.viewport.classList.add('prebieha-posun');
   els.viewport.setPointerCapture(e.pointerId);
-  const mv=ev=>{state.settings.panX=px+ev.clientX-sx;state.settings.panY=py+ev.clientY-sy;setTransform()};
-  const finish=()=>{els.viewport.classList.remove('prebieha-posun');els.viewport.removeEventListener('pointermove',mv);els.viewport.removeEventListener('pointerup',finish);els.viewport.removeEventListener('pointercancel',finish)};
+  const mv=ev=>{if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>2)moved=true;state.settings.panX=px+ev.clientX-sx;state.settings.panY=py+ev.clientY-sy;setTransform()};
+  const finish=()=>{els.viewport.classList.remove('prebieha-posun');els.viewport.removeEventListener('pointermove',mv);els.viewport.removeEventListener('pointerup',finish);els.viewport.removeEventListener('pointercancel',finish);if(moved)saveViewport()};
   els.viewport.addEventListener('pointermove',mv);els.viewport.addEventListener('pointerup',finish);els.viewport.addEventListener('pointercancel',finish)
 });
 document.addEventListener('keydown',e=>{if(e.code==='Space')space=true;const isDelete=e.key==='Delete'||e.key==='Del'||e.keyCode===46;if(!isDelete||!selectedItem)return;const target=e.target;if(target.matches('input, textarea, select')||target.isContentEditable||document.querySelector('dialog[open]'))return;e.preventDefault();removeObject(selectedItem)});document.addEventListener('keyup',e=>{if(e.code==='Space')space=false});
