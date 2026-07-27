@@ -59,7 +59,7 @@ function save_email_templates(array $templates,array $signature=[],string $userE
 function email_template_variables(array $project,array $extra=[]): array {
  unset($extra['_template_user']);
  return array_merge([
-  'project_name'=>(string)($project['name']??''),'client_name'=>(string)($project['client']['name']??''),'client_email'=>(string)($project['client']['email']??''),'wedding_date'=>format_date_sk($project['weddingDate']??''),
+  'project_name'=>(string)($project['name']??''),'client_name'=>(string)($project['client']['name']??''),'client_email'=>(string)($project['client']['email']??''),'wedding_date'=>format_date_sk($project['eventDate']??''),
   'guest_count'=>(string)count($project['state']['guests']??[]),'item_count'=>(string)count($project['state']['items']??[]),'review_note'=>'',
  ],$extra);
 }
