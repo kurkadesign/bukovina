@@ -624,6 +624,7 @@ dialog label { gap: 8px; }
 
 .dashboard-stats .event-alert-card.has-events {
   background: #785265;
+  background: linear-gradient(0deg,rgba(120, 82, 101, 1) 0%, rgba(140, 79, 110, 1) 34%, rgba(199, 52, 133, 1) 100%);
   color: #fff;
 }
 
