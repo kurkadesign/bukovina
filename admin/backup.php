@@ -27,7 +27,7 @@ verify_csrf();
 $action=(string)($_POST['action']??'restore');
 if($action==='delete'){
     $selected=basename((string)($_POST['storedBackup']??''));
-    if(!preg_match('/^\d{8}-\d{6}(?:-man)?\.zip$/',$selected))backup_redirect('error','Vyberte platnú ZIP zálohu na vymazanie.');
+    if(backup_filename_type($selected)===null)backup_redirect('error','Vyberte platnú ZIP zálohu na vymazanie.');
     $path=BACKUP_DIR.'/'.$selected;
     if(!is_file($path)||!unlink($path))backup_redirect('error','Vybranú zálohu sa nepodarilo vymazať.');
     $meta=backup_metadata();
@@ -43,9 +43,9 @@ if($action==='delete'){
 }
 if($action==='download'){
     $selected=basename((string)($_POST['storedBackup']??''));
-    if(!preg_match('/^\d{8}-\d{6}-man\.zip$/',$selected))backup_redirect('error','Vyberte manuálnu ZIP zálohu na stiahnutie.');
+    if(backup_filename_type($selected)===null)backup_redirect('error','Vyberte ZIP zálohu na stiahnutie.');
     $path=BACKUP_DIR.'/'.$selected;
-    if(!is_file($path))backup_redirect('error','Vybraná manuálna záloha neexistuje.');
+    if(!is_file($path))backup_redirect('error','Vybraná ZIP záloha neexistuje.');
     send_backup_file($path);
 }
 if($action==='create'){
@@ -62,7 +62,7 @@ if($source==='upload'){
     $uploadedTmp=(string)$_FILES['backup']['tmp_name'];$zipPath=$uploadedTmp;
 }else{
     $selected=basename((string)($_POST['storedBackup']??''));
-    if($selected===''||!preg_match('/^\d{8}-\d{6}(?:-man)?\.zip$/',$selected))backup_redirect('error','Vyberte platnú uloženú zálohu.');
+    if($selected===''||backup_filename_type($selected)===null)backup_redirect('error','Vyberte platnú uloženú zálohu.');
     $zipPath=BACKUP_DIR.'/'.$selected;
     if(!is_file($zipPath))backup_redirect('error','Vybraná záloha neexistuje.');
 }
