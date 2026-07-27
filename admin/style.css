@@ -665,6 +665,13 @@ dialog label { gap: 8px; }
     min-width: 0;
     direction: ltr;
   }
+  .detail-grid input[type="date"],
+  .detail-grid input[type="date"]::-webkit-date-and-time-value {
+    width: 100%;
+    min-width: 0;
+    direction: ltr;
+    text-align: left;
+  }
   .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-stats a { min-width: 0; padding: 16px; }
   .dashboard-stats span { overflow-wrap: anywhere; }
