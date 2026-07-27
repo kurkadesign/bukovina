@@ -31,8 +31,18 @@ function backup_files(): array {
     return $files;
 }
 
+function backup_filename_type(string $name): ?string {
+    $name=basename($name);
+    if(preg_match('/^\d{2}-\d{2}-\d{4}-\d{6}-(auto|man)\.zip$/',$name,$matches)){
+        return $matches[1]==='man'?'manual':'automatic';
+    }
+    if(preg_match('/^\d{8}-\d{6}-man\.zip$/',$name))return'manual';
+    if(preg_match('/^\d{8}-\d{6}\.zip$/',$name))return'automatic';
+    return null;
+}
+
 function prune_automatic_backups(): array {
-    $files=array_values(array_filter(glob(BACKUP_DIR.'/*.zip')?:[],static fn(string $file):bool => preg_match('/^\d{8}-\d{6}\.zip$/',basename($file))===1));
+    $files=array_values(array_filter(glob(BACKUP_DIR.'/*.zip')?:[],static fn(string $file):bool => backup_filename_type($file)==='automatic'));
     usort($files,static fn(string $a,string $b):int => filemtime($a)<=>filemtime($b));
     $deleted=[];
     while(count($files)>AUTOMATIC_BACKUP_RETENTION){
@@ -70,8 +80,8 @@ function create_data_backup(bool $manual=false): array {
                 return['file'=>$currentFile,'path'=>BACKUP_DIR.'/'.$currentFile,'createdAt'=>$currentMeta['lastAutomaticAt'],'manual'=>false];
             }
         }
-        $stamp=(new DateTimeImmutable('now',new DateTimeZone('Europe/Bratislava')))->format('dmY-His');
-        $name=$stamp.($manual?'-man':'').'.zip';
+        $stamp=(new DateTimeImmutable('now',new DateTimeZone('Europe/Bratislava')))->format('d-m-Y-His');
+        $name=$stamp.($manual?'-man':'-auto').'.zip';
         $path=BACKUP_DIR.'/'.$name;
         $tmp=$path.'.tmp';
         $zip=new ZipArchive();
