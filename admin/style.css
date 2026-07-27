@@ -87,6 +87,18 @@ body:has(.restore-card) header nav a[href="email-templates.php"] { display: none
 .review-form > div,
 .new-project-actions { display: flex; justify-content: flex-end; gap: 10px; }
 
+.dialog-cancel,
+.dialog-cancel:hover {
+  border: 1px solid #708e8e;
+  background: #fff;
+  color: #395656;
+}
+
+#newProject input[type="date"],
+#newProject input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
 .review-card {
   background: rgba(120, 82, 101, 0.08);
 }
@@ -256,9 +268,14 @@ dialog form { border: 0; border-radius: 0; }
 .project-filters input,
 .project-filters select { border-radius: 0; }
 .projects { gap: 16px; margin-top: 24px; }
-.projects article { padding: 20px; gap: 18px; }
+.projects article {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  padding: 20px;
+  gap: 18px;
+}
 .projects h2 { margin-bottom: 8px; line-height: 1.25; }
 .projects small { margin-top: 8px; line-height: 1.45; }
+.projects .project-detail-link { justify-self: end; }
 
 .pagination {
   display: flex;
@@ -372,6 +389,105 @@ dialog label { gap: 8px; }
 .backup-card::after { display: none; }
 .danger-zone,
 .restore-card { border: 0; }
+
+.backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.backup-actions form {
+  margin: 0;
+}
+
+.backup-meta {
+  padding: 12px 14px;
+  background: rgba(112, 142, 142, .08);
+}
+
+.backup-source {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid #dce5e5;
+}
+
+.backup-source legend {
+  padding: 0 8px;
+  color: #527878;
+  font-weight: 700;
+}
+
+.backup-source select,
+.backup-manual-form select {
+  min-height: 168px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #cfdada;
+  color: #243535;
+}
+
+.backup-source select option,
+.backup-manual-form select option {
+  padding: 9px 10px;
+}
+
+.backup-manual-form {
+  display: grid;
+  gap: 12px;
+}
+
+.backup-manual-form label {
+  display: grid;
+  gap: 8px;
+  font-weight: 650;
+}
+
+.collapsible-card {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.collapsible-card > h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 76px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.collapsible-card-toggle {
+  display: grid;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid #708e8e;
+  background: #fff;
+  color: #527878;
+}
+
+.collapsible-card-toggle i {
+  transition: transform .2s ease;
+}
+
+.collapsible-card-content {
+  display: none;
+  padding-bottom: 26px;
+}
+
+.collapsible-card.is-open .collapsible-card-content {
+  display: block;
+}
+
+.collapsible-card.is-open .collapsible-card-toggle i {
+  transform: rotate(180deg);
+}
 
 .login-stack {
   width: min(430px, 90vw);
@@ -515,9 +631,40 @@ dialog label { gap: 8px; }
 }
 
 @media (max-width: 760px) {
-  header { align-items: center; }
+  header {
+    align-items: center;
+    padding-right: 16px;
+    padding-left: 16px;
+  }
   header nav { flex-direction: row; align-items: center; gap: 12px; }
   main { padding: 32px 16px; }
+  .project-filters {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .project-filters label,
+  .project-filters input,
+  .project-filters select {
+    width: 100%;
+    min-width: 0;
+  }
+  .backup-source select,
+  .backup-manual-form select {
+    width: 100%;
+    min-width: 0;
+    min-height: 210px;
+    padding: 0;
+    font-size: 16px;
+  }
+  .backup-source select option,
+  .backup-manual-form select option {
+    padding: 12px;
+  }
+  #newProject input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    direction: ltr;
+  }
   .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-stats a { min-width: 0; padding: 16px; }
   .dashboard-stats span { overflow-wrap: anywhere; }
@@ -538,7 +685,6 @@ dialog label { gap: 8px; }
   .admin-users > div { align-items: flex-start; }
   .projects article { grid-template-columns: minmax(0, 1fr) auto; }
   .projects article > div:first-child { grid-column: 1 / -1; }
-  .projects .project-editor-link { display: none; }
   .projects .status { grid-column: 1; justify-self: start; }
   .projects .project-detail-link { grid-column: 2; justify-self: end; }
 }
