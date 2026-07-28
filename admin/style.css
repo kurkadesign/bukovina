@@ -160,6 +160,21 @@ section.card.review-card textarea {
   color: #925238;
 }
 
+.dashboard-stats.review-alerts {
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  margin: 20px 0;
+}
+
+.dashboard-stats.review-alerts a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 18px;
+}
+
 .review-history-item p {
   margin: 10px 0 0;
   margin-bottom: 0 !important;
