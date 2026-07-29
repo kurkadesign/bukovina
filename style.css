@@ -734,6 +734,31 @@ main, #zobrazeniePodorysu {
 	border-color: var(--rose)
 }
 
+.odstranit-hosta-z-miesta {
+	align-items: center;
+	background: #fff;
+	border: 1px solid var(--line);
+	border-radius: 50%;
+	color: #74515a;
+	cursor: pointer;
+	display: flex;
+	font-size: 13px;
+	font-weight: 700;
+	height: 17px;
+	justify-content: center;
+	line-height: 1;
+	position: absolute;
+	right: -6px;
+	top: -6px;
+	width: 17px
+}
+
+.odstranit-hosta-z-miesta:hover {
+	background: #f7e7e9;
+	border-color: #b94e55;
+	color: #b94e55
+}
+
 .dialog-close {
 	background: transparent;
 	color: #536767;
@@ -914,6 +939,14 @@ main, #zobrazeniePodorysu {
 	height: 260px;
 	margin: 18px 0;
 	position: relative
+}
+
+.napoveda-presunu {
+	bottom: 0;
+	color: var(--muted);
+	font-size: 18px;
+	position: absolute;
+	right: 0
 }
 
 .mapa-miest .nahlad-stola {
